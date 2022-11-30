@@ -1,0 +1,29 @@
+<script type="text/javascript">
+#parse("js/birthday_js.vm")
+
+	var helpwin;
+	function open_help(url,ev) {
+	    var width=300;
+	    var height=400;
+	    var x=ev.screenX-(width/2);
+	    var y=ev.screenY-(height/2);
+	
+	    if(x<0) x=0;
+	    if(y<0) y=0;
+	    
+	    if (helpwin) {
+	        helpwin.close();
+	    }
+	
+	    helpwin=window.open(url,"regsys_help_window", "width="+width+",height="+height+",left=" + x + ",top=" + y + ",menubar=no,resizable=yes,directories=no,status=no,toolbar=no,scrollbars=yes, location=no,dependent=yes");
+	
+        if (helpwin) return false;
+        else return true;
+	}
+	
+	function country_hack() {
+	    var countryselector = document.getElementById("param_country");
+	    var badgecountryselector = document.getElementById("param_country_badge");
+	    badgecountryselector.value = countryselector.value;
+	}
+</script>

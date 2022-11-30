@@ -1,0 +1,15 @@
+  <td class="contentbox">
+    <div class="pageheader">Search Attendees</div>
+    <hr class="contentbox">
+    #parse( "errorlisting.vm" )
+
+    $form.getFormHeader()
+    #parse( "searchFormSimple.vm" )
+    $form.getFormFooter()
+
+    <hr class="contentbox">
+
+    $form.getFormHeader()
+    #parse( "searchForm.vm" )
+    $form.getFormFooter()
+  </td>

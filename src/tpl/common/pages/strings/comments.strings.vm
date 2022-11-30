@@ -1,0 +1,11 @@
+## Strings used in the confirmation page
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+#set($strpageTitle = "Comment Listing")##
+#set($strpageHeader = "Comment Listing")##
+#set($strcolId = "ID")##
+#set($strcolNick = "Nickname")##
+#set($strcolCommentType = "Type")##
+#set($strcolComment = "Comment")##
+#set($strdbError = "DATABASE ERROR")##

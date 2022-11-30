@@ -1,0 +1,9 @@
+## Strings used in the landing page
+##
+## you may also wish to customize the other startXX.vm templates that contain
+## large blocks of text.
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+#set($strTitle = "MMC Registrierung")##
+#set($strOffline = "Das Registrierungssystem ist aktuell nicht freigeschaltet.")##

@@ -1,0 +1,11 @@
+## Strings used in the confirmation page
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+#set($strPageTitle = "Massenmailer")##
+#set($strformAnnouncement = "Ank&uuml;ndigung")##
+#set($strformFrom = "Absender")##
+#set($strformStatus = "Status")##
+#set($strformRecipients = "Empf&auml;nger")##
+#set($strsubmitPerform = "Massenmail absenden!")##
+#set($strexplainDoNotKeepClicking = "Mails werden gesendet. Dies kann dauern. Bitte nicht erneut klicken.")##

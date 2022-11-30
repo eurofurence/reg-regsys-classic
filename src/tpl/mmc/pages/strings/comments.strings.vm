@@ -1,0 +1,12 @@
+## Strings used in the confirmation page
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+#set($strstoreSuccessMsg = "Your changes have been stored to the database.")##
+#set($strpageTitle = "Kommentare auflisten")##
+#set($strpageHeader = "Kommentare auflisten")##
+#set($strcolId = "ID")##
+#set($strcolNick = "Nickname")##
+#set($strcolCommentType = "Typ")##
+#set($strcolComment = "Kommentar")##
+#set($strdbError = "DATENBANKFEHLER")##

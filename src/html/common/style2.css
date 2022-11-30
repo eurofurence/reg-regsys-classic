@@ -1,0 +1,48 @@
+table.refund
+{
+    border-width: 0px;
+    border-style: none;
+    border-color: #006357;
+    border-spacing: 3px;
+    padding: 3px;
+    background-color: #ffffff;
+    font-family: Arial;
+    font-size: 10pt;
+    color: #000000;
+    vertical-align:top;
+    align:center;
+    border-collapse: collapse;
+}
+
+th.refund
+{
+    border-width: 0px;
+    border-style: solid;
+    border-color: #006357;
+    border-spacing: 3px;
+    padding: 8px;
+    background-color: #006357;
+    font-family: Arial;
+    font-size: 10pt;
+    font-weight: bold;
+    color: #ffffff;
+    vertical-align:top;
+    text-align:left;
+    border-collapse: collapse;
+}
+
+td.refund
+{
+    border-width: 0px;
+    border-style: solid;
+    border-color: #006357;
+    border-spacing: 3px;
+    padding: 8px;
+    background-color: #ffffff;
+    font-family: Arial;
+    font-size: 10pt;
+    color: #000000;
+    vertical-align:top;
+    text-align:left;
+    border-collapse: collapse;
+}

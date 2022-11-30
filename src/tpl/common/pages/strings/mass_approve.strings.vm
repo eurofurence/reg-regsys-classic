@@ -1,0 +1,12 @@
+## Strings used in the confirmation page
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+#set($strPageTitle = "Bulk Approve")##
+#set($strOperation = "Operation:")##
+#set($strOperationDesc = "Mass approve these attendees in status new")##
+#set($strStatus = "Status:")##
+#set($strAttendees = "Attendees:")##
+#set($strApproveAll = "Approve all!")##
+#set($strReloadList = "Reload list!")##
+#set($strMessage = "Mass approval can take a while! Do not click the button more than once!")##

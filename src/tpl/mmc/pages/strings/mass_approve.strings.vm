@@ -1,0 +1,12 @@
+## Strings used in the confirmation page
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+#set($strPageTitle = "Massenregistrierung")##
+#set($strOperation = "Vorgang:")##
+#set($strOperationDesc = "Massenregistrierung")##
+#set($strStatus = "Status:")##
+#set($strAttendees = "Teilnehmer:")##
+#set($strApproveAll = "Alle best&auml;tigen!")##
+#set($strReloadList = "Liste neu laden!")##
+#set($strMessage = "ACHTUNG! Der Vorgang ben&ouml;tigt einen Moment! Dr&uuml;cke die Schaltfl&auml;che nur ein Mal und warte!")##

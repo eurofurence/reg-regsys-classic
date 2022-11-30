@@ -1,0 +1,75 @@
+#parse( "strings/payment.strings.vm" )
+<td class="contentbox">
+#parse( "errorlisting.vm" )
+
+#if( $page.isAdmin() )##
+    $form.getDeleteFormComplete()
+
+    $form.getEditFormHeader()
+
+    <div class="pageheader">$strEnterPayments</div>
+    <noscript>
+        $strNeedJs
+    </noscript>    
+    <hr class="contentbox"/>
+#else##
+    <div class="pageheader">$strListTransactions</div>
+    <hr class="contentbox"/>
+#end##
+
+    <table border="0" width="100%">
+#if( $page.isAdmin() )##
+      <TR>
+        <TD>
+          #parse( "paymentEditForm.vm" )
+        </TD>
+        <TD valign=top class="input">
+          $strAmountExplain
+        </TD> 
+      </TR> 
+#end##
+      <tr>
+        <td valign="top">
+          <div class="headline">$strOverview</div>
+          <hr class="contentbox"/>
+          #parse( "paymentViewForm.vm" )
+        </td>
+        <!-- second column starts here -->
+        <td valign="top">
+          <div class="headline">$strHistory</div>
+          <hr class="contentbox">
+          <TABLE class="searchlist">
+            <TR>
+              <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderDate</b></TH>
+              <TH class="searchlist" ALIGN="right" VALIGN="top"><b>$strHeaderDues</b></TH>
+              <TH class="searchlist" ALIGN="right" VALIGN="top"><b>$strHeaderPaid</b></TH>
+#if( $page.isAdmin() )##
+              <TH class="searchlist" ALIGN="left" VALIGN="top" colspan="2"><b>$strHeaderStatus</b></TH>
+#else##
+              <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderStatus</b></TH>
+#end##
+              <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderMethod</b></TH>
+              <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderComment</b></TH>
+            </TR>
+#foreach( $line in $paymentlines )##
+            <TR>
+              <TD class="$line.get(8)" ALIGN="left" VALIGN="top">$line.get(1)</TD>
+              <TD class="$line.get(8)" ALIGN="right" VALIGN="top">$line.get(2)</TD>
+              <TD class="$line.get(8)" ALIGN="right" VALIGN="top">$line.get(3)</TD>
+              <TD class="$line.get(8) nobr" ALIGN="right" VALIGN="top">$line.get(4)</TD>
+#if( $page.isAdmin() )##
+              <TD class="$line.get(8) nobr" ALIGN="right" VALIGN="top">$line.get(5)</TD>
+#end##
+              <TD class="$line.get(8) nobr" ALIGN="left" VALIGN="top">$line.get(6)</TD>
+              <TD class="$line.get(8)" ALIGN="left" VALIGN="top">$line.get(7)</TD>
+            </TR>
+#end##
+          </TABLE>
+        </td>
+      </tr>
+    </table>
+#if( $page.isAdmin() )##
+    $form.getEditFormFooter()
+    <br/><br/><br/>
+#end##
+</td>

@@ -1,0 +1,23 @@
+##
+##   This file contains a message that is put in a big yellow box on the start and registration page. 
+##   We use it for important announcements, such as "payments via credit card not available yet".
+##
+#set ( $showMessage = false )##
+##
+#if ( $showMessage )##
+<!-- begin announcement message -->
+<div id="debuginfo">
+<TABLE BORDER="0" class="debuginfo">
+   <TR>
+    <TH class="debuginfo"><font color="red">Staff Preregistration</font></TH>
+   </TR>
+   <TR>
+    <TD class="debuginfo">
+      Pre-Registration for Eurofurence Staff and their significant others.<br/><br/>
+      Please remember to put in a comment explaining your position or who your so is.<br/><br/>
+    </TD>
+   </TR>
+</TABLE>
+</div>
+<!-- announcement message ends -->
+#end##

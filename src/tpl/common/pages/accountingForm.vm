@@ -1,0 +1,23 @@
+<TABLE BORDER="0" CELLSPACING="2" CELLPADDING="2">
+    <FORM ACTION="accounting" METHOD="GET" accept-charset="UTF-8">
+        <TR>
+            <TD class="label" ALIGN="right" VALIGN="middle">$strformFrom</TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldFrom("small")</TD>
+            <TD class="label" ALIGN="right" VALIGN="middle">$strformTo</TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldTo("small")</TD>
+            <TD class="label" ALIGN="right" VALIGN="middle">$strformComment</TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldComments("big")</TD>
+        </TR>
+        <TR>
+            <TD class="label" ALIGN="right" VALIGN="middle">$strformStatus</TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldStatus("big")</TD>
+            <TD class="label" ALIGN="right" VALIGN="middle">$strformType</TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldTypes("big")</TD>
+            <TD class="label" ALIGN="right" VALIGN="middle">$strformMethod</TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldMethods("big")</TD>
+        </TR>
+        <TR>
+            <TD COLSPAN="6" class="content_main" ALIGN="left"><INPUT TYPE="SUBMIT" VALUE="$strformSearchSubmit" class="submit"/></TD>
+        </TR>
+    </FORM>
+</TABLE>

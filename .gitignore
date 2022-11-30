@@ -1,0 +1,14 @@
+lib
+.idea
+.ideaDataSources
+tmp/**
+.gradle
+build
+**/*.iml
+**/*.ipr
+**/*.iws
+out/**
+/bin/
+httpRequests/**
+
+config.yaml

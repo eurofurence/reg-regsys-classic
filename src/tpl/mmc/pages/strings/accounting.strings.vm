@@ -1,0 +1,34 @@
+## Strings used in the confirmation page
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+## parameter: $url
+##
+#set($strpageTitle = "Buchhaltung")##
+#set($strsearchHeader = "Suche nach Transaktionen")##
+#set($strformFrom = "Von")##
+#set($strformTo = "Bis&nbsp;vor")##
+#set($strformComment = "Kommentar")##
+#set($strformStatus = "Status")##
+#set($strformType = "Typ")##
+#set($strformMethod = "Methode")##
+#set($strformSearchSubmit = "Zahlungen suchen!")##
+#set($strshowAdditionalCols = "Zus&auml;tzliche Spalten zeigen")##
+#set($strresultHeader = "Suchergebnisse")##
+#set($strcolNumber = "Nr.")##
+#set($strcolNick = "Nick")##
+#set($strcolRealname = "Realer&nbsp;Name")##
+#set($strcolTotal = "Total")##
+#set($strcolAttendance = "Teilnahme")##
+#set($strcolMembership = "Vereinsbeitrag")##
+#set($strcolAmount = "Betrag")##
+#set($strcolDate = "Datum")##
+#set($strcolStatus = "Status")##
+#set($strcolType = "Typ")##
+#set($strcolMethod = "Methode")##
+#set($strcolComment = "Kommentar")##
+#set($strnoPaymentsFound = "Es wurden keine &uml;bereinstimmenden Zahlungen in der Datenbank gefunden.")##
+#set($strcondensedByAmount = "Zusammengefasst nach Betrag:")##
+#set($strcondAmount = "Betrag &euro;")##
+#set($strcondNumber = "Anzahl der Zahlungseing&auml;nge")##
+#set($strcondTotal = "Betrag total")##

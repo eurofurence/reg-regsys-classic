@@ -1,0 +1,382 @@
+      <TABLE WIDTH="100%" CELLPADDING="0" CELLSPACING="4" BORDER="0">
+## =====================================================================================
+        <TR>
+          <TD COLSPAN="2" ALIGN="left" VALIGN="middle">
+            <a name="step1"></a>
+            <div class="headline"><br>$strNameAndAddressHeading</div>
+            <hr class="contentbox">
+          </TD>
+        </TR>
+#if (!$form.isNew() && $strSellingRegistrationInfo)##
+        <TR>
+          <TD class="input" colspan="2">
+            $strSellingRegistrationInfo
+          </TD>
+        </TR>
+#end##
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle" width="20%">$strNickname</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle" width="80%">$form.fieldNick(40)</TD>
+        </TR>
+        <TR>
+           <TD class="label" ALIGN="right" VALIGN="middle">$strFirstName</TD>
+           <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldFirstname(40)</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strLastName</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldLastname(40)</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strStreet</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldStreet(40)</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strZIPAndCity</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">${form.fieldZip(9,"small")}${form.fieldCity(25,"big")}</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strCountry</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldCountry("country_hack()")</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strCountryBadge</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldCountryBadge()</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strState</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldState(40)</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strEmail</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldEmail(40)</TD>
+        </TR>
+    <TR>
+        <TD class="label" ALIGN="right" VALIGN="middle">$strEmailRepeat</TD>
+        <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldEmailRepeat(40)</TD>
+    </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strPhone</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldPhone(40)</TD>
+        </TR>
+## ========================== Personal Information ==================================
+        <TR>
+          <TD  COLSPAN="2" ALIGN="left" VALIGN="middle">
+        <a name="personal"></a>
+          <div class="headline"><br>$strPersonalInformationHeading</div>
+          <hr class="contentbox">
+          </TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle" nowrap="nowrap">$strDateOfBirth</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle" nowrap="nowrap">
+              #if ($page.mayEdit())##
+                #set($fieldBirthdayWidth=300)
+                #parse("datepicker.vm")
+              #else##
+                  $form.fieldBirthday(10,"small")
+              #end##
+          </td>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="top">$strGender</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">
+            <TABLE BORDER="0" CELLPADDING="3" CELLSPACING="0" width="100%">
+              <TR>
+                <TD class="input" ALIGN="LEFT" width="10%">$form.radioMale("radio")</TD>
+                <TD class="input" ALIGN="LEFT" width="90%">$strGenderMale</TD>
+              </TR>
+              <TR>
+                <TD class="input" ALIGN="LEFT" width="10%">$form.radioFemale("radio")</TD>
+                <TD class="input" ALIGN="LEFT" width="90%">$strGenderFemale</TD>
+              </TR>
+              <TR>
+                <TD class="input" ALIGN="LEFT" width="10%">$form.radioOther("radio")</TD>
+                <TD class="input" ALIGN="LEFT" width="90%">$strGenderOther</TD>
+              </TR>
+              <TR>
+                <TD class="input" ALIGN="LEFT" width="10%">$form.radioNotprovided("radio")</TD>
+                <TD class="input" ALIGN="LEFT" width="90%">$strGenderNotprovided</TD>
+              </TR>
+            </TABLE>
+          </TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="top">$strPersonalFlags</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">
+            <TABLE BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+              #foreach ($option in $form.getFlags())##
+              <TR>
+                <TD class="input" width="5%">$form.fieldFlag($option)</TD>
+                <TD class="input" width="45%"><label for="$form.getFlagParam($option)">$form.getOptionName($option)</label></TD>
+              </TR>
+              #end##
+            </TABLE>
+          </td>
+        </TR>
+#if ($!confShowPartner)##
+        <TR>
+           <TD class="label" ALIGN="right" VALIGN="middle">$strPartner</TD>
+           <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldPartner(40)</TD>
+        </TR>
+#end##
+#if ($!confShowTelegram)##
+    <TR>
+        <TD class="label" ALIGN="right" VALIGN="middle">$strTelegram</TD>
+        <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldTelegram(40)</TD>
+    </TR>
+#end##
+
+##
+## =========================== Packages ==========================================
+##
+
+        <TR>
+          <TD  COLSPAN="2" ALIGN="left" VALIGN="middle">
+       <a name="step3"></a>
+           <div class="headline"><br>$strMembershipPackages</div>
+           <hr class="contentbox">
+          </TD>
+        </TR>
+        <TR>
+          <TD></TD>
+          <TD ALIGN="left" VALIGN="top" colspan="2">
+            #parse( "inputPackages.vm" )
+          </TD>
+        </TR>
+
+#if ($form.showManualDues())##
+              <TR>
+                <TD class="label" ALIGN="right" VALIGN="top">$strManualDues</TD>
+                <TD class="input"  ALIGN="left" VALIGN="middle">$form.fieldManualDues(20,"small")</TD>
+              </TR>
+              <TR>
+                <TD class="label" ALIGN="right" VALIGN="top">$strManualDuesDescription</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldManualDuesDescription(40)</TD>
+              </TR>
+#end##
+
+##
+## ==============================================================================
+##
+        <TR>
+          <TD  COLSPAN="2" ALIGN="left" VALIGN="middle">
+          <a name="optional"></a>
+          <div class="headline"><br>$strOptionalInformationHeader</div>
+          <hr class="contentbox">
+          </TD>
+        </TR>
+
+         <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle" nowrap="nowrap">$strTShirtSize</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldTshirtSize("big")</TD>
+        </TR>
+
+        <TR>
+         <TD class="label" ALIGN="right" VALIGN="top">$strOptions</TD>
+         <TD class="input" ALIGN="left" VALIGN="middle">
+            <TABLE BORDER="0" CELLPADDING="3" CELLSPACING="0" width="100%">
+              #foreach ($option in $form.getOptions())##
+              <TR>
+                <TD class="input" width="5%">$form.fieldOption($option)</TD>
+                <TD class="input" width="45%"><label for="$form.getOptionParam($option)">$form.getOptionName($option)</label></TD>
+              </TR>
+              #end##
+            </TABLE>
+          </TD>
+        </TR>
+
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle" nowrap="nowrap">$strComments</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">
+            <table border="0">
+              <tr>
+                <td class="input">$form.fieldUserComments()</td>
+              </tr>
+              <tr>
+                <td class="input" valign="top">$strCommentsMessage</td>
+              </tr>
+            </table>
+          </TD>
+        </TR>
+
+##
+## ==================== Roommates =======================================
+## (only relevant if room management is set to ROOMS_AS_PACKAGES)
+
+#if ($form.showRoommatesSection())## ---section---
+       <TR>
+         <TD COLSPAN="2" ALIGN="left" VALIGN="middle">
+           <a name="roomshare"></a>
+           <div class="headline"><br>$strRoomSharing</br></div>
+           <hr class="contentbox">
+        </TD>
+      </TR>
+
+  #set ($isInitialReg = $form.isInitialReg())
+  #set ($bedsPerRoom = $form.bedsPerRoom())
+
+  #if ($isInitialReg)
+    ## always show the message during a new registration - room package may not have been selected yet
+      <TR>
+          <TD COLSPAN="2" class="input" ALIGN="left" VALIGN="middle">
+          $strRoomSharingInitialMsg
+          <TD>
+      <TR>
+  #end
+  #if (!$isInitialReg && ($bedsPerRoom >= 2))## --notinitial and applicable--
+    <TR>
+     <TD class="label" ALIGN="right" VALIGN="middle" nowrap="nowrap"></TD>
+     <TD class="input" ALIGN="left" VALIGN="middle">
+     #parse("inputRoommateExplanationMessage.vm")
+     </TD>
+    </TR>
+
+    #foreach ($info in $form.roomateInfos())
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle" nowrap="nowrap"><B>$info.caption</B></TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">
+          #if ($form.maySelectRoommates())
+            $form.fieldRoommate($info.nr, 10, "small")
+            #if ($info.confirmed)##
+              <b><font color="green">$strRoommateConfirmed</font></b>
+            #else##
+              <b><font color="red">$strRoommateNotConfirmed $info.status</font></b>
+            #end##
+          #else
+            $form.displayRoommate($info.nr)
+          #end
+          </TD>
+        </TR>
+
+        #if ($form.maySeeRoommateAdminLinks())
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle" nowrap="nowrap"></TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">
+              $form.adminLinkToRoommate($info.nr)
+          </TD>
+        </TR>
+        #end
+    #end
+  #end## --notinitial and applicable--
+
+  #if (!$form.maySelectRoommates())
+    <TR>
+      <TD class="label" ALIGN="right" VALIGN="middle" nowrap="nowrap"></TD>
+      <TD class="input" ALIGN="left" VALIGN="middle">$strRoommateCannotChange</TD>
+    </TR>
+  #end
+#end## ---section---
+
+##
+## ============================ Admin =========================================
+##
+
+#if ($page.mayViewAdmin())##
+        <TR>
+          <TD COLSPAN="2" ALIGN="left" VALIGN="middle">
+            <div class="headline"><br/>$strAdminHeader</div>
+               <hr class="contentbox"/>
+               <a name="admin"></a>
+          </TD>
+        </TR>
+  #if ($form.getStatus().isDeleteAllowed() && $page.mayEditAdmin())##
+        <TR>
+          <TD class="label" ALIGN="center" VALIGN="middle" colspan="2">
+            <A HREF="../userdelete?param_id=$form.id" onClick="return confirm('$strAdminConfirmPrompt')"><img border=0 src="../images/delete.png"/>$strAdminDelete</a>
+          </TD>
+        </TR>
+  #end##
+  #if ($page.mayEditAdmin())##
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strAdminDisableBanCheck</TD>
+          <TD class="input" ALIGN="left">$form.fieldDisableBanCheck("check")</TD>
+        </TR>
+  #end##
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strAdminStatus</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldStatus("big")</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strAdminRoomQuota</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$page.getRoomQuotaInfos()</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strAdminCancelReason</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldCancelReason(40)</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="top">$strAdminRoomAssignment</TD>
+          <TD class="input"  ALIGN="left" VALIGN="middle">$form.fieldRoomAssmt(20,"small")</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strAdminMinor</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">#if($form.isMinor())${strAdminMinorYes}#{else}${strAdminMinorNo}#end</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strAdminTotalDues</TD>
+          <TD class="input"  ALIGN="left" VALIGN="middle">$form.getAmountDue() &euro;</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strAdminRemainingDues</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle"><A
+                HREF="payment?param_id=$form.Id">$form.getRemainingDues() &euro;</A>
+                $strAdminClickForPayments</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strAdminReportedPayment</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.reportedPayment()</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strAdminRegistrationDate</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldRegistrationDate(10,"small")</TD>
+        </TR>
+        <TR>
+          <TD class="label"  ALIGN="right" VALIGN="middle">$strAdminFeesDueDate</TD>
+          <TD class="input"  ALIGN="left" VALIGN="middle">$form.fieldDueDate(10,"small")</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="top">$strAdminAdminComments</TD>
+          <TD class="input"  ALIGN="left" VALIGN="middle">$form.fieldAdminComments()</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="top">$strAdminPermissions</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldPermissions(40)</TD>
+        </TR>
+        <TR>
+          <TD></TD>
+          <TD class="input" ALIGN="left" VALIGN="middle" colspan="2">$strAdminPermissionsExplain</TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="top">$strAdminKeyDeposit</TD>
+          <TD class="input" ALIGN="left">$form.fieldKeyDeposit("check")</TD>
+        </TR>
+#end##
+
+#if ($form.isNew() && $page.mayEdit())##
+       <TR>
+         <TD COLSPAN="3" ALIGN="left" VALIGN="middle">
+           <div class="headline"><br>$strCompleteRegistrationHeading</div>
+           <hr class="contentbox">
+        </TD>
+      </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle" nowrap="nowrap"><input class="check" id="readTOS" type="checkbox" name="readTOS" value="yes"></TD>
+          <TD class="input" ALIGN="left" VALIGN="middle" colspan="2">
+            $strAgreeTOSMessage
+          </TD>
+        </TR>
+        <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle" nowrap="nowrap"></TD>
+          <TD class="input" ALIGN="left" VALIGN="middle" colspan="2">
+            $form.getSubmitButton("$strSubmitCompleteRegistrationRequest","submit","if(!document.getElementById('readTOS').checked){alert('$strMustAgreeTOSPopup');return false}")
+            $strLegalNoticeMessage
+          </TD>
+        </TR>
+#else##
+        <TR>
+            <TD class="input" ALIGN="left" VALIGN="middle">
+                <br>$form.getSubmitButton("$strSubmitSave","submit",null)
+            </TD><td></td>
+        </TR>
+#end##
+      </TABLE>

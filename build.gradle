@@ -1,0 +1,69 @@
+// ======================= start configuration section ========================================
+
+// configure the convention to build for
+// (used as a path component in several places)
+
+def convention = "ef"
+
+// ======================= end configuration section ========================================
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+
+description = "The Eurofurence Registration System"
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+group = 'org.eurofurence.regsys'
+version = '0.1.0-SNAPSHOT'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+jar {
+}
+
+sourceSets {
+    main { java { srcDirs = ['src/java'] } }
+}
+
+dependencies {
+    providedCompile 'org.apache.tomcat:tomcat-servlet-api:8.5.84'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.velocity:velocity-engine-core:2.3'
+    implementation 'org.apache.commons:commons-text:1.10.0'
+    implementation 'org.slf4j:slf4j-api:2.0.5'
+    implementation 'org.slf4j:slf4j-simple:2.0.5'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.14.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.1'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.14.1'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.1'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'commons-validator:commons-validator:1.7'
+    // security updates
+    implementation 'commons-codec:commons-codec:1.15'
+}
+
+war {
+    dependsOn check
+    // file sets at the root of the archive
+    from 'src/jsp'
+    from ('src/html/' + convention)
+    from ('src/html/common') { duplicatesStrategy = 'exclude' }
+    // file sets to go into WEB-INF
+    from ('src/tpl/' + convention) { into 'WEB-INF/templates' }
+    from ('src/tpl/common') { into 'WEB-INF/templates'; duplicatesStrategy = 'exclude' }
+    // the web.xml location
+    webXml = file('src/web.xml')
+}

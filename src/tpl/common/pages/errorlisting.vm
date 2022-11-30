@@ -1,0 +1,18 @@
+##
+##  if there are any errors, display them listed in a box
+##
+#if ( $page.hasErrors() )##
+  #set ( $errCount = $page.ErrorCount )##
+  <TABLE BORDER="0" class="error">
+   <TR>
+    <TH class="error">
+        The following #if($errCount==1)error has#else$errCount errors have#end occured processing your last request:
+    </TH>
+   </TR>
+   #foreach ( $errMessage in $page.Errors )##
+   <TR>
+    <TD class="error">$errMessage</TD>
+   </TR>
+   #end##
+  </TABLE>
+#end##

@@ -1,0 +1,37 @@
+#parse( "strings/export.strings.vm" )
+<td class="contentbox">
+
+    <div class="pageheader">$strpageTitle</div>
+    <hr class="contentbox"/>
+    #parse( "errorlisting.vm" )
+
+    <FORM ACTION="export" METHOD="get" accept-charset="UTF-8">
+        <table>
+#if($page.isAdmin())##
+                <tr>
+                    <td><INPUT TYPE="SUBMIT" NAME="export-csv-new" VALUE="Hotel Export" class="submit_small"></td>
+                    <td>$strexportCsvNewDesc</td>
+                </tr>
+                <tr>
+                    <td><INPUT TYPE="SUBMIT" NAME="export-badge-new" VALUE="Badge Export" class="submit_small"></td>
+                    <td>$strexportBadgeNewDesc</td>
+                </tr>
+#end##
+#if($page.canExportConbook())##
+                <tr>
+                    <td><INPUT TYPE="SUBMIT" NAME="export-conbook-ss" VALUE="Supersponsors" class="submit_small"></td>
+                    <td>$strexportConbookSupersponsorsDesc</td>
+                </tr>
+                <tr>
+                    <td><INPUT TYPE="SUBMIT" NAME="export-conbook-s" VALUE="Sponsors" class="submit_small"></td>
+                    <td>$strexportConbookSponsorsDesc</td>
+                </tr>
+#end##
+        </table>
+    </FORM>
+#if($page.canExportConbook())##
+    <br/>
+    $strstatusDescription
+    <br/><br/>
+#end##
+</td>

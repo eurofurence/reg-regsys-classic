@@ -1,0 +1,3 @@
+## Strings used in the not found page
+#set($strTitle = "Eurofurence Registration")##
+#set($strNotFound = "Not Found")##

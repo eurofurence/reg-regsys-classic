@@ -1,0 +1,40 @@
+         <TABLE border="0">
+         <TR>
+          <TD class="tbl_label" ALIGN="left" VALIGN="middle"><B>Registration&nbsp;No.</B></TD>
+          <TD class="tbl_value" ALIGN="left" VALIGN="middle">$form.ViewFormAttendeeId</TD>
+         </TR>
+         <TR>
+          <TD class="tbl_label" ALIGN="left" VALIGN="middle"><B>Registriert</B></TD>
+          <TD class="tbl_value" ALIGN="left" VALIGN="middle">$form.ViewFormRegistrationDate</TD>
+         </TR>
+         <TR>
+          <TD class="tbl_label" ALIGN="left" VALIGN="middle"><B>Nickname</B></TD>
+          <TD class="tbl_value" ALIGN="left" VALIGN="middle"><A HREF="$form.AttendeeEditURL">$form.ViewFormNickname</A></TD>
+         </TR>
+         <TR>
+          <TD class="tbl_label" ALIGN="left" VALIGN="middle"><B>RL&nbsp;Name</B></TD>
+          <TD class="tbl_value" ALIGN="left" VALIGN="middle">$form.ViewFormRLName</TD>
+         </TR>
+         <TR>
+          <TD class="tbl_label" ALIGN="left" VALIGN="middle"><B>E-mail</B></TD>
+          <TD class="tbl_value" ALIGN="left" VALIGN="middle">$form.ViewFormEmail</TD>
+         </TR>
+         <TR>
+          <TD class="tbl_label" ALIGN="left" VALIGN="middle"><B>Gesamter&nbsp;Betrag</B></TD>
+          <TD class="tbl_value" ALIGN="left" VALIGN="middle">$form.ViewFormTotalDues &euro;</TD>
+         </TR>
+#if( $form.isParticipating() )##
+         <TR>
+          <TD class="tbl_label" ALIGN="left" VALIGN="middle"><B>Betrag ausstehend</B></TD>
+          <TD class="tbl_value" ALIGN="left" VALIGN="middle">$form.ViewFormRemainingDues &euro;
+          #if( $form.hasRemainingDues() )##
+            (due until $form.ViewFormDueDate)
+          #end##
+          #if( $form.hasPendingPayments() )##
+            (Payments pending)
+          #end##
+          </TD>
+         </TR>
+#end##
+        </TABLE>
+##

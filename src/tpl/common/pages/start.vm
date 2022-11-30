@@ -1,0 +1,18 @@
+#parse( "strings/start.strings.vm")
+  <td class="contentbox">
+#parse( "local/localmessage.vm" )
+   <div class="pageheader">$strTitle</div>
+   <hr class="contentbox"/>
+
+ #parse( "message.vm" )
+ #parse( "messagePreparedForConvention.vm" )
+
+#if( $page.isRegistrationEnabled() )##
+ #parse( "startWelcome.vm")    
+
+#else##
+       <div class="contentbox">$strOffline</div><br/>
+#end##
+
+  </td>
+##

@@ -1,0 +1,34 @@
+## Strings used in the confirmation page
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+## parameter: $url
+##
+#set($strpageTitle = "Accounting Page")##
+#set($strsearchHeader = "Transaction Search")##
+#set($strformFrom = "From")##
+#set($strformTo = "Until&nbsp;before")##
+#set($strformComment = "Comment")##
+#set($strformStatus = "Status")##
+#set($strformType = "Type")##
+#set($strformMethod = "Method")##
+#set($strformSearchSubmit = "Find Payments")##
+#set($strshowAdditionalCols = "Show additional columns")##
+#set($strresultHeader = "Search Results")##
+#set($strcolNumber = "Nr.")##
+#set($strcolNick = "Nick")##
+#set($strcolRealname = "Realname")##
+#set($strcolTotal = "Total")##
+#set($strcolAttendance = "Attendance")##
+#set($strcolMembership = "Membership")##
+#set($strcolAmount = "Amount")##
+#set($strcolDate = "Date")##
+#set($strcolStatus = "Status")##
+#set($strcolType = "Type")##
+#set($strcolMethod = "Method")##
+#set($strcolComment = "Comment")##
+#set($strnoPaymentsFound = "No matching payments were found in the database.")##
+#set($strcondensedByAmount = "Condensed by amounts:")##
+#set($strcondAmount = "Amount &euro;")##
+#set($strcondNumber = "Number of Payments")##
+#set($strcondTotal = "Total Amount")##

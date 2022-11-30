@@ -1,0 +1,99 @@
+#parse( "strings/announcements.strings.vm" )
+<td class="contentbox">
+    <div class="pageheader">$function</div>
+    <hr class="contentbox">
+    #parse( "errorlisting.vm" )
+
+#if($page.showDeleteConfirm())##
+    <p>$strsureToDeleteMsg</p><br/>
+    <TABLE>
+        <TR>
+            <TD class="label" ALIGN="right" VALIGN="middle"><B>$strcolName</B></TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$form.printCid()</TD>
+        </TR>
+        <TR>
+            <TD class="label" ALIGN="right" VALIGN="middle"><B>$strcolLang</B></TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$form.printLang()</TD>
+        </TR>
+        <TR>
+            <TD class="label" ALIGN="right" VALIGN="middle"><B>$strcolSubject</B></TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$form.printSubject()</TD>
+        </TR>
+        <TR>
+            <TD colspan="2" class="label" ALIGN="left" VALIGN="top"><pre>$form.printBody()</pre></TD>
+        </TR>
+    </TABLE>
+
+    <p><a href="$form.deleteYesUrl()">$strdeleteYes</a> <a href="${url}">$strdeleteNo</a></p><br/>
+
+#elseif($page.showList())##
+
+    #if($page.wasStored())##
+        <div class="alert_green">
+            $strstoreSuccessMsg
+        </div>
+    #end
+
+    <p>$strlistIntroMsg</p><br/>
+
+    <table class="searchlist">
+        <tr>
+            <th class="searchlist">$strlistColCid</th>
+            <th class="searchlist">$strlistColLang</th>
+            <th class="searchlist">$strlistColSubject</th>
+            <th class="searchlist">$strlistColActions</th>
+        </tr>
+        #foreach ( $rule in $page.getLoadedEscapedList() )##
+        <tr class="searchlist_sep">
+            <td class="searchlist">$rule.cid</td>
+            <td class="searchlist">$rule.lang</td>
+            <td class="searchlist">$rule.subject</td>
+            <td class="searchlist">##
+<a href="$rule.editUrl">$stractionEdit</a>,&nbsp;##
+<a href="$rule.copyUrl">$stractionCopy</a>,&nbsp;##
+<a href="$rule.deleteUrl">$stractionDelete</a>##
+</td>
+        </tr>
+        #end##
+    </table>
+
+    <p>$stractionNew</p><br/>
+
+#elseif($page.showEditForm())##
+
+    $form.editFormHeader()
+        <TABLE>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle"><B>$strcolName</B></TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$form.cidField()</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle"><B>$strcolLang</B></TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$form.langField()</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle"><B>$strcolSubject</B></TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$form.subjectField()</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle"><B>$strplaceholdersMsg</B></TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">{{ nickname }}, {{ ... TODO %DUES% (total), %REMAINING% (rest), %DUEDATE%, %ID% (numeric) ... }}</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">&nbsp;</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$form.bodyField()</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">$strsendTestEmail</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$form.testSendCheckbox()</TD>
+            </TR>
+            <TR>
+                <TD class="label" align="right">&nbsp;</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle"><INPUT TYPE="submit" VALUE="$strsubmitSave"/></TD>
+            </TR>
+        </TABLE>
+    $form.editFormFooter()
+
+#end##
+
+</td>

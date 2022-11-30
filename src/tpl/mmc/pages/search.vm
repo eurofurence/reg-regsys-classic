@@ -1,0 +1,11 @@
+  <td class="contentbox">
+    <div class="pageheader">Mitgliedersuche</div>
+    <hr class="contentbox">
+    #parse( "errorlisting.vm" )
+
+    $form.getFormHeader()
+
+    #parse( "searchForm.vm" )
+
+    $form.getFormFooter()
+  </td>

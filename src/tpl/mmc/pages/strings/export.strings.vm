@@ -1,0 +1,12 @@
+## Strings used in the confirmation page
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+## parameter: $url
+##
+#set($strpageTitle = "Exportfunktionen")##
+#set($strexportCsvNewDesc = "Exportiere alle G&auml;ste mit einem gebuchten Raum als CSV-Datei f&uuml;r das Hotel")##
+#set($strexportBadgeNewDesc = "Exportiere alle G&auml;ste als CSV-Datei f&uuml;r den Badgedruck")##
+#set($strexportConbookSupersponsorsDesc = "Exportiere alle Supersponsoren als Text-Datei")##
+#set($strexportConbookSponsorsDesc = "Exportiere alle Sponsoren als Text-Datei")##
+#set($strstatusDescription = "")##

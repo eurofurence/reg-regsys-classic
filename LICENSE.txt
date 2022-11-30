@@ -1,0 +1,40 @@
+The Eurofurence Regsys Classic:
+-------------------------------
+
+This includes
+
+ - all code under org.eurofurence
+ - all jsp files
+ - all templates, html files, css, sql scripts
+
+Copyright (C) 1998-2022 Eurofurence e.V.
+
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+
+A Note on Trademark issues:
+---------------------------
+
+When using the Eurofurence regsys, you are expected to replace the
+logos associated with Eurofurence e.V., in particular the large side banner
+wolf logo found in 
+
+    html/ef/images/logo.jpg
+
+and you may not use the name "Eurofurence" for your own purposes. Please
+go through all templates found under src/tpl and adapt them to your needs.
+Further customization may be needed - to a lesser degree - regarding the
+files under src/html.
+
+It is of course appreciated if you link to Eurofurence as the entity who
+provided you with this free software, especially if your event is a "furry"
+convention, and it is of course ok if that link mentions "Eurofurence".

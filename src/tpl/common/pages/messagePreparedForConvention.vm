@@ -1,0 +1,42 @@
+##
+##  Notify attendees that the registration system has been taken offline or is readonly before the convention.
+##  The message is put in a big yellow box on the start and registration page.
+##
+#if ( $page.showBeforeConventionAnnouncement() )##
+    <div id="debuginfo">
+    <TABLE BORDER="0" class="debuginfo">
+       <TR>
+        <TH class="debuginfo">##
+#if ( $page.showBeforeConventionAnnouncementOffline() )##
+Registration System offline##
+#elseif ( $page.showBeforeConventionAnnouncementReadonly() )##
+Registration System is in read only mode##
+#else##
+Registration System is being prepared for the convention##
+#end##
+</TH>
+       </TR>
+       <TR>
+        <TD class="debuginfo">##
+#if ( $page.showBeforeConventionAnnouncementOffline() )##
+The system has been taken offline for the convention.<p/> 
+                    
+          This close to the convention, you cannot register any more. You can also no longer log in to view existing registrations.<p/>
+                    
+          In case of inquiries, please contact us at the convention registration desk.##
+#elseif ( $page.showBeforeConventionAnnouncementReadonly() )##
+The system has been set to read only mode as we prepare for the convention.<p/> 
+                    
+          This close to the convention, you cannot register any more. You can log in to view existing registrations, but you cannot make any changes.<p/>
+                    
+          In case of inquiries, please contact us via mail.##
+#else##
+This close to the convention, we cannot guarantee that new registrations will be processed in time.
+                       
+          In case of inquiries, please contact us via mail.##
+#end##
+</TD>
+       </TR>
+    </TABLE>
+    </div>
+#end##

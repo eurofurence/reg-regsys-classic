@@ -1,0 +1,19 @@
+## Strings used in the landing page
+##
+## you may also wish to customize the other startXX.vm templates that contain
+## large blocks of text.
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+#set($strEnterPayments = "Enter Payments")##
+#set($strListTransactions = "List Transactions")##
+#set($strAmountExplain = "Positive amounts are handled as incoming payments. Please use the manual dues field for other things.")##
+#set($strOverview = "Enter Payments")##
+#set($strHistory = "Transaction History")##
+#set($strHeaderDate = "Date")##
+#set($strHeaderDues = "Dues Amount")##
+#set($strHeaderPaid = "Paid Amount")##
+#set($strHeaderStatus = "Status")##
+#set($strHeaderMethod = "Method")##
+#set($strHeaderComment = "Comment")##
+#set($strNeedJs = "<b>Note: Javascript is disabled.</b> Please enable to use full functionality.")##

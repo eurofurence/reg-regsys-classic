@@ -1,0 +1,31 @@
+<script type="text/javascript">
+    function fillInForm(debitor_id, transaction_id, received, amount, transaction_status, transaction_method, comments) {
+        document.forms["paymentform"].elements["param_id"].value = debitor_id;
+        document.forms["paymentform"].elements["transaction_id"].value = transaction_id;
+        document.forms["paymentform"].elements["received"].value = received;
+        document.forms["paymentform"].elements["amount"].value = amount;
+        var paymentStatusDropdown = document.forms["paymentform"].elements["transaction_status"];
+        for (i=paymentStatusDropdown.length-1;i>=0;i--) {
+            if (transaction_status === paymentStatusDropdown.options[i].value) {
+                paymentStatusDropdown.selectedIndex = i;
+            }
+        }
+        var paymentMethodDropdown = document.forms["paymentform"].elements["transaction_method"];
+        for (i=paymentMethodDropdown.length-1;i>=0;i--) {
+            if (transaction_method === paymentMethodDropdown.options[i].value) {
+                paymentMethodDropdown.selectedIndex = i;
+            }
+        }
+        document.forms["paymentform"].elements["comments"].value = comments;
+        document.forms["paymentform"].elements["comments"].focus();
+    }
+    
+    function confirmCancel(debitor_id, transaction_id, received, amount, transaction_status, transaction_method, comments) {
+        res = confirm("Cancel this payment?\n"+transaction_status+" "+transaction_method+" payment of "+amount+" \u20AC");
+        if (res) {
+            document.forms["payment_delete_form"].elements["transaction_id"].value = transaction_id;
+            document.forms["payment_delete_form"].submit();
+        }
+    }
+
+</script>

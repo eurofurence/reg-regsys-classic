@@ -1,0 +1,40 @@
+## Strings used in the side bar menu
+##
+## you may want to use &nbsp; for spaces to avoid lines wrapping
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+#set($strNavPermissionAdmin = "Admin")##
+#set($strNavPermissionViewAll = "Alle&nbsp;anzeigen")##
+##
+#set($strNavStartPage = "Startseite")##
+#set($strNavAccounting = "Buchhaltung")##
+#set($strNavStatistics = "Statistik")##
+#set($strNavListNew = "Liste&nbsp;Neuzug&auml;nge")##
+#set($strNavListAll = "List&nbsp;alle")##
+#set($strNavListUrgentCCRefunds = "Urgent&nbsp;CC&nbsp;Refunds")##
+#set($strNavListCCRefunds = "CC&nbsp;Refunds")##
+#set($strNavListUrgentBankRefunds = "Urgent&nbsp;Bank&nbsp;Refunds")##
+#set($strNavListBankRefunds = "Bank&nbsp;Refunds")##
+#set($strNavListRoomRequests = "Liste&nbsp;Zimmergruppen")##
+#set($strNavListRooms = "Liste&nbsp;der&nbsp;Zimmer")##
+#set($strNavAssignRooms = "Zimmerzuordnung")##
+#set($strNavSearch = "Suche")##
+#set($strNavViewComments = "Kommentare&nbsp;anzeigen")##
+#set($strNavExport = "Exportieren")##
+#set($strNavManageBans = "Sperrungen&nbsp;verwalten")##
+#set($strNavEditAnnouncements = "Bearbeite&nbsp;Ank&uuml;ndigungen")##
+#set($strNavSendAnnouncements = "Sende&nbsp;Ank&uuml;ndigungen")##
+#set($strNavMarkOverdue = "Markiere&nbsp;offene&nbsp;Zahlungen")##
+#set($strNavSendNotifications = "Sende&nbsp;Benachrichtigungen")##
+#set($strNavEditOwnRegistration = "Bearbeite&nbsp;meine&nbsp;Registrierung")##
+#set($strNavChangeOwnPassword = "&Auml;ndere&nbsp;mein&nbsp;Passwort")##
+#set($strNavViewOwnPayments = "Meine&nbsp;Zahlungen")##
+#set($strNavHowToPay = "How-To&nbsp;Bezahlung")##
+#set($strNavHowToBookARoom = "How-To&nbsp;Zimmerbuchung")##
+#set($strNavMyRoomGroup = "Meine&nbsp;Zimmergruppe")##
+#set($strNavNewRegistration = "Neu&nbsp;registrieren")##
+#set($strNavLogOut = "Abmelden")##
+#set($strNavLogIn = "Anmelden")##
+#set($strNavResetSession = "Sitzung&nbsp;zur&uuml;cksetzen")##
+##

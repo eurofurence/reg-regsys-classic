@@ -1,0 +1,35 @@
+#parse( "strings/mass_approve.strings.vm" )
+<td class="contentbox">
+  <div class="pageheader">$strPageTitle</div>
+  <hr class="contentbox"/>
+  #parse( "errorlisting.vm" )
+  
+  $form.getFormHeader()
+
+    <TABLE>
+        <TR>
+            <TD class="label" ALIGN="right" VALIGN="middle">$strOperation</TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$strOperationDesc</TD>
+        </TR>
+        <TR>
+            <TD class="label" ALIGN="right" VALIGN="middle">$strStatus</TD>
+            <TD class="input" ALIGN="left" VALIGN="middle"><b>$form.getStatusText()</b></TD>
+        </TR>
+        <TR>
+            <TD class="label" ALIGN="right" VALIGN="middle">$strAttendees</TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$form.getListingBox()</TD>
+        </TR>
+        <TR>
+            <TD class="label"></TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$form.getSubmitButton($strApproveAll, $strReloadList, "submit")</TD>
+        </TR>
+        #if (!$form.hasErrors())##
+        <TR>
+            <TD class="label"></TD> 
+            <TD class="input"><b>$strMessage</b></TD>
+        </TR>        
+        #end##
+     </TABLE>
+
+  $form.getFormFooter()
+</td>

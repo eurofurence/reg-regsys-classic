@@ -1,0 +1,15 @@
+  <td class="contentbox">
+    <div class="pageheader">Ergebnis der Suche</div>
+    <hr class="contentbox">
+    #parse( "errorlisting.vm" )
+
+    #if ($page.showResultListing())
+      <center>
+      $form.getFormHeader()
+
+      #parse( "listForm.vm" )
+
+      $form.getFormFooter()
+      </center>
+    #end
+  </td>

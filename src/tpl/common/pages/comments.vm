@@ -1,0 +1,48 @@
+#parse( "strings/comments.strings.vm" )
+<td class="contentbox">
+    <div class="pageheader">$strpageHeader</div>
+    <hr class="contentbox">
+    #parse( "errorlisting.vm" )
+
+    <table class="searchlist">
+        <tr>
+            <th class="searchlist">$strcolId</th>
+            <th class="searchlist">$strcolNick</th>
+            <th class="searchlist">$strcolCommentType</th>
+            <th class="searchlist">$strcolComment</th>
+        </tr>
+#foreach($entry in $results)##
+    #if($entry.userComments)##
+        <tr class="searchlist_sep">
+            <td class="searchlist"><a class="searchlist" HREF="input?param_id=$entry.id">$entry.id</a></td>
+            <td class="searchlist">$entry.nickname</td>
+            <td class="searchlist"><b>User</b></td>
+            <td class="searchlist">
+                <div class="searchlist_text">$entry.userComments</div>
+            </td>
+        </tr>
+        #if($entry.adminComments)##
+            <tr>
+                <td class="searchlist"></td>
+                <td class="searchlist"></td>
+                <td class="searchlist_sep"><b>Admin</b></td>
+                <td class="searchlist_sep">
+                    <div class="searchlist_text">$entry.adminComments</div>
+                </td>
+            </tr>
+        #end
+    #else
+        #if($entry.adminComments)##
+            <tr class="searchlist_sep">
+                <td class="searchlist"><a class="searchlist" HREF="input?param_id=$entry.id">$entry.id</a></td>
+                <td class="searchlist">$entry.nickname</td>
+                <td class="searchlist"><b>Admin</b></td>
+                <td class="searchlist">
+                    <div class="searchlist_text">$entry.adminComments</div>
+                </td>
+            </tr>
+        #end
+    #end
+#end##
+    </table>
+</td>
