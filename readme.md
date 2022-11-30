@@ -7,7 +7,7 @@ interface implementations.
 - ✅ config is loaded from yaml at war deploy time 
 - ❌ still implements dealers' den api, nosecounter api, security system api (to be moved to export service)
 
-## Local Setup
+## Local Development Setup
 
 ### Install Java
 
@@ -92,13 +92,16 @@ This will build the registration system WAR and deploy it to tomcat. You should 
 
 If you don't have the `make` utility, the Makefile has the individual commands that build and copy the WAR.
 
-Or build and deploy the tomcat application from within IntelliJ idea.
+Or build and deploy the tomcat application from within IntelliJ idea:
+
+![run config page 1](doc/intellij-run-config-p1.png)
+![run config page 2](doc/intellij-run-config-p2.png)
 
 ### Run local apache to achieve a server-like setup
 
 Back up the original `httpd.conf` in your apache httpd installation.
 
-Add `httpd.conf` to the end of it. 
+Add `httpd.regsys_proxy.conf` to the end of it (or include the file).
 
 You will probably need to change the SERVERROOT path at the beginning.
 
