@@ -203,6 +203,7 @@ public class StringsMMC {
         public String errorCannotLoadRoomList = "Fehler beim Laden der Zimmerliste aus der Datenbank: ";
         public String needToSelectAtLeastOnePackage = "Du musst mindestens eine Teilnahmeoption ausw&auml;hlen.";
         public String invalidAttendeeType = "Bitte melde dich bei uns!";
+        public String mustProvideCancelReason = "Du must einen Grund f&uuml;r die Absage eingeben.";
 
         public String roommateCaption(int nr, int outOf) {
             if (outOf > 1) {

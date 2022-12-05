@@ -279,35 +279,41 @@
                <a name="admin"></a>
           </TD>
         </TR>
-  #if ($form.getStatus().isDeleteAllowed() && $page.mayEditAdmin())##
-        <TR>
-          <TD class="label" ALIGN="center" VALIGN="middle" colspan="2">
-            <A HREF="../userdelete?param_id=$form.id" onClick="return confirm('$strAdminConfirmPrompt')"><img border=0 src="../images/delete.png"/>$strAdminDelete</a>
-          </TD>
-        </TR>
-  #end##
   #if ($page.mayEditAdmin())##
-        <TR>
-          <TD class="label" ALIGN="right" VALIGN="middle">$strAdminDisableBanCheck</TD>
-          <TD class="input" ALIGN="left">$form.fieldDisableBanCheck("check")</TD>
-        </TR>
+      <TR>
+          <TD class="label" ALIGN="right" VALIGN="top">$strAdminFlags</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">
+              <TABLE BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+                  #foreach ($option in $form.getAdminFlags())##
+                      <TR>
+                          <TD class="input" width="5%">$form.fieldFlag($option)</TD>
+                          <TD class="input" width="45%"><label for="$form.getFlagParam($option)">$form.getOptionName($option)</label></TD>
+                      </TR>
+                  #end##
+              </TABLE>
+          </td>
+      </TR>
   #end##
         <TR>
           <TD class="label" ALIGN="right" VALIGN="middle">$strAdminStatus</TD>
           <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldStatus("big")</TD>
         </TR>
+  #if (false)##
         <TR>
           <TD class="label" ALIGN="right" VALIGN="middle">$strAdminRoomQuota</TD>
           <TD class="input" ALIGN="left" VALIGN="middle">$page.getRoomQuotaInfos()</TD>
         </TR>
+  #end##
         <TR>
           <TD class="label" ALIGN="right" VALIGN="middle">$strAdminCancelReason</TD>
           <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldCancelReason(40)</TD>
         </TR>
+  #if (false)##
         <TR>
           <TD class="label" ALIGN="right" VALIGN="top">$strAdminRoomAssignment</TD>
           <TD class="input"  ALIGN="left" VALIGN="middle">$form.fieldRoomAssmt(20,"small")</TD>
         </TR>
+  #end##
         <TR>
           <TD class="label" ALIGN="right" VALIGN="middle">$strAdminMinor</TD>
           <TD class="input" ALIGN="left" VALIGN="middle">#if($form.isMinor())${strAdminMinorYes}#{else}${strAdminMinorNo}#end</TD>
@@ -346,10 +352,12 @@
           <TD></TD>
           <TD class="input" ALIGN="left" VALIGN="middle" colspan="2">$strAdminPermissionsExplain</TD>
         </TR>
+    #if (false)##
         <TR>
           <TD class="label" ALIGN="right" VALIGN="top">$strAdminKeyDeposit</TD>
           <TD class="input" ALIGN="left">$form.fieldKeyDeposit("check")</TD>
         </TR>
+    #end##
 #end##
 
 #if ($form.isNew() && $page.mayEdit())##

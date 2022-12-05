@@ -167,7 +167,7 @@ public class InputForm extends Form {
     }
 
     public OptionList getAdminOnlyFlags() {
-        OptionList flags = new OptionList(Option.OptionTypes.Flag, configService.getConfig().choices.flags, o -> !o.adminOnly);
+        OptionList flags = new OptionList(Option.OptionTypes.Flag, configService.getConfig().choices.flags, o -> o.adminOnly);
         flags.parseFromDbString(nvl(adminInfo.flags));
         return flags;
     }
@@ -427,13 +427,21 @@ public class InputForm extends Form {
         }
 
         private void setStatus(String t) {
-            // TODO
-            // attendee.setStatus(FormHelper.parseInt(getPage(), t, "status", attendee.getStatus().dbValue()));
+            try {
+                newAttendeeStatus = Constants.MemberStatus.byNewRegsysValue(nvl(t));
+            } catch (DownstreamException e) {
+                newAttendeeStatus = attendeeStatus;
+                addError(e.getMessage());
+            }
         }
 
         private void setCancelReason(String t) {
-            // TODO
-            // attendee.setCancelReason(nvl(t));
+            cancelReason = nvl(t);
+            if (newAttendeeStatus == Constants.MemberStatus.CANCELLED) {
+                if ("".equals(cancelReason)) {
+                    addError(Strings.inputForm.mustProvideCancelReason);
+                }
+            }
         }
 
         private void setAdminComments(String t) {
@@ -824,12 +832,6 @@ public class InputForm extends Form {
             List<Option> oList = new ArrayList<Option>();
             OptionList flags = getAdminOnlyFlags();
             for (Option o: flags) {
-                // omit unselected admin only options
-                if (o.adminOnly && !auth(Permission.ADMIN)) {
-                    o.readonly = true;
-                    if (!o.optionEnable)
-                        continue;
-                }
                 oList.add(o);
             }
             return oList;
@@ -838,9 +840,9 @@ public class InputForm extends Form {
         public String fieldStatus(String style) {
             List<Constants.MemberStatus> available = Constants.MemberStatus.getDropDownList_Admin_AvailableOnly(attendeeStatus);
             return selector(mayEditAdmin(), STATUS,
-                    Constants.MemberStatus.getDbValueArray(available),
+                    Constants.MemberStatus.getNewRegsysValueArray(available),
                     Constants.MemberStatus.getDisplayNames(available),
-                    str(attendeeStatus.dbValue()), 1, false, style);
+                    attendeeStatus.newRegsysValue(), 1, false, style);
         }
 
         public String fieldCancelReason(int displaySize) {
