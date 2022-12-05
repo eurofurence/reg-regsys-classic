@@ -7,6 +7,7 @@ import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.repositories.attendees.AdminInfo;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
+import org.eurofurence.regsys.repositories.attendees.StatusChange;
 import org.eurofurence.regsys.repositories.config.ConfigService;
 import org.eurofurence.regsys.repositories.config.Option;
 import org.eurofurence.regsys.repositories.config.OptionList;
@@ -77,6 +78,7 @@ public class InputForm extends Form {
     private Attendee attendee;
     private AdminInfo adminInfo;
     private Constants.MemberStatus attendeeStatus;
+    private Constants.MemberStatus newAttendeeStatus;
 
     private String cancelReason = "";
 
@@ -91,6 +93,7 @@ public class InputForm extends Form {
         attendee = new Attendee();
         adminInfo = new AdminInfo();
         attendeeStatus = Constants.MemberStatus.NEW;
+        newAttendeeStatus = Constants.MemberStatus.NEW;
     }
 
     public synchronized void initialize() {
@@ -190,12 +193,28 @@ public class InputForm extends Form {
         attendeeStatus = Constants.MemberStatus.byNewRegsysValue(
                 attendeeService.performGetCurrentStatus(dbId, token, requestId)
         );
+        newAttendeeStatus = attendeeStatus;
         if (getPage().hasPermission(Permission.ADMIN)) {
             adminInfo = attendeeService.performGetAdminInfo(dbId, token, requestId);
         }
     }
 
     // Web form data checking
+
+    private boolean hasFundamentalDifference(Constants.MemberStatus s1, Constants.MemberStatus s2) {
+        if (s1 == Constants.MemberStatus.APPROVED || s1 == Constants.MemberStatus.PARTIALLY_PAID || s1 == Constants.MemberStatus.PAID) {
+            if (s2 == Constants.MemberStatus.APPROVED || s2 == Constants.MemberStatus.PARTIALLY_PAID || s2 == Constants.MemberStatus.PAID) {
+                return false;
+            }
+        }
+        return s1 != s2;
+    }
+
+    private void reloadAttendeeStatus() {
+        attendeeStatus = Constants.MemberStatus.byNewRegsysValue(
+                attendeeService.performGetCurrentStatus(attendee.id, getPage().getTokenFromRequest(), getPage().getRequestId())
+        );
+    }
 
     /**
      * Processes a registration step form submission and decides whether to advance the current registration step and
@@ -206,11 +225,34 @@ public class InputForm extends Form {
      *
      */
     public boolean processAccept(boolean wasNew) {
+        String token = getPage().getTokenFromRequest();
+        String requestId = getPage().getRequestId();
+
         try {
             if (wasNew) {
-                attendee.id = attendeeService.performAddAttendee(attendee, getPage().getTokenFromRequest(), getPage().getRequestId());
+                attendee.id = attendeeService.performAddAttendee(attendee, token, requestId);
             } else {
-                attendeeService.performUpdateAttendee(attendee, getPage().getTokenFromRequest(), getPage().getRequestId());
+                attendeeService.performUpdateAttendee(attendee, token, requestId);
+
+                if (getPage().hasPermission(Permission.ADMIN)) {
+                    attendeeService.performSetAdminInfo(attendee.id, adminInfo, token, requestId);
+                }
+
+                // reload current status after the changes
+                reloadAttendeeStatus();
+
+                if (hasFundamentalDifference(newAttendeeStatus, attendeeStatus)) {
+                    StatusChange change = new StatusChange();
+                    change.status = newAttendeeStatus.newRegsysValue();
+                    if (newAttendeeStatus == Constants.MemberStatus.CANCELLED) {
+                        change.comment = cancelReason;
+                    } else {
+                        change.comment = "admin changed status";
+                    }
+                    attendeeService.performStatusChange(attendee.id, change, token, requestId);
+
+                    reloadAttendeeStatus();
+                }
             }
         } catch (DownstreamWebErrorException e) {
             resetErrors(Strings.inputForm.dbError);
