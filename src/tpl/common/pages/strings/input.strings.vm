@@ -101,6 +101,7 @@
 #set( $strAdminRegistrationDate = "Registration&nbsp;Date")##
 #set( $strAdminFeesDueDate = "Fees&nbsp;Due&nbsp;Date")##
 #set( $strAdminAdminComments = "Admin&nbsp;Comments")##
+#set( $strAdminFlags = "Admin Flags")##
 #set( $strAdminPermissions = "Permissions")##
 #set( $strAdminPermissionsExplain = "Available: admin,regdesk,sponsordesk,view,stats,announce,export_conbook (separate by comma)")##
 #set( $strAdminKeyDeposit = "Key Deposit")##

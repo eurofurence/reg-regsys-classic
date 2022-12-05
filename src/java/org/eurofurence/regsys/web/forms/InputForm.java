@@ -7,6 +7,7 @@ import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.repositories.attendees.AdminInfo;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
+import org.eurofurence.regsys.repositories.attendees.StatusChange;
 import org.eurofurence.regsys.repositories.config.ConfigService;
 import org.eurofurence.regsys.repositories.config.Option;
 import org.eurofurence.regsys.repositories.config.OptionList;
@@ -77,6 +78,7 @@ public class InputForm extends Form {
     private Attendee attendee;
     private AdminInfo adminInfo;
     private Constants.MemberStatus attendeeStatus;
+    private Constants.MemberStatus newAttendeeStatus;
 
     private String cancelReason = "";
 
@@ -91,6 +93,7 @@ public class InputForm extends Form {
         attendee = new Attendee();
         adminInfo = new AdminInfo();
         attendeeStatus = Constants.MemberStatus.NEW;
+        newAttendeeStatus = Constants.MemberStatus.NEW;
     }
 
     public synchronized void initialize() {
@@ -164,7 +167,7 @@ public class InputForm extends Form {
     }
 
     public OptionList getAdminOnlyFlags() {
-        OptionList flags = new OptionList(Option.OptionTypes.Flag, configService.getConfig().choices.flags, o -> !o.adminOnly);
+        OptionList flags = new OptionList(Option.OptionTypes.Flag, configService.getConfig().choices.flags, o -> o.adminOnly);
         flags.parseFromDbString(nvl(adminInfo.flags));
         return flags;
     }
@@ -190,12 +193,28 @@ public class InputForm extends Form {
         attendeeStatus = Constants.MemberStatus.byNewRegsysValue(
                 attendeeService.performGetCurrentStatus(dbId, token, requestId)
         );
+        newAttendeeStatus = attendeeStatus;
         if (getPage().hasPermission(Permission.ADMIN)) {
             adminInfo = attendeeService.performGetAdminInfo(dbId, token, requestId);
         }
     }
 
     // Web form data checking
+
+    private boolean hasFundamentalDifference(Constants.MemberStatus s1, Constants.MemberStatus s2) {
+        if (s1 == Constants.MemberStatus.APPROVED || s1 == Constants.MemberStatus.PARTIALLY_PAID || s1 == Constants.MemberStatus.PAID) {
+            if (s2 == Constants.MemberStatus.APPROVED || s2 == Constants.MemberStatus.PARTIALLY_PAID || s2 == Constants.MemberStatus.PAID) {
+                return false;
+            }
+        }
+        return s1 != s2;
+    }
+
+    private void reloadAttendeeStatus() {
+        attendeeStatus = Constants.MemberStatus.byNewRegsysValue(
+                attendeeService.performGetCurrentStatus(attendee.id, getPage().getTokenFromRequest(), getPage().getRequestId())
+        );
+    }
 
     /**
      * Processes a registration step form submission and decides whether to advance the current registration step and
@@ -206,11 +225,34 @@ public class InputForm extends Form {
      *
      */
     public boolean processAccept(boolean wasNew) {
+        String token = getPage().getTokenFromRequest();
+        String requestId = getPage().getRequestId();
+
         try {
             if (wasNew) {
-                attendee.id = attendeeService.performAddAttendee(attendee, getPage().getTokenFromRequest(), getPage().getRequestId());
+                attendee.id = attendeeService.performAddAttendee(attendee, token, requestId);
             } else {
-                attendeeService.performUpdateAttendee(attendee, getPage().getTokenFromRequest(), getPage().getRequestId());
+                attendeeService.performUpdateAttendee(attendee, token, requestId);
+
+                if (getPage().hasPermission(Permission.ADMIN)) {
+                    attendeeService.performSetAdminInfo(attendee.id, adminInfo, token, requestId);
+                }
+
+                // reload current status after the changes
+                reloadAttendeeStatus();
+
+                if (hasFundamentalDifference(newAttendeeStatus, attendeeStatus)) {
+                    StatusChange change = new StatusChange();
+                    change.status = newAttendeeStatus.newRegsysValue();
+                    if (newAttendeeStatus == Constants.MemberStatus.CANCELLED) {
+                        change.comment = cancelReason;
+                    } else {
+                        change.comment = "admin changed status";
+                    }
+                    attendeeService.performStatusChange(attendee.id, change, token, requestId);
+
+                    reloadAttendeeStatus();
+                }
             }
         } catch (DownstreamWebErrorException e) {
             resetErrors(Strings.inputForm.dbError);
@@ -385,13 +427,21 @@ public class InputForm extends Form {
         }
 
         private void setStatus(String t) {
-            // TODO
-            // attendee.setStatus(FormHelper.parseInt(getPage(), t, "status", attendee.getStatus().dbValue()));
+            try {
+                newAttendeeStatus = Constants.MemberStatus.byNewRegsysValue(nvl(t));
+            } catch (DownstreamException e) {
+                newAttendeeStatus = attendeeStatus;
+                addError(e.getMessage());
+            }
         }
 
         private void setCancelReason(String t) {
-            // TODO
-            // attendee.setCancelReason(nvl(t));
+            cancelReason = nvl(t);
+            if (newAttendeeStatus == Constants.MemberStatus.CANCELLED) {
+                if ("".equals(cancelReason)) {
+                    addError(Strings.inputForm.mustProvideCancelReason);
+                }
+            }
         }
 
         private void setAdminComments(String t) {
@@ -782,12 +832,6 @@ public class InputForm extends Form {
             List<Option> oList = new ArrayList<Option>();
             OptionList flags = getAdminOnlyFlags();
             for (Option o: flags) {
-                // omit unselected admin only options
-                if (o.adminOnly && !auth(Permission.ADMIN)) {
-                    o.readonly = true;
-                    if (!o.optionEnable)
-                        continue;
-                }
                 oList.add(o);
             }
             return oList;
@@ -796,9 +840,9 @@ public class InputForm extends Form {
         public String fieldStatus(String style) {
             List<Constants.MemberStatus> available = Constants.MemberStatus.getDropDownList_Admin_AvailableOnly(attendeeStatus);
             return selector(mayEditAdmin(), STATUS,
-                    Constants.MemberStatus.getDbValueArray(available),
+                    Constants.MemberStatus.getNewRegsysValueArray(available),
                     Constants.MemberStatus.getDisplayNames(available),
-                    str(attendeeStatus.dbValue()), 1, false, style);
+                    attendeeStatus.newRegsysValue(), 1, false, style);
         }
 
         public String fieldCancelReason(int displaySize) {

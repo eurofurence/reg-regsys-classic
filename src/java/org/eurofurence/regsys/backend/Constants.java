@@ -220,6 +220,16 @@ public class Constants {
             }
             return arr;
         }
+
+        /** Used by "inputForm" dropdown */
+        public static String[] getNewRegsysValueArray(List<Constants.MemberStatus> statusList) {
+            String[] arr = new String[statusList.size()];
+            int idx = 0;
+            for (Constants.MemberStatus status : statusList) {
+                arr[idx++] = status.newRegsysValue();
+            }
+            return arr;
+        }
     }
 
     // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

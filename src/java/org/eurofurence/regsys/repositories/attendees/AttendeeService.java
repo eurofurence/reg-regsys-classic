@@ -111,9 +111,9 @@ public class AttendeeService {
         return result.dto;
     }
 
-    public void performSetAdminInfo(long attendeeId, String area, AddInfo value, String token, String requestId) {
+    public void performSetAdminInfo(long attendeeId, AdminInfo value, String token, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/" + attendeeId + "/admin";
-        DownstreamClientWithBodyNoResponse<AddInfo> client = new DownstreamClientWithBodyNoResponse<>(AddInfo.class);
+        DownstreamClientWithBodyNoResponse<AdminInfo> client = new DownstreamClientWithBodyNoResponse<>(AdminInfo.class);
         client.performPut(requestId, url,"attendee/setAdminInfo", value, token);
     }
 

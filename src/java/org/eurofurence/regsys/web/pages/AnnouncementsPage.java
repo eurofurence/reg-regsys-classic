@@ -110,12 +110,7 @@ public class AnnouncementsPage extends Page {
         }, Strings.announcementPage.dbErrorLoadList);
     }
 
-    public static class SendTestMailResult {
-        boolean result;
-    }
-
-    private synchronized boolean sendTestMail() {
-        final SendTestMailResult result = new SendTestMailResult();
+    private void sendTestMail() {
         MailSendRequest sendRequest = new MailSendRequest();
         sendRequest.to = Collections.singletonList(getLoggedInAttendee().email);
         sendRequest.cid = getAnnouncementForm().getCid();
@@ -125,9 +120,7 @@ public class AnnouncementsPage extends Page {
         // TODO - more vars
         getAnnouncementForm().withErrorHandling(() -> {
             getMailService().performSendMail(sendRequest, getTokenFromRequest(), getRequestId());
-            result.result = true;
         }, Strings.announcementPage.testSendFailure);
-        return result.result;
     }
 
     private void performFunction() {
@@ -141,13 +134,10 @@ public class AnnouncementsPage extends Page {
             }
 
             getAnnouncementForm().getParameterParser().parseFormParams(getRequest());
+            getAnnouncementForm().storeAnnouncement(); // may change id
 
             if (sendTestMail) {
-                if (sendTestMail()) {
-                    getAnnouncementForm().storeAnnouncement(); // may change id
-                }
-            } else {
-                getAnnouncementForm().storeAnnouncement(); // may change id
+                sendTestMail();
             }
 
             if (hasErrors()) {

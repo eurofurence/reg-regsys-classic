@@ -195,6 +195,7 @@ public class StringsEF {
         public String errorCannotLoadRoomList = "Unable to load the list of rooms from the database: ";
         public String needToSelectAtLeastOnePackage = "You need to have at least one of the attendance packages selected, either full attendance or any selection of the day guest packages.";
         public String invalidAttendeeType = "Please write to us to be switched back from day guest to full membership. This needs to be done by an administrator.";
+        public String mustProvideCancelReason = "You must enter a reason for the cancellation";
 
         public String roommateCaption(int nr, int outOf) {
             if (outOf > 1) {
