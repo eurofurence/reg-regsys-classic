@@ -11,4 +11,4 @@ out/**
 /bin/
 httpRequests/**
 
-config.yaml
+config*.yaml

@@ -21,8 +21,8 @@ apply plugin: 'war'
 
 description = "The Eurofurence Registration System"
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 group = 'org.eurofurence.regsys'
 version = '0.1.0-SNAPSHOT'
