@@ -2,14 +2,15 @@
 default: build
 
 perm:
-	chmod 644 src/jsp/*.jsp src/jsp/*.inc
+	chmod 644 src/jsp/*.jsp
 	chmod -R u=rwX,go=rX src/tpl
+	chmod 755 ./gradlew
 
 build: perm 
 	./gradlew --no-daemon --console=plain clean war
 
 deploy:
-	cp build/libs/regsys-*.war $(INSTBASE)/$(WARNAME)
+	cp build/libs/reg-regsys-classic-*.war $(INSTBASE)/$(WARNAME)
 
 undeploy:
 	rm -f $(INSTBASE)/$(WARNAME)
