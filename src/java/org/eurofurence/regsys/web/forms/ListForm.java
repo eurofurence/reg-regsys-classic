@@ -209,7 +209,7 @@ public class ListForm extends Form {
         }
 
         public String viewPaymentsUrl() {
-            return "payment.jsp?param_id=" + getId();
+            return "payment?param_id=" + getId();
         }
 
         // list data
