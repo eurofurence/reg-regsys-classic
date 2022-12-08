@@ -54,7 +54,7 @@
     #if ($form.getPaymentsPending())##
       ($strStatusPaymentsPending)
     #end##
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="payment.jsp#if($page.mayEditAdmin())?param_id=$form.Id#end">$strViewPayments</a>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="payment#if($page.mayEditAdmin())?param_id=$form.Id#end">$strViewPayments</a>
   #end##
 
   $form.getFormHeader()

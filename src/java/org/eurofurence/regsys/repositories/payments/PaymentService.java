@@ -32,21 +32,21 @@ public class PaymentService {
             queryParams.add(new BasicNameValuePair("effective_from", effectiveFromISO));
         if (effectiveBeforeISO != null)
             queryParams.add(new BasicNameValuePair("effective_before", effectiveBeforeISO));
-        String url = serviceBaseUrl + "/v1/transactions?" + URLEncodedUtils.format(queryParams, "UTF-8");
+        String url = serviceBaseUrl + "/api/rest/v1/transactions?" + URLEncodedUtils.format(queryParams, "UTF-8");
         DownstreamClientNoBody<TransactionResponse> client = new DownstreamClientNoBody<>(TransactionResponse.class);
         ResponseWithDto<TransactionResponse> result = client.performGet(requestId, url, "payment/findTransactions", token);
         return result.dto;
     }
 
     public long performCreateTransaction(Transaction transaction, String token, String requestId) {
-        String url = serviceBaseUrl + "/v1/transactions";
+        String url = serviceBaseUrl + "/api/rest/v1/transactions";
         DownstreamClientWithBodyNoResponse<Transaction> client = new DownstreamClientWithBodyNoResponse<>(Transaction.class);
         ResponseWithDto<String> result = client.performPost(requestId, url, "payment/createTransaction", transaction, token);
         return Utils.idFromLocationHeader(result.location);
     }
 
     public void performUpdateTransaction(long id, Transaction transaction, String token, String requestId) {
-        String url = serviceBaseUrl + "/v1/transactions/" + id;
+        String url = serviceBaseUrl + "/api/rest/v1/transactions/" + id;
         DownstreamClientWithBodyNoResponse<Transaction> client = new DownstreamClientWithBodyNoResponse<>(Transaction.class);
         ResponseWithDto<String> result = client.performPut(requestId, url, "payment/updateTransaction", transaction, token);
     }
