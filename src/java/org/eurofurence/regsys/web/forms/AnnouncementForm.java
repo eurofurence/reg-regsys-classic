@@ -80,9 +80,15 @@ public class AnnouncementForm extends Form {
                 current = mailService.performGetTemplate(id, getPage().getTokenFromRequest(), getPage().getRequestId());
             }
         }, String.format(Strings.announcementPage.dbErrorLoadById, id));
+
+        // fix line terminators for the web
+        current.data = current.data.replaceAll("\r", "");
     }
 
     public void storeAnnouncement() {
+        // ensure correct line terminators for sending mail (wants crlf)
+        current.data = current.data.replaceAll("\r", "").replaceAll("\n", "\r\n");
+
         withErrorHandling(() -> {
             if (id == null) {
                 id = mailService.performCreateTemplate(current, getPage().getTokenFromRequest(), getPage().getRequestId());
@@ -91,6 +97,9 @@ public class AnnouncementForm extends Form {
                 mailService.performUpdateTemplate(id, current, getPage().getTokenFromRequest(), getPage().getRequestId());
             }
         }, Strings.announcementPage.dbErrorSave);
+
+        // fix line terminators for the web
+        current.data = current.data.replaceAll("\r", "");
     }
 
     public void deleteAnnouncement() {
@@ -207,7 +216,7 @@ public class AnnouncementForm extends Form {
         }
 
         public String bodyField() {
-            return textArea(true, PARAM_BODY, current.data, 20, 80);
+            return textArea(true, PARAM_BODY, current.data, 20, 80, "mail");
         }
 
         public String testSendCheckbox() {
