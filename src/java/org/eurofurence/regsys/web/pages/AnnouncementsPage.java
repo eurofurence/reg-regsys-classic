@@ -2,6 +2,7 @@ package org.eurofurence.regsys.web.pages;
 
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Strings;
+import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.mails.MailSendRequest;
 import org.eurofurence.regsys.repositories.mails.MailService;
 import org.eurofurence.regsys.repositories.mails.TemplateList;
@@ -110,14 +111,32 @@ public class AnnouncementsPage extends Page {
         }, Strings.announcementPage.dbErrorLoadList);
     }
 
+
     private void sendTestMail() {
+        Attendee me = getLoggedInAttendee();
+
         MailSendRequest sendRequest = new MailSendRequest();
         sendRequest.to = Collections.singletonList(getLoggedInAttendee().email);
         sendRequest.cid = getAnnouncementForm().getCid();
         sendRequest.lang = getAnnouncementForm().getLang();
         sendRequest.variables = new HashMap<>();
+        sendRequest.variables.put("email", me.email);
         sendRequest.variables.put("nickname", "testnick");
-        // TODO - more vars
+        sendRequest.variables.put("badge_number","444");
+        sendRequest.variables.put("badge_number_with_checksum","444Y");
+        sendRequest.variables.put("reason","some cancel reason");
+        sendRequest.variables.put("remaining_dues","4711.00 EUR");
+        sendRequest.variables.put("total_dues","6969.69 EUR");
+        sendRequest.variables.put("due_date","31.12.2022");
+        sendRequest.variables.put("regsys_url","https://reg.eurofurence.org/nope/");
+        sendRequest.variables.put("room_group_name","squirrels");
+        sendRequest.variables.put("room_group_owner","SomeRedSquirrel");
+        sendRequest.variables.put("room_group_owner_email",me.email);
+        sendRequest.variables.put("room_group_member","SomeGreySquirrel");
+        sendRequest.variables.put("room_group_member_email",me.email);
+        sendRequest.variables.put("confirm_link","https://reg.eurofurence.org/nope?yes=yeah");
+        sendRequest.variables.put("new_email","new_"+me.email);
+
         getAnnouncementForm().withErrorHandling(() -> {
             getMailService().performSendMail(sendRequest, getTokenFromRequest(), getRequestId());
         }, Strings.announcementPage.testSendFailure);

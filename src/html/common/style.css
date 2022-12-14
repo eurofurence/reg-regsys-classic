@@ -570,6 +570,18 @@ textarea
         background-color: #ffffff;
 }
 
+textarea.mail
+{
+    height: 400px;
+    margin: 0px 0px 0px 4px;
+    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    font-size: 10pt;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #006357;
+    background-color: #ffffff;
+}
+
 td.tbl_label
 {
         border-width: 0px;
