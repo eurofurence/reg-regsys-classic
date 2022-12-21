@@ -34,9 +34,6 @@ public class AttendeeSearchResultList {
         @JsonProperty("country")
         public String country;
 
-        @JsonProperty("country_badge")
-        public String countryBadge;
-
         @JsonProperty("state")
         public String state;
 
@@ -63,6 +60,12 @@ public class AttendeeSearchResultList {
 
         @JsonProperty("tshirt_size")
         public String tshirtSize;
+
+        @JsonProperty("spoken_languages")
+        public String spokenLanguages;
+
+        @JsonProperty("registration_language")
+        public String registrationLanguage;
 
         @JsonProperty("flags")
         public String flags;

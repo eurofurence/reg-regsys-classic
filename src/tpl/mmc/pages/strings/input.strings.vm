@@ -26,7 +26,6 @@
 #set( $strStreet = "Stra&szlig;e")##
 #set( $strZIPAndCity = "PLZ + Stadt")##
 #set( $strCountry = "Land")##
-#set( $strCountryBadge = "Land f&uuml;r das Badge")##
 #set( $strState = "Staat oder Bundesland")##
 #set( $strEmail = "E-Mail")##
 #set( $strEmailRepeat = "E-mail&nbsp;(nochmal)")##
@@ -34,6 +33,8 @@
 #set( $strConfirmDirectly = "Best&auml;tigung dieser Adresse")##
 #set( $strConfirmSendNewEmail = "Sende neue Best&auml;tigungsmail an den Gast")##
 #set( $strPhone = "Telefon")##
+#set( $strSpokenLanguages = "Sprachen")##
+#set( $strRegistrationLanguage = "Reg-Sprache")##
 #set( $strPersonalInformationHeading = "Pers&ouml;nliche Daten")##
 #set( $strDateOfBirth = "Geburtstag")##
 #set( $strMonthSelector = "W&auml;hle den Monat")##
@@ -73,6 +74,7 @@
 #set( $strSubmitSave = "&Auml;nderungen speichern")##
 #set( $strPartner = "Lebenspartner(in)")##
 #set( $confShowPartner = 1)##
+#set( $confShowGender = 1)##
 ##
 #set( $strRoomSharing = "Zimmerpartner")##
 #set( $strRoomSharingInitialMsg = "Wenn du einen Zimmertyp mit mehreren Betten w&auml;hlst, kannst du sp&auml;ter an dieser Stelle die Anmeldenummer deiner Zimmerpartner eintragen, sobald deine Anmeldung akzeptiert wurde.")##

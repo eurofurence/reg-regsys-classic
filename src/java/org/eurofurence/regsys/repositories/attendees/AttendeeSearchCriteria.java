@@ -24,14 +24,17 @@ public class AttendeeSearchCriteria {
         @JsonProperty("country")
         public String country;
 
-        @JsonProperty("country_badge")
-        public String countryBadge;
-
         @JsonProperty("email")
         public String email;
 
         @JsonProperty("telegram")
         public String telegram;
+
+        @JsonProperty("spoken_languages")
+        public Map<String, Integer> spokenLanguages = new HashMap<>();
+
+        @JsonProperty("registration_language")
+        public Map<String, Integer> registrationLanguage = new HashMap<>();
 
         @JsonProperty("flags")
         public Map<String, Integer> flags = new HashMap<>();

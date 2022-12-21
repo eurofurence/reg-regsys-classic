@@ -124,6 +124,12 @@ public class Configuration {
     @JsonProperty("tshirtsizes")
     public List<String> tShirtSizes;
 
+    @JsonProperty("spoken_languages")
+    public List<String> spokenLanguages;
+
+    @JsonProperty("registration_languages")
+    public List<String> registrationLanguages;
+
     @JsonProperty("countries")
     public List<String> countries;
 

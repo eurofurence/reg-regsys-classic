@@ -26,7 +26,6 @@
 #set( $strStreet = "Street")##
 #set( $strZIPAndCity = "ZIP + City")##
 #set( $strCountry = "Country")##
-#set( $strCountryBadge = "Country on Badge")##
 #set( $strState = "State")##
 #set( $strEmail = "E-mail")##
 #set( $strEmailRepeat = "E-mail&nbsp;(repeat)")##
@@ -34,6 +33,8 @@
 #set( $strConfirmDirectly = "Directly confirm this address")##
 #set( $strConfirmSendNewEmail = "Send User a new confirmation mail")##
 #set( $strPhone = "Phone")##
+#set( $strSpokenLanguages = "Speaks")##
+#set( $strRegistrationLanguage = "Reg-Language")##
 #set( $strPersonalInformationHeading = "Personal Information")##
 #set( $strDateOfBirth = "Date of birth")##
 #set( $strMonthSelector = "Select Month")##
@@ -72,6 +73,7 @@
 #set( $strSubmitCompleteRegistrationRequest = "Complete Registration Request")##
 #set( $strTelegram = "Telegram")##
 #set( $confShowTelegram = 1)##
+#set( $confShowGender = 0)##
 #set( $strSubmitSave = "Save Changes")##
 ##
 #set( $strRoomSharing = "Room Sharing")##

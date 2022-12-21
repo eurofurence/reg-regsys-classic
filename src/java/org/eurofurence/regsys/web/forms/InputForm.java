@@ -17,7 +17,10 @@ import org.eurofurence.regsys.web.pages.InputPage;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 /**
@@ -37,7 +40,6 @@ public class InputForm extends Form {
     public static final String ZIP           = "param_zip";
     public static final String CITY          = "param_city";
     public static final String COUNTRY       = "param_country";
-    public static final String COUNTRY_BADGE = "param_country_badge";
     public static final String STATE         = "param_state";
     public static final String EMAIL         = "param_email";
     public static final String EMAIL_REPEAT  = "param_email_repeat";
@@ -48,6 +50,8 @@ public class InputForm extends Form {
     public static final String PARTNER       = "param_partner";
     public static final String TELEGRAM      = "param_telegram";
 
+    public static final String LANG          = "param_lang";
+    public static final String REG_LANG      = "param_reg_lang";
     public static final String FLAG          = "param_flag_"; // flag names taken from configuration
     public static final String PACKAGE       = "param_package_"; // package names taken from configuration
     public static final String OPTION        = "param_option_"; // option names taken from configuration
@@ -310,6 +314,23 @@ public class InputForm extends Form {
             }
         }
 
+        private void setSpokenLanguagesFromRequest(HttpServletRequest request) {
+            String[] raw = request.getParameterValues(LANG);
+            if (raw == null) {
+                raw = new String[]{};
+            }
+            List<String> selected = Arrays.asList(raw);
+            attendee.spokenLanguages = String.join(",", selected);
+        }
+
+        private void setRegistrationLanguageFromRequest(HttpServletRequest request) {
+            String selected = request.getParameter(REG_LANG);
+            if (selected == null) {
+                selected = configService.getConfig().registrationLanguages.get(0);
+            }
+            attendee.registrationLanguage = selected;
+        }
+
         private void setFlagsFromRequest(HttpServletRequest request) {
             OptionList list = getAttendeeFlags();
             setLowlevelFromRequest(request, list, FLAG);
@@ -395,12 +416,13 @@ public class InputForm extends Form {
             attendee.zip = nvl(request.getParameter(ZIP));
             attendee.city = nvl(request.getParameter(CITY));
             attendee.country = nvl(request.getParameter(COUNTRY));
-            attendee.countryBadge = nvl(request.getParameter(COUNTRY_BADGE));
             attendee.state = nvl(request.getParameter(STATE));
             setEmail(request.getParameter(EMAIL), request.getParameter(EMAIL_REPEAT));
             attendee.phone = nvl(request.getParameter(PHONE));
             setBirthday(request.getParameter(BIRTHDAY));
             setGender(request.getParameter(GENDER));
+            setSpokenLanguagesFromRequest(request);
+            setRegistrationLanguageFromRequest(request);
             setFlagsFromRequest(request);
             setPackagesFromRequest(request);
             setOptionsFromRequest(request);
@@ -624,12 +646,19 @@ public class InputForm extends Form {
             return textField(mayEdit(), CITY, attendee.city, displaySize, 80, style);
         }
 
-        public String fieldCountry(String onChange) {
-            return selector(mayEdit(), COUNTRY, getCountries(), attendee.country, 1, false, null, onChange);
+        public String fieldCountry() {
+            return selector(mayEdit(), COUNTRY, getCountries(), attendee.country, 1, false);
         }
 
-        public String fieldCountryBadge() {
-            return selector(mayEdit(), COUNTRY_BADGE, getCountries(), attendee.countryBadge, 1, false);
+        public String fieldSpokenLanguages() {
+            String value = attendee.spokenLanguages;
+            if (value == null) value = "";
+            Set<String> selected = new HashSet<>(Arrays.asList(value.split(",")));
+            return selector(mayEdit(), LANG, configService.getConfig().spokenLanguages, configService.getConfig().spokenLanguages, selected, 5, true);
+        }
+
+        public String fieldRegistrationLanguage() {
+            return selector(mayEdit(), REG_LANG, configService.getConfig().registrationLanguages, configService.getConfig().registrationLanguages, attendee.registrationLanguage, 1);
         }
 
         public String fieldState(int displaySize) {

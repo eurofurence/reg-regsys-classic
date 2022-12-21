@@ -36,11 +36,7 @@
         </TR>
         <TR>
           <TD class="label" ALIGN="right" VALIGN="middle">$strCountry</TD>
-          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldCountry("country_hack()")</TD>
-        </TR>
-        <TR>
-          <TD class="label" ALIGN="right" VALIGN="middle">$strCountryBadge</TD>
-          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldCountryBadge()</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldCountry()</TD>
         </TR>
         <TR>
           <TD class="label" ALIGN="right" VALIGN="middle">$strState</TD>
@@ -77,6 +73,7 @@
               #end##
           </td>
         </TR>
+#if ($!confShowGender)##
         <TR>
           <TD class="label" ALIGN="right" VALIGN="top">$strGender</TD>
           <TD class="input" ALIGN="left" VALIGN="middle">
@@ -100,6 +97,7 @@
             </TABLE>
           </TD>
         </TR>
+#end##
         <TR>
           <TD class="label" ALIGN="right" VALIGN="top">$strPersonalFlags</TD>
           <TD class="input" ALIGN="left" VALIGN="middle">
@@ -125,6 +123,14 @@
         <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldTelegram(40)</TD>
     </TR>
 #end##
+  <TR>
+      <TD class="label" ALIGN="right" VALIGN="middle">$strSpokenLanguages</TD>
+      <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldSpokenLanguages()</TD>
+  </TR>
+  <TR>
+      <TD class="label" ALIGN="right" VALIGN="middle">$strRegistrationLanguage</TD>
+      <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldRegistrationLanguage()</TD>
+  </TR>
 
 ##
 ## =========================== Packages ==========================================
