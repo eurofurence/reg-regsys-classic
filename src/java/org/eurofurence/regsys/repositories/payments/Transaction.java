@@ -1,15 +1,13 @@
 package org.eurofurence.regsys.repositories.payments;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@JsonIgnoreProperties({"status_history"})
 public class Transaction {
-    @JsonIgnore
-    public Long id;
-
     @JsonProperty("debitor_id")
     public Long debitorId;
 
