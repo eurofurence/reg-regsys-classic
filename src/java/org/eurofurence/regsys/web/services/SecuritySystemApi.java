@@ -58,8 +58,7 @@ public class SecuritySystemApi extends AbstractAttendeeListService {
         public String state;
         public String countryCode;
         public String country;
-        public String countryBadgeCode;
-        public String countryBadge;
+        public List<String> spokenLanguageCodes;
 
         public String email;
         public String phone;
@@ -93,9 +92,8 @@ public class SecuritySystemApi extends AbstractAttendeeListService {
             info.city = StringEscapeUtils.unescapeHtml4(attendee.city);
             info.state = StringEscapeUtils.unescapeHtml4(attendee.state);
             info.countryCode = attendee.country;
-            info.countryBadgeCode = attendee.countryBadge;
+            info.spokenLanguageCodes = Arrays.asList(attendee.spokenLanguages.split(","));
             info.country = info.countryCode;
-            info.countryBadge = info.countryBadgeCode;
             info.email = attendee.email;
             info.phone = attendee.phone;
             info.telegram = attendee.telegram;

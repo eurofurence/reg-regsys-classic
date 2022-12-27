@@ -27,9 +27,6 @@ public class Attendee {
     @JsonProperty("country")
     public String country;
 
-    @JsonProperty("country_badge")
-    public String countryBadge;
-
     @JsonProperty("state")
     public String state;
 
@@ -53,6 +50,12 @@ public class Attendee {
 
     @JsonProperty("pronouns")
     public String pronouns;
+
+    @JsonProperty("spoken_languages")
+    public String spokenLanguages;
+
+    @JsonProperty("registration_language")
+    public String registrationLanguage;
 
     @JsonProperty("tshirt_size")
     public String tshirtSize;
