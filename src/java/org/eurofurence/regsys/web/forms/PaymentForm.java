@@ -81,10 +81,6 @@ public class PaymentForm extends Form {
         return Long.toString(attendee.id);
     }
 
-    public String getTransactionIdString() {
-        return Long.toString(transaction.id);
-    }
-
     public String getAttendeeRegistered() {
         return attendee.registered;
     }
@@ -136,8 +132,8 @@ public class PaymentForm extends Form {
         transaction.amount.grossCent = FormHelper.parseCurrencyDecimals(getPage(), t, Strings.paymentForm.fieldPaymentAmount, transaction.amount.grossCent);
     }
 
-    public long getTransactionId() {
-        return transaction.id;
+    public String getTransactionId() {
+        return transaction.transactionIdentifier;
     } // read only
 
     public String getComments() {
@@ -284,15 +280,13 @@ public class PaymentForm extends Form {
         return true;
     }
 
-    public boolean getById(long id) {
+    public void getById(String id) {
         for (Transaction t: transactions) {
-            if (id == t.id) {
+            if (id.equals(t.transactionIdentifier)) {
                 transaction = t;
-                return true;
             }
         }
         getPage().addError(Strings.paymentForm.noSuchTransactionForAttendee);
-        return false;
     }
 
     private boolean typeIs(Transaction.TransactionType t) {
@@ -310,7 +304,7 @@ public class PaymentForm extends Form {
             return false;
         }
 
-        if (transaction.id <= 0) {
+        if (transaction.transactionIdentifier == null || "".equals(transaction.transactionIdentifier)) {
             if (addErrors)
                 addError(Strings.paymentForm.permCancelBeforeStore);
             return false;
@@ -396,13 +390,11 @@ public class PaymentForm extends Form {
             throw new PermissionDeniedException(Strings.paymentForm.permNotAuthorizedManualChanges);
         }
 
-        long txId = 0;
-        try {
-            txId = Long.parseLong(request.getParameter(TRANSACTION_ID));
-        } catch (Exception e) {
-            // ok, stays set to 0
+        String txId = request.getParameter(TRANSACTION_ID);
+        if (txId == null) {
+            txId = "";
         }
-        if (txId > 0) {
+        if (!"".equals(txId)) {
             // load and change an existing payment
             getById(txId);
         }
