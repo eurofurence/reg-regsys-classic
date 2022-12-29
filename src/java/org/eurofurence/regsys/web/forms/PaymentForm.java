@@ -15,6 +15,7 @@ import org.eurofurence.regsys.backend.persistence.DbDataException;
 import org.eurofurence.regsys.backend.persistence.DbException;
 import org.eurofurence.regsys.backend.persistence.TypeChecks;
 import org.eurofurence.regsys.backend.types.IsoDate;
+import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 import org.eurofurence.regsys.repositories.errors.NotFoundException;
@@ -211,16 +212,30 @@ public class PaymentForm extends Form {
     public void initializeForAttendee(long the_id) throws DbException {
         if (the_id <= 0) throw new DbException(Strings.paymentForm.internalNeedId);
 
-        AttendeeSearchCriteria criteria = new AttendeeSearchCriteria();
-        AttendeeSearchCriteria.AttendeeSearchSingleCriterion criterion = new AttendeeSearchCriteria.AttendeeSearchSingleCriterion();
-        criterion.ids = Collections.singletonList(the_id);
-        criteria.matchAny.add(criterion);
-        AttendeeSearchResultList attendeeResult = getPage().getAttendeeService().performFindAttendees(criteria, getPage().getTokenFromRequest(), getPage().getRequestId());
+        if (getPage().hasPermission(Constants.Permission.ADMIN)) {
+            // load using search
+            AttendeeSearchCriteria criteria = new AttendeeSearchCriteria();
+            AttendeeSearchCriteria.AttendeeSearchSingleCriterion criterion = new AttendeeSearchCriteria.AttendeeSearchSingleCriterion();
+            criterion.ids = Collections.singletonList(the_id);
+            criteria.matchAny.add(criterion);
+            AttendeeSearchResultList attendeeResult = getPage().getAttendeeService().performFindAttendees(criteria, getPage().getTokenFromRequest(), getPage().getRequestId());
 
-        if (attendeeResult.attendees == null || attendeeResult.attendees.size() == 0) {
-            throw new DbException(Strings.paymentForm.noAttendeeReceived);
+            if (attendeeResult.attendees == null || attendeeResult.attendees.size() == 0) {
+                throw new DbException(Strings.paymentForm.noAttendeeReceived);
+            }
+            attendee = attendeeResult.attendees.get(0);
+        } else {
+            // simply use the logged in attendee and copy needed fields over
+            // TODO some info will be missing here
+            Attendee a = getPage().getLoggedInAttendee();
+            attendee.id = a.id;
+            attendee.registered = "TODO";
+            attendee.nickname = a.nickname;
+            attendee.lastName = a.lastName;
+            attendee.firstName = a.firstName;
+            attendee.email = a.email;
+            // TODO current dues, total dues, due date should be calculated from existing transactions everywhere on this page!!
         }
-        attendee = attendeeResult.attendees.get(0);
 
         transaction.debitorId = the_id;
 
