@@ -2,9 +2,11 @@ package org.eurofurence.regsys.web.forms;
 
 import org.eurofurence.regsys.backend.HardcodedConfig;
 import org.eurofurence.regsys.backend.Constants;
+import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.backend.enums.RoomManagementOption;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
+import org.eurofurence.regsys.repositories.errors.UnauthorizedException;
 
 import java.util.function.Predicate;
 
@@ -170,7 +172,13 @@ public class NavbarForm extends Form {
 
     private boolean loggedInRegisteredAttendeeStatusCondition(Predicate<Constants.MemberStatus> condition) {
         if (getPage().isLoggedIn()) {
-            Attendee attendee = getPage().getLoggedInAttendee();
+            Attendee attendee;
+            try {
+                attendee = getPage().getLoggedInAttendee();
+            } catch (UnauthorizedException e) {
+                Logging.warn("authorization expired - during navbar render, getLoggedInAttendee failed but isLoggedIn is true");
+                return false;
+            }
             if (attendee.id != null && attendee.id > 0) {
                 Constants.MemberStatus status = getPage().getLoggedInAttendeeStatus();
                 return condition.test(status);
@@ -229,7 +237,13 @@ public class NavbarForm extends Form {
         if (getPage().isRegistrationEnabled()) {
             if (getPage().isLoggedIn()) {
                 if (!getPage().readonlyExceptAdmin()) {
-                    Attendee attendee = getPage().getLoggedInAttendee();
+                    Attendee attendee;
+                    try {
+                        attendee = getPage().getLoggedInAttendee();
+                    } catch (UnauthorizedException e) {
+                        Logging.warn("authorization expired - during navbar render, getLoggedInAttendee failed but isLoggedIn is true");
+                        return false;
+                    }
                     if (attendee.id == null || attendee.id <= 0) {
                         return true;
                     }
