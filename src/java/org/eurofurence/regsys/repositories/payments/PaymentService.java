@@ -38,14 +38,14 @@ public class PaymentService {
         return result.dto;
     }
 
-    public long performCreateTransaction(Transaction transaction, String token, String requestId) {
+    public String performCreateTransaction(Transaction transaction, String token, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/transactions";
         DownstreamClientWithBodyNoResponse<Transaction> client = new DownstreamClientWithBodyNoResponse<>(Transaction.class);
         ResponseWithDto<String> result = client.performPost(requestId, url, "payment/createTransaction", transaction, token);
-        return Utils.idFromLocationHeader(result.location);
+        return Utils.uuidFromLocationHeader(result.location);
     }
 
-    public void performUpdateTransaction(long id, Transaction transaction, String token, String requestId) {
+    public void performUpdateTransaction(String id, Transaction transaction, String token, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/transactions/" + id;
         DownstreamClientWithBodyNoResponse<Transaction> client = new DownstreamClientWithBodyNoResponse<>(Transaction.class);
         ResponseWithDto<String> result = client.performPut(requestId, url, "payment/updateTransaction", transaction, token);
