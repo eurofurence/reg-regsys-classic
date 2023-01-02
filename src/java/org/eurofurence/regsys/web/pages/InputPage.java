@@ -185,6 +185,7 @@ public class InputPage extends Page {
                             Attendee savedAttendee = inputForm.getAttendee();
                             cachedMyBadgeNumbers = Collections.singletonList(savedAttendee.id);
                             cachedLoggedInAttendee = savedAttendee;
+                            the_id = savedAttendee.id;
                         } else {
                             // notify user of successful changes only if he is actually changing, not registering for the first time
                             didSaveChanges = true;
@@ -192,6 +193,8 @@ public class InputPage extends Page {
                     }
                 }
             }
+
+            inputForm.updateTransactionCache(the_id);
         }
 
         // ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ----------

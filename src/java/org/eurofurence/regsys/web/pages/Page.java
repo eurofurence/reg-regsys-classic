@@ -7,6 +7,11 @@ import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
+import org.eurofurence.regsys.repositories.errors.NotFoundException;
+import org.eurofurence.regsys.repositories.payments.PaymentService;
+import org.eurofurence.regsys.repositories.payments.Transaction;
+import org.eurofurence.regsys.repositories.payments.TransactionResponse;
+import org.eurofurence.regsys.service.TransactionCalculator;
 import org.eurofurence.regsys.web.forms.Form;
 import org.eurofurence.regsys.web.forms.NavbarForm;
 import org.eurofurence.regsys.web.servlets.RequestHandler;
@@ -18,6 +23,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.function.Predicate;
 
 /**
  *  Semi-abstract base class that represents a page in a web application.
@@ -239,6 +245,17 @@ public abstract class Page extends RequestHandler {
     public Constants.MemberStatus getLoggedInAttendeeStatus() {
         getLoggedInAttendee(); // ensure status set
         return cachedLoggedInAttendeeStatus;
+    }
+
+    public TransactionCalculator getMyTransactionCalculator() {
+        List<Long> badgeNumbers = getMyBadgeNumbers();
+        if (badgeNumbers.isEmpty()) {
+            return null;
+        }
+
+        TransactionCalculator instance = new TransactionCalculator();
+        instance.loadTransactionsFor(badgeNumbers.get(0), getTokenFromRequest(), getRequestId());
+        return instance;
     }
 
     /**
