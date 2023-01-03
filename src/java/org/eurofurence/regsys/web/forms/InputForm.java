@@ -13,6 +13,7 @@ import org.eurofurence.regsys.repositories.config.Option;
 import org.eurofurence.regsys.repositories.config.OptionList;
 import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
+import org.eurofurence.regsys.service.TransactionCalculator;
 import org.eurofurence.regsys.web.pages.InputPage;
 
 import javax.servlet.http.HttpServletRequest;
@@ -266,6 +267,16 @@ public class InputForm extends Form {
         }
 
         return !hasErrors();
+    }
+
+    protected TransactionCalculator transactionCalculator = new TransactionCalculator();
+
+    public void updateTransactionCache(long id) {
+        try {
+            transactionCalculator.loadTransactionsFor(id, getPage().getTokenFromRequest(), getPage().getRequestId());
+        } catch (DownstreamException e) {
+            addError(e.getMessage());
+        }
     }
 
     private Attendee fetchRoommate(int roommateId) {
@@ -560,35 +571,27 @@ public class InputForm extends Form {
         }
 
         public String getFullPrice() {
-            // TODO
-            return str(0.00f);
+            return FormHelper.toCurrencyDecimals(transactionCalculator.getTotalDues());
         }
 
         public String getAmountDue() {
-            // TODO
-            return str(0.00f);
+            return FormHelper.toCurrencyDecimals(transactionCalculator.getTotalDues());
         }
 
         public String getRemainingDues() {
-            // TODO
-            return str(0.00f);
+            return FormHelper.toCurrencyDecimals(transactionCalculator.getRemainingDues());
         }
 
         public String getDueDate() {
-            // TODO
-            return "2000-01-01";
+            return transactionCalculator.getDueDate();
         }
 
         public boolean getPaymentsPending() {
-            // TODO
-            return false;
-            // return attendee.getPaymentsPending();
+            return transactionCalculator.getOpenPayments() > 0;
         }
 
         public boolean hasRemainingDues() {
-            // TODO
-            return false;
-            // return attendee.getRemainingDues() > 0.01f;
+            return transactionCalculator.getRemainingDues() > 0;
         }
 
         // form fields

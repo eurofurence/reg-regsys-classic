@@ -42,37 +42,19 @@ public class StringsMMC {
         public String navbarLogoWidth = "254";
         public String navbarLogoHeight = "300";
 
-        public String helpUrl = "help/";
         public String dateFormat = "dd.MM.yyyy";
 
         public String defaultBirthday = "31.12.1900";
-        public String earliestBirthday = "01.01.1901";
-
-        public String underageTestday = "26.05.2004";
-
-        public String registrationStart = "15.01.2022";
-        public String registrationEnd = "31.12.2022";  // do not set this earlier than paymentEnd, or new regs will not work
 
         public String paymentStart = "01.01.2022";
         public String paymentEnd = "31.12.2022";
 
-        public String earliestDueDate = "01.04.2022"; // if the due date is before this, it will be silently adjusted whenever an admin saves the attendee
-
         public String conStart = "26.05.2022";
         public String conEnd = "29.05.2022";
 
-        public String goLiveTime = "01.03.2022 20:00:00"; // expects Europe/Berlin timezone
-
-        public String priceEarlyEnd = "31.03.2022";
-        public String priceBeforeEnd = "31.05.2022";
-
         /* okay, so these are not strings, but it is useful to separate out all configuration */
 
-        public float membershipPrice = 0.00f; // only if you deduct Verein membership from confee, used for accounting functions
-
         public RoomManagementOption roomConfiguration = RoomManagementOption.ROOMS_HOUSE_GROUPS;
-
-        public int maxRoomSize = 7;
     }
 
     public static class UtilMsgs {

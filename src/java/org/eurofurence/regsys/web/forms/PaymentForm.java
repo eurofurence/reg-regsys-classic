@@ -18,10 +18,13 @@ import org.eurofurence.regsys.backend.types.IsoDate;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
+import org.eurofurence.regsys.repositories.errors.DownstreamException;
+import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
 import org.eurofurence.regsys.repositories.errors.NotFoundException;
 import org.eurofurence.regsys.repositories.payments.PaymentService;
 import org.eurofurence.regsys.repositories.payments.Transaction;
 import org.eurofurence.regsys.repositories.payments.TransactionResponse;
+import org.eurofurence.regsys.service.TransactionCalculator;
 import org.eurofurence.regsys.web.pages.PaymentPage;
 
 /**
@@ -146,7 +149,7 @@ public class PaymentForm extends Form {
     }
 
     public String getReceived() {
-        return transaction.effectiveDate;
+        return Util.formatDate(new IsoDate().fromIsoFormat(transaction.effectiveDate));
     }
 
     public void setReceived(String t) {
@@ -154,7 +157,7 @@ public class PaymentForm extends Form {
             IsoDate tdate = new IsoDate().fromDate(TypeChecks.parseDate(t, "received", Strings.conf.paymentStart, Strings.util.payDateMessage,
                     Strings.conf.paymentEnd, Strings.util.payDateMessage));
 
-            transaction.effectiveDate = t;
+            transaction.effectiveDate = tdate.getIsoFormat();
         } catch (DbDataException e) {
             getPage().addError(e.getMessage());
         }
@@ -209,6 +212,8 @@ public class PaymentForm extends Form {
     // Business methods
     //
 
+    protected TransactionCalculator calculator = new TransactionCalculator();
+
     public void initializeForAttendee(long the_id) throws DbException {
         if (the_id <= 0) throw new DbException(Strings.paymentForm.internalNeedId);
 
@@ -229,13 +234,21 @@ public class PaymentForm extends Form {
             // TODO some info will be missing here
             Attendee a = getPage().getLoggedInAttendee();
             attendee.id = a.id;
-            attendee.registered = "TODO";
+            attendee.registered = "";
             attendee.nickname = a.nickname;
             attendee.lastName = a.lastName;
             attendee.firstName = a.firstName;
             attendee.email = a.email;
-            // TODO current dues, total dues, due date should be calculated from existing transactions everywhere on this page!!
         }
+
+        // load info from payment service rather than relying on attendee service cache
+        calculator.resetCache();
+        calculator.loadTransactionsFor(the_id, getPage().getTokenFromRequest(), getPage().getRequestId());
+
+        attendee.totalDues = calculator.getTotalDues();
+        attendee.currentDues = calculator.getRemainingDues();
+        attendee.paymentBalance = calculator.getTotalPayments();
+        attendee.dueDate = calculator.getDueDate();
 
         transaction.debitorId = the_id;
 
@@ -247,18 +260,26 @@ public class PaymentForm extends Form {
             if (attendee.currentDues != null && attendee.currentDues > 0) {
                 transaction.amount.grossCent = attendee.currentDues;
             }
-            // TODO - configuration
+            transaction.status = Transaction.Status.VALID.getValue();
+            transaction.transactionType = Transaction.TransactionType.PAYMENT.getValue();
+            transaction.method = Transaction.Method.TRANSFER.getValue();
             transaction.amount.currency = "EUR";
         }
     }
 
     public void processAndStorePayment() {
-        // TODO - payment service unavailable right now
-        /*
-        payment.storeToDB();
-
-        // wait a moment, then reload the attendee (because hook might have updated it)
-         */
+        try {
+            if (transaction.transactionIdentifier == null || "".equals(transaction.transactionIdentifier)) {
+                paymentService.performCreateTransaction(transaction, getPage().getTokenFromRequest(), getPage().getRequestId());
+            } else {
+                paymentService.performUpdateTransaction(transaction.transactionIdentifier, transaction, getPage().getTokenFromRequest(), getPage().getRequestId());
+            }
+        } catch (DownstreamWebErrorException e) {
+            resetErrors(Strings.inputForm.dbError);
+            addWebErrors(e.getErr());
+        } catch (DownstreamException e) {
+            resetErrors(e.getMessage());
+        }
     }
 
     public int count = -1; // -1: not loaded, 0: loaded, 1..n (1-based) on entry
@@ -368,8 +389,14 @@ public class PaymentForm extends Form {
             return false;
         }
 
-        if (statusIs(Transaction.Status.TENTATIVE) || statusIs(Transaction.Status.PENDING)) {
-            return true;
+        if (transaction.transactionIdentifier == null || "".equals(transaction.transactionIdentifier)) {
+            if (statusIs(Transaction.Status.VALID)) {
+                return true;
+            }
+        } else {
+            if (statusIs(Transaction.Status.TENTATIVE) || statusIs(Transaction.Status.PENDING)) {
+                return true;
+            }
         }
 
         if (addErrors)
@@ -455,63 +482,69 @@ public class PaymentForm extends Form {
 
     // list output methods
     public ArrayList<String[]> getPaymentWebListing(long attendee_id) {
-        ArrayList<String[]> paymentlines = new ArrayList<String[]>();
-        loadFirst(attendee_id);
+        Transaction backup = transaction;
 
-        while (loadNext()) {
-            if (!showCurrentTransaction())
-                continue;
+        try {
+            ArrayList<String[]> paymentlines = new ArrayList<String[]>();
+            loadFirst(attendee_id);
 
-            String statusHtml = "";
-            if (canConfirm(false)) {
-                statusHtml += "<a href='#' onClick=\"fillInForm('" + getAttendeeId() + "', '" + getTransactionId()
-                        + "', '" + getReceived() + "', '" + getAmount() + "', '"
-                        + getStatus().getValue() + "', '" + getMethod().getValue() + "', '"
-                        + getComments()
-                        + "'); return false;\"><img src='images/confirm.gif' title='confirm this payment' border=0></a>";
-                statusHtml += "&nbsp";
-            }
-            if (canCancel(false)) {
-                statusHtml += "<a href='#' onClick=\"confirmCancel('" + getAttendeeId() + "', '"
-                        + getTransactionId() + "', '" + getReceived() + "', '" + getAmount() + "', '"
-                        + getStatus().getValue() + "', '" + getMethod().getValue() + "', '"
-                        + getComments()
-                        + "'); return false;\"><img src='images/delete.png' title='Cancel this payment' border=0></a>";
-            }
-            String styleClass = "searchlist";
-            if (getStatus() == Transaction.Status.TENTATIVE)
-                styleClass = "searchlist_prepending";
-            if (getStatus() == Transaction.Status.PENDING)
-                styleClass = "searchlist_pending";
+            while (loadNext()) {
+                if (!showCurrentTransaction())
+                    continue;
 
-            if (typeIs(Transaction.TransactionType.PAYMENT)) {
-                paymentlines.add(new String[] {
-                        escape(getAttendeeId()),
-                        escape(getReceived()),
-                        "&nbsp;",
-                        escape(getAmount()),
-                        escape(getStatus().getValue()),
-                        statusHtml,
-                        escape(getMethod().getValue()),
-                        escape(getComments()),
-                        styleClass
-                });
-            } else {
-                paymentlines.add(new String[] {
-                        escape(getAttendeeId()),
-                        escape(getReceived()),
-                        escape(getAmount()),
-                        "&nbsp;",
-                        escape(getStatus().getValue()),
-                        "&nbsp;",
-                        escape(getMethod().getValue()),
-                        escape(getComments()),
-                        styleClass
-                });
+                String statusHtml = "";
+                if (canConfirm(false)) {
+                    statusHtml += "<a href='#' onClick=\"fillInForm('" + getAttendeeId() + "', '" + getTransactionId()
+                            + "', '" + getReceived() + "', '" + getAmount() + "', '"
+                            + getStatus().getValue() + "', '" + getMethod().getValue() + "', '"
+                            + getComments()
+                            + "'); return false;\"><img src='../images/confirm.gif' title='confirm this payment' border=0></a>";
+                    statusHtml += "&nbsp";
+                }
+                if (canCancel(false)) {
+                    statusHtml += "<a href='#' onClick=\"confirmCancel('" + getAttendeeId() + "', '"
+                            + getTransactionId() + "', '" + getReceived() + "', '" + getAmount() + "', '"
+                            + getStatus().getValue() + "', '" + getMethod().getValue() + "', '"
+                            + getComments()
+                            + "'); return false;\"><img src='../images/delete.png' title='Cancel this payment' border=0></a>";
+                }
+                String styleClass = "searchlist";
+                if (getStatus() == Transaction.Status.TENTATIVE)
+                    styleClass = "searchlist_prepending";
+                if (getStatus() == Transaction.Status.PENDING)
+                    styleClass = "searchlist_pending";
+
+                if (typeIs(Transaction.TransactionType.PAYMENT)) {
+                    paymentlines.add(new String[]{
+                            escape(getAttendeeId()),
+                            escape(getReceived()),
+                            "&nbsp;",
+                            escape(getAmount()),
+                            escape(getStatus().getValue()),
+                            statusHtml,
+                            escape(getMethod().getValue()),
+                            escape(getComments()),
+                            styleClass
+                    });
+                } else {
+                    paymentlines.add(new String[]{
+                            escape(getAttendeeId()),
+                            escape(getReceived()),
+                            escape(getAmount()),
+                            "&nbsp;",
+                            escape(getStatus().getValue()),
+                            "&nbsp;",
+                            escape(getMethod().getValue()),
+                            escape(getComments()),
+                            styleClass
+                    });
+                }
             }
+
+            return paymentlines;
+        } finally {
+            transaction = backup;
         }
-
-        return paymentlines;
     }
 
     // --------------------- form output methods ------------------------------------------------
@@ -537,7 +570,7 @@ public class PaymentForm extends Form {
 
         result += "<FORM id=\"paymentform\" ACTION=\"payment\" METHOD=\"POST\" accept-charset=\"UTF-8\">\n";
         result += "    " + Form.hiddenField(PaymentPage.ATTENDEE_ID, getAttendeeId()) + "\n";
-        result += "    " + Form.hiddenField(TRANSACTION_ID, "0") + "\n";
+        result += "    " + Form.hiddenField(TRANSACTION_ID, "") + "\n";
 
         return result;
     }
@@ -554,7 +587,7 @@ public class PaymentForm extends Form {
         String[] values = Arrays.stream(Transaction.Method.values())
                 .map(Transaction.Method::getValue)
                 .toArray(String[]::new);
-        return selector(true, TRANSACTION_TYPE,
+        return selector(true, TRANSACTION_METHOD,
                 values,
                 values,
                 getMethod().getValue(), 1, false, style);
@@ -565,7 +598,6 @@ public class PaymentForm extends Form {
     }
 
     public String getEditFormSubmitButton(String caption, String style) {
-        // TODO: there should be methods in Form to create submit and reset buttons
         return "<INPUT TYPE=\"SUBMIT\" VALUE=\"" + escape(caption) + "\" CLASS=\"" + escape(style) + "\"/>";
     }
 

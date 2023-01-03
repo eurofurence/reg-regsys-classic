@@ -42,37 +42,19 @@ public class StringsEF {
         public String navbarLogoWidth = "168";
         public String navbarLogoHeight = "487";
 
-        public String helpUrl = "help/";
         public String dateFormat = "dd.MM.yyyy";
 
         public String defaultBirthday = "31.12.1900";
-        public String earliestBirthday = "01.01.1901";
-
-        public String underageTestday = "24.08.2004";
-
-        public String registrationStart = "15.01.2022";
-        public String registrationEnd = "31.12.2022";  // do not set this earlier than paymentEnd, or new regs will not work
 
         public String paymentStart = "01.01.2022";
-        public String paymentEnd = "31.12.2022";
-
-        public String earliestDueDate = "15.03.2022"; // if the due date is before this, it will be silently adjusted whenever an admin saves the attendee
+        public String paymentEnd = "31.12.2023";
 
         public String conStart = "24.08.2022";
         public String conEnd = "28.08.2022";
 
-        public String goLiveTime = "29.01.2022 20:00:00"; // expects Europe/Berlin timezone
-
-        public String priceEarlyEnd = "31.03.2022";
-        public String priceBeforeEnd = "31.05.2022";
-
         /* okay, so these are not strings, but it is useful to separate out all configuration */
 
-        public float membershipPrice = 20.00f; // only if you deduct Verein membership from confee, used for accounting functions
-
         public RoomManagementOption roomConfiguration = RoomManagementOption.ROOMS_EXTERNAL;
-
-        public int maxRoomSize = 3;
     }
 
     public static class UtilMsgs {
@@ -92,7 +74,7 @@ public class StringsEF {
         public String tooOldMessage = "Over 115 years of age? Come on!";
         public String tooYoungMessage = "Sorry, people under 18 years cannot attend Eurofurence.";
         public String regDateMessage = "Registration starts Jan 2018 and ends on the last day of the con!";
-        public String payDateMessage = "Payments must be received within 2018.";
+        public String payDateMessage = "Payments must be received within 2023.";
     }
 
     public static class AccountingPageMsgs {
