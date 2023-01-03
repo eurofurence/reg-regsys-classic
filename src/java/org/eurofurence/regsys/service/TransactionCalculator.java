@@ -19,6 +19,10 @@ public class TransactionCalculator {
     }
     public void loadTransactionsFor(long debitorId, String token, String requestId) {
         if (cachedTransactions == null) {
+            if (debitorId == 0) {
+                cachedTransactions = new ArrayList<>();
+                return;
+            }
             try {
                 TransactionResponse response = paymentService.performFindTransactions(debitorId, null, null, null, token, requestId);
                 if (response != null && response.payload != null) {
