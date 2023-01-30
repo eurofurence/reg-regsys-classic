@@ -65,8 +65,11 @@ public class Configuration {
         @JsonProperty("payment_service")
         public String paymentService;
 
-        @JsonProperty("token_cookie_name")
-        public String tokenCookieName;
+        @JsonProperty("id_token_cookie_name")
+        public String idTokenCookieName;
+
+        @JsonProperty("access_token_cookie_name")
+        public String accessTokenCookieName;
 
         @JsonProperty("api_token")
         public String apiToken; // needed for the interfaces

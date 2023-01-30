@@ -7,10 +7,7 @@ import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
-import org.eurofurence.regsys.repositories.errors.NotFoundException;
-import org.eurofurence.regsys.repositories.payments.PaymentService;
-import org.eurofurence.regsys.repositories.payments.Transaction;
-import org.eurofurence.regsys.repositories.payments.TransactionResponse;
+import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.service.TransactionCalculator;
 import org.eurofurence.regsys.web.forms.Form;
 import org.eurofurence.regsys.web.forms.NavbarForm;
@@ -23,7 +20,6 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.*;
-import java.util.function.Predicate;
 
 /**
  *  Semi-abstract base class that represents a page in a web application.
@@ -157,17 +153,17 @@ public abstract class Page extends RequestHandler {
         if (cachedPermissionsFromRequest != null)
             return cachedPermissionsFromRequest;
 
-        String token = getTokenFromRequest();
+        RequestAuth auth = getTokenFromRequest();
 
         Set<Constants.Permission> result = new HashSet<>();
-        if ("".equals(token)) {
+        if ("".equals(auth)) {
             cachedPermissionsFromRequest = result;
             return result;
         }
 
         result.add(Constants.Permission.LOGIN);
 
-        if (attendeeService.performHasRole("admin", token, getRequestId())) {
+        if (attendeeService.performHasRole("admin", auth, getRequestId())) {
             result.add(Constants.Permission.STATS);
             result.add(Constants.Permission.ADMIN);
             result.add(Constants.Permission.EXPORT_CONBOOK);
@@ -184,27 +180,33 @@ public abstract class Page extends RequestHandler {
         return v == null ? "" : v;
     }
 
-    private String cachedTokenFromRequest;
-    public String getTokenFromRequest() {
-        if (cachedTokenFromRequest != null)
-            return cachedTokenFromRequest;
+    private RequestAuth cachedTokensFromRequest;
+    public RequestAuth getTokenFromRequest() {
+        if (cachedTokensFromRequest != null)
+            return cachedTokensFromRequest;
+
+        RequestAuth result = new RequestAuth();
 
         Cookie[] cookies = getRequest().getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (nvl(configuration.downstream.tokenCookieName).equals(nvl(cookie.getName()))) {
-                    String token = nvl(cookie.getValue());
-                    cachedTokenFromRequest = token;
-                    return token;
+                if (nvl(configuration.downstream.idTokenCookieName).equals(nvl(cookie.getName()))) {
+                    result.idToken = nvl(cookie.getValue());
+                }
+                if (nvl(configuration.downstream.accessTokenCookieName).equals(nvl(cookie.getName()))) {
+                    result.accessToken = nvl(cookie.getValue());
                 }
             }
         }
-        cachedTokenFromRequest = "";
-        return "";
+
+        cachedTokensFromRequest = result;
+        return result;
     }
 
     public boolean isLoggedIn() {
-        return !"".equals(getTokenFromRequest());
+        RequestAuth auth = getTokenFromRequest();
+        boolean unauthorized = auth.idToken == null || "".equals(auth.idToken) || auth.accessToken == null || "".equals(auth.accessToken);
+        return !unauthorized;
     }
 
     protected List<Long> cachedMyBadgeNumbers;

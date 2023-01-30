@@ -3,6 +3,7 @@ package org.eurofurence.regsys.web.pages;
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
+import org.eurofurence.regsys.repositories.mails.MailPreviewRequest;
 import org.eurofurence.regsys.repositories.mails.MailSendRequest;
 import org.eurofurence.regsys.repositories.mails.MailService;
 import org.eurofurence.regsys.repositories.mails.TemplateList;
@@ -115,8 +116,7 @@ public class AnnouncementsPage extends Page {
     private void sendTestMail() {
         Attendee me = getLoggedInAttendee();
 
-        MailSendRequest sendRequest = new MailSendRequest();
-        sendRequest.to = Collections.singletonList(getLoggedInAttendee().email);
+        MailPreviewRequest sendRequest = new MailPreviewRequest();
         sendRequest.cid = getAnnouncementForm().getCid();
         sendRequest.lang = getAnnouncementForm().getLang();
         sendRequest.variables = new HashMap<>();
@@ -138,7 +138,7 @@ public class AnnouncementsPage extends Page {
         sendRequest.variables.put("new_email","new_"+me.email);
 
         getAnnouncementForm().withErrorHandling(() -> {
-            getMailService().performSendMail(sendRequest, getTokenFromRequest(), getRequestId());
+            getMailService().performPreviewMail(sendRequest, getTokenFromRequest(), getRequestId());
         }, Strings.announcementPage.testSendFailure);
     }
 

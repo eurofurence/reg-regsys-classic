@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.ByteArrayEntity;
 import org.eurofurence.regsys.backend.HardcodedConfig;
+import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.config.ConfigService;
 
 public class DownstreamClientWithBodyNoResponse<B> {
@@ -20,17 +21,8 @@ public class DownstreamClientWithBodyNoResponse<B> {
         this.lowlevelClient = new LowlevelClient();
     }
 
-    private ResponseWithDto<String> performOnRequest(String requestId, String requestName, B body, HttpEntityEnclosingRequest request, String token) {
-        if (token != null && !"".equals(token)) {
-            if (token.equals(configService.getConfig().downstream.apiToken)) {
-                request.addHeader("X-Api-Key", token);
-            } else {
-                request.addHeader("Authorization", "Bearer " + token);
-            }
-        }
-        if (requestId != null && !"".equals(requestId)) {
-            request.addHeader("X-Request-Id", requestId);
-        }
+    private ResponseWithDto<String> performOnRequest(String requestId, String requestName, B body, HttpEntityEnclosingRequest request, RequestAuth auth) {
+        lowlevelClient.requestHeaderManipulator(request, requestId, auth, configService.getConfig());
 
         request.setHeader("Content-Type", "application/json");
         try {
@@ -51,13 +43,13 @@ public class DownstreamClientWithBodyNoResponse<B> {
         return response;
     }
 
-    public ResponseWithDto<String> performPost(String requestId, String url, String requestName, B body, String token) {
+    public ResponseWithDto<String> performPost(String requestId, String url, String requestName, B body, RequestAuth auth) {
         HttpEntityEnclosingRequest request = new HttpPost(url);
-        return performOnRequest(requestId, requestName, body, request, token);
+        return performOnRequest(requestId, requestName, body, request, auth);
     }
 
-    public ResponseWithDto<String> performPut(String requestId, String url, String requestName, B body, String token) {
+    public ResponseWithDto<String> performPut(String requestId, String url, String requestName, B body, RequestAuth auth) {
         HttpEntityEnclosingRequest request = new HttpPut(url);
-        return performOnRequest(requestId, requestName, body, request, token);
+        return performOnRequest(requestId, requestName, body, request, auth);
     }
 }

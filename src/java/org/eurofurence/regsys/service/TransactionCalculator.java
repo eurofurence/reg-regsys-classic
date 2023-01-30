@@ -1,6 +1,7 @@
 package org.eurofurence.regsys.service;
 
 import org.eurofurence.regsys.backend.Logging;
+import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.errors.NotFoundException;
 import org.eurofurence.regsys.repositories.payments.PaymentService;
 import org.eurofurence.regsys.repositories.payments.Transaction;
@@ -17,14 +18,14 @@ public class TransactionCalculator {
     public void resetCache() {
         cachedTransactions = null;
     }
-    public void loadTransactionsFor(long debitorId, String token, String requestId) {
+    public void loadTransactionsFor(long debitorId, RequestAuth auth, String requestId) {
         if (cachedTransactions == null) {
             if (debitorId == 0) {
                 cachedTransactions = new ArrayList<>();
                 return;
             }
             try {
-                TransactionResponse response = paymentService.performFindTransactions(debitorId, null, null, null, token, requestId);
+                TransactionResponse response = paymentService.performFindTransactions(debitorId, null, null, null, auth, requestId);
                 if (response != null && response.payload != null) {
                     cachedTransactions = response.payload;
                 } else {
