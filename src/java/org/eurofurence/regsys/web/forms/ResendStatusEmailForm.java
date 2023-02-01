@@ -5,6 +5,7 @@ import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
+import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.ForbiddenException;
 import org.eurofurence.regsys.repositories.errors.UnauthorizedException;
@@ -37,11 +38,11 @@ public class ResendStatusEmailForm extends AttendeeSelectionForm {
         for (Long id: idSet) {
             try {
                 AttendeeService attendeeService = getPage().getAttendeeService();
-                String token = getPage().getTokenFromRequest();
+                RequestAuth auth = getPage().getTokenFromRequest();
                 String requestId = getPage().getRequestId();
 
-                Attendee attendee = attendeeService.performGetAttendee(id, token, requestId);
-                String statusStr = attendeeService.performGetCurrentStatus(id, token, requestId);
+                Attendee attendee = attendeeService.performGetAttendee(id, auth, requestId);
+                String statusStr = attendeeService.performGetCurrentStatus(id, auth, requestId);
                 Constants.MemberStatus status = Constants.MemberStatus.byNewRegsysValue(statusStr);
 
                 // TODO actually call endpoint on attendee service once it's implemented

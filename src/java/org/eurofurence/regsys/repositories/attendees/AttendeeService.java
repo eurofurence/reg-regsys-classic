@@ -1,6 +1,7 @@
 package org.eurofurence.regsys.repositories.attendees;
 
 import org.eurofurence.regsys.backend.HardcodedConfig;
+import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.config.ConfigService;
 import org.eurofurence.regsys.repositories.config.Configuration;
 import org.eurofurence.regsys.repositories.errors.ForbiddenException;
@@ -26,11 +27,11 @@ public class AttendeeService {
 
     // --- registration ---
 
-    public List<Long> performGetBadgeNumbers(String token, String requestId) {
+    public List<Long> performGetBadgeNumbers(RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees";
         DownstreamClientNoBody<AttendeeIdList> client = new DownstreamClientNoBody<>(AttendeeIdList.class);
         try {
-            ResponseWithDto<AttendeeIdList> result = client.performGet(requestId, url,"attendee/listMyRegistrations", token);
+            ResponseWithDto<AttendeeIdList> result = client.performGet(requestId, url,"attendee/listMyRegistrations", auth);
             if (result.dto == null || result.dto.ids == null)
                 return new ArrayList<>();
             return result.dto.ids;
@@ -39,144 +40,144 @@ public class AttendeeService {
         }
     }
 
-    public Attendee performGetAttendee(long id, String token, String requestId) {
+    public Attendee performGetAttendee(long id, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/" + id;
         DownstreamClientNoBody<Attendee> client = new DownstreamClientNoBody<>(Attendee.class);
-        ResponseWithDto<Attendee> result = client.performGet(requestId, url,"attendee/getAttendee", token);
+        ResponseWithDto<Attendee> result = client.performGet(requestId, url,"attendee/getAttendee", auth);
         return result.dto;
     }
 
-    public long performAddAttendee(Attendee attendee, String token, String requestId) {
+    public long performAddAttendee(Attendee attendee, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees";
         DownstreamClientWithBodyNoResponse<Attendee> client = new DownstreamClientWithBodyNoResponse<>(Attendee.class);
-        ResponseWithDto<String> result = client.performPost(requestId, url,"attendee/addAttendee", attendee, token);
+        ResponseWithDto<String> result = client.performPost(requestId, url,"attendee/addAttendee", attendee, auth);
         return Utils.idFromLocationHeader(result.location);
     }
 
-    public void performUpdateAttendee(Attendee attendee, String token, String requestId) {
+    public void performUpdateAttendee(Attendee attendee, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/" + attendee.id;
         DownstreamClientWithBodyNoResponse<Attendee> client = new DownstreamClientWithBodyNoResponse<>(Attendee.class);
-        client.performPut(requestId, url,"attendee/updateAttendee", attendee, token);
+        client.performPut(requestId, url,"attendee/updateAttendee", attendee, auth);
     }
 
     // --- additional ---
 
-    public AddInfo performGetAdditionalInfo(long attendeeId, String area, String token, String requestId) {
+    public AddInfo performGetAdditionalInfo(long attendeeId, String area, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/" + attendeeId + "/additional-info/" + area;
         DownstreamClientNoBody<AddInfo> client = new DownstreamClientNoBody<>(AddInfo.class);
-        ResponseWithDto<AddInfo> result = client.performGet(requestId, url,"attendee/getAdditionalInfo", token);
+        ResponseWithDto<AddInfo> result = client.performGet(requestId, url,"attendee/getAdditionalInfo", auth);
         return result.dto;
     }
 
-    public void performSetAdditionalInfo(long attendeeId, String area, AddInfo value, String token, String requestId) {
+    public void performSetAdditionalInfo(long attendeeId, String area, AddInfo value, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/" + attendeeId + "/additional-info/" + area;
         DownstreamClientWithBodyNoResponse<AddInfo> client = new DownstreamClientWithBodyNoResponse<>(AddInfo.class);
-        client.performPost(requestId, url,"attendee/setAdditionalInfo", value, token);
+        client.performPost(requestId, url,"attendee/setAdditionalInfo", value, auth);
     }
 
-    public void performDeleteAdditionalInfo(long attendeeId, String area, String token, String requestId) {
+    public void performDeleteAdditionalInfo(long attendeeId, String area, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/" + attendeeId + "/additional-info/" + area;
         DownstreamClientNoBodyNoResponse client = new DownstreamClientNoBodyNoResponse();
-        client.performDelete(requestId, url,"attendee/deleteAdditionalInfo", token);
+        client.performDelete(requestId, url,"attendee/deleteAdditionalInfo", auth);
     }
 
     // --- status ---
 
-    public String performGetCurrentStatus(long id, String token, String requestId) {
+    public String performGetCurrentStatus(long id, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/" + id + "/status";
         DownstreamClientNoBody<StatusOnly> client = new DownstreamClientNoBody<>(StatusOnly.class);
-        ResponseWithDto<StatusOnly> result = client.performGet(requestId, url,"attendee/getStatus", token);
+        ResponseWithDto<StatusOnly> result = client.performGet(requestId, url,"attendee/getStatus", auth);
         return result.dto.status;
     }
 
-    public void performStatusChange(long attendeeId, StatusChange change, String token, String requestId) {
+    public void performStatusChange(long attendeeId, StatusChange change, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/" + attendeeId + "/status";
         DownstreamClientWithBodyNoResponse<StatusChange> client = new DownstreamClientWithBodyNoResponse<>(StatusChange.class);
-        client.performPost(requestId, url,"attendee/changeStatus", change, token);
+        client.performPost(requestId, url,"attendee/changeStatus", change, auth);
     }
 
-    public StatusHistory performGetStatusHistory(long id, String token, String requestId) {
+    public StatusHistory performGetStatusHistory(long id, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/" + id + "/status-history";
         DownstreamClientNoBody<StatusHistory> client = new DownstreamClientNoBody<>(StatusHistory.class);
-        ResponseWithDto<StatusHistory> result = client.performGet(requestId, url,"attendee/getStatusHistory", token);
+        ResponseWithDto<StatusHistory> result = client.performGet(requestId, url,"attendee/getStatusHistory", auth);
         return result.dto;
     }
 
     // --- privileged: adminInfo ---
 
-    public AdminInfo performGetAdminInfo(long attendeeId, String token, String requestId) {
+    public AdminInfo performGetAdminInfo(long attendeeId, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/" + attendeeId + "/admin";
         DownstreamClientNoBody<AdminInfo> client = new DownstreamClientNoBody<>(AdminInfo.class);
-        ResponseWithDto<AdminInfo> result = client.performGet(requestId, url,"attendee/getAdminInfo", token);
+        ResponseWithDto<AdminInfo> result = client.performGet(requestId, url,"attendee/getAdminInfo", auth);
         return result.dto;
     }
 
-    public void performSetAdminInfo(long attendeeId, AdminInfo value, String token, String requestId) {
+    public void performSetAdminInfo(long attendeeId, AdminInfo value, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/" + attendeeId + "/admin";
         DownstreamClientWithBodyNoResponse<AdminInfo> client = new DownstreamClientWithBodyNoResponse<>(AdminInfo.class);
-        client.performPut(requestId, url,"attendee/setAdminInfo", value, token);
+        client.performPut(requestId, url,"attendee/setAdminInfo", value, auth);
     }
 
     // --- privileged: search ---
 
-    public AttendeeSearchResultList performFindAttendees(AttendeeSearchCriteria criteria, String token, String requestId) {
+    public AttendeeSearchResultList performFindAttendees(AttendeeSearchCriteria criteria, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/find";
         DownstreamClientWithBody<AttendeeSearchCriteria, AttendeeSearchResultList> client = new DownstreamClientWithBody<>(AttendeeSearchCriteria.class, AttendeeSearchResultList.class);
-        ResponseWithDto<AttendeeSearchResultList> result = client.performPost(requestId, url,"attendee/findAttendees", criteria, token);
+        ResponseWithDto<AttendeeSearchResultList> result = client.performPost(requestId, url,"attendee/findAttendees", criteria, auth);
         return result.dto;
     }
 
     // --- privileged: bans ---
 
-    public BanRuleList performListBans(String token, String requestId) {
+    public BanRuleList performListBans(RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/bans";
         DownstreamClientNoBody<BanRuleList> client = new DownstreamClientNoBody<>(BanRuleList.class);
-        ResponseWithDto<BanRuleList> result = client.performGet(requestId, url,"attendee/listBans", token);
+        ResponseWithDto<BanRuleList> result = client.performGet(requestId, url,"attendee/listBans", auth);
         return result.dto;
     }
 
-    public long performAddBan(BanRule ban, String token, String requestId) {
+    public long performAddBan(BanRule ban, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/bans";
         DownstreamClientWithBodyNoResponse<BanRule> client = new DownstreamClientWithBodyNoResponse<>(BanRule.class);
-        ResponseWithDto<String> result = client.performPost(requestId, url,"attendee/addBan", ban, token);
+        ResponseWithDto<String> result = client.performPost(requestId, url,"attendee/addBan", ban, auth);
         return Utils.idFromLocationHeader(result.location);
     }
 
-    public BanRule performGetBan(long id, String token, String requestId) {
+    public BanRule performGetBan(long id, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/bans/" + id;
         DownstreamClientNoBody<BanRule> client = new DownstreamClientNoBody<>(BanRule.class);
-        ResponseWithDto<BanRule> result = client.performGet(requestId, url,"attendee/getBan", token);
+        ResponseWithDto<BanRule> result = client.performGet(requestId, url,"attendee/getBan", auth);
         return result.dto;
     }
 
-    public void performUpdateBan(BanRule ban, String token, String requestId) {
+    public void performUpdateBan(BanRule ban, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/bans/" + ban.id;
         DownstreamClientWithBodyNoResponse<BanRule> client = new DownstreamClientWithBodyNoResponse<>(BanRule.class);
-        client.performPut(requestId, url,"attendee/updateBan", ban, token);
+        client.performPut(requestId, url,"attendee/updateBan", ban, auth);
     }
 
-    public void performDeleteBan(long id, String token, String requestId) {
+    public void performDeleteBan(long id, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/bans/" + id;
         DownstreamClientNoBodyNoResponse client = new DownstreamClientNoBodyNoResponse();
-        client.performDelete(requestId, url,"attendee/deleteBan", token);
+        client.performDelete(requestId, url,"attendee/deleteBan", auth);
     }
 
     // --- info ---
 
-    public Countdown performGetCountdown(String token, String requestId) {
+    public Countdown performGetCountdown(RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/countdown";
         DownstreamClientNoBody<Countdown> client = new DownstreamClientNoBody<>(Countdown.class);
-        ResponseWithDto<Countdown> result = client.performGet(requestId, url,"attendee/countdown", token);
+        ResponseWithDto<Countdown> result = client.performGet(requestId, url,"attendee/countdown", auth);
         return result.dto;
     }
 
     // --- unofficial - this may move to auth service at some point ---
 
-    public boolean performHasRole(String role, String token, String requestId) {
+    public boolean performHasRole(String role, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/roles/" + role;
         DownstreamClientNoBodyNoResponse client = new DownstreamClientNoBodyNoResponse();
         try {
-            ResponseWithDto<String> result = client.performGet(requestId, url,"attendee/roles", token);
+            ResponseWithDto<String> result = client.performGet(requestId, url,"attendee/roles", auth);
         } catch (UnauthorizedException | ForbiddenException e) {
             return false;
         }

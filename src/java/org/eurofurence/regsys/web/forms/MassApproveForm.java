@@ -6,6 +6,7 @@ import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
 import org.eurofurence.regsys.repositories.attendees.StatusChange;
 import org.eurofurence.regsys.backend.Strings;
+import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.ForbiddenException;
 import org.eurofurence.regsys.repositories.errors.UnauthorizedException;
@@ -37,11 +38,11 @@ public class MassApproveForm extends AttendeeSelectionForm {
         for (Long id: idSet) {
             try {
                 AttendeeService attendeeService = getPage().getAttendeeService();
-                String token = getPage().getTokenFromRequest();
+                RequestAuth auth = getPage().getTokenFromRequest();
                 String requestId = getPage().getRequestId();
 
-                Attendee attendee = attendeeService.performGetAttendee(id, token, requestId);
-                String statusStr = attendeeService.performGetCurrentStatus(id, token, requestId);
+                Attendee attendee = attendeeService.performGetAttendee(id, auth, requestId);
+                String statusStr = attendeeService.performGetCurrentStatus(id, auth, requestId);
                 Constants.MemberStatus status = Constants.MemberStatus.byNewRegsysValue(statusStr);
 
                 if (status != Constants.MemberStatus.NEW) {
@@ -50,7 +51,7 @@ public class MassApproveForm extends AttendeeSelectionForm {
                     StatusChange change = new StatusChange();
                     change.status = Constants.MemberStatus.APPROVED.newRegsysValue();
                     change.comment = "regsys classic bulk approve";
-                    attendeeService.performStatusChange(id, change, token, requestId);
+                    attendeeService.performStatusChange(id, change, auth, requestId);
                 }
                 successCount++;
             } catch (UnauthorizedException | ForbiddenException e) {

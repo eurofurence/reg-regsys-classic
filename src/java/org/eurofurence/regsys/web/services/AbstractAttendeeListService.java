@@ -4,6 +4,7 @@ import org.eurofurence.regsys.backend.HardcodedConfig;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
+import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.config.ConfigService;
 
 import java.util.function.Consumer;
@@ -37,10 +38,11 @@ public abstract class AbstractAttendeeListService extends Service {
         finderAdditionalSetup(criterion);
         criteria.matchAny.add(criterion);
 
-        String adminToken = configService.getConfig().downstream.apiToken;
+        RequestAuth auth = new RequestAuth();
+        auth.apiToken = configService.getConfig().downstream.apiToken;
 
         try {
-            AttendeeSearchResultList resultList = attendeeService.performFindAttendees(criteria, adminToken, getRequestId());
+            AttendeeSearchResultList resultList = attendeeService.performFindAttendees(criteria, auth, getRequestId());
             for (AttendeeSearchResultList.AttendeeSearchResult attendee: resultList.attendees) {
                 if (filter.test(attendee)) {
                     collector.accept(attendee);

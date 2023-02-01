@@ -8,6 +8,7 @@ import org.eurofurence.regsys.repositories.attendees.AdminInfo;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
 import org.eurofurence.regsys.repositories.attendees.StatusChange;
+import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.config.ConfigService;
 import org.eurofurence.regsys.repositories.config.Option;
 import org.eurofurence.regsys.repositories.config.OptionList;
@@ -191,16 +192,16 @@ public class InputForm extends Form {
     // --------- Business methods ----------------------
 
     public void getFromDB(long dbId) {
-        String token = getPage().getTokenFromRequest();
+        RequestAuth auth = getPage().getTokenFromRequest();
         String requestId = getPage().getRequestId();
 
-        attendee = attendeeService.performGetAttendee(dbId, token, requestId);
+        attendee = attendeeService.performGetAttendee(dbId, auth, requestId);
         attendeeStatus = Constants.MemberStatus.byNewRegsysValue(
-                attendeeService.performGetCurrentStatus(dbId, token, requestId)
+                attendeeService.performGetCurrentStatus(dbId, auth, requestId)
         );
         newAttendeeStatus = attendeeStatus;
         if (getPage().hasPermission(Permission.ADMIN)) {
-            adminInfo = attendeeService.performGetAdminInfo(dbId, token, requestId);
+            adminInfo = attendeeService.performGetAdminInfo(dbId, auth, requestId);
         }
     }
 
@@ -230,17 +231,17 @@ public class InputForm extends Form {
      *
      */
     public boolean processAccept(boolean wasNew) {
-        String token = getPage().getTokenFromRequest();
+        RequestAuth auth = getPage().getTokenFromRequest();
         String requestId = getPage().getRequestId();
 
         try {
             if (wasNew) {
-                attendee.id = attendeeService.performAddAttendee(attendee, token, requestId);
+                attendee.id = attendeeService.performAddAttendee(attendee, auth, requestId);
             } else {
-                attendeeService.performUpdateAttendee(attendee, token, requestId);
+                attendeeService.performUpdateAttendee(attendee, auth, requestId);
 
                 if (getPage().hasPermission(Permission.ADMIN)) {
-                    attendeeService.performSetAdminInfo(attendee.id, adminInfo, token, requestId);
+                    attendeeService.performSetAdminInfo(attendee.id, adminInfo, auth, requestId);
                 }
 
                 // reload current status after the changes
@@ -254,7 +255,7 @@ public class InputForm extends Form {
                     } else {
                         change.comment = "admin changed status";
                     }
-                    attendeeService.performStatusChange(attendee.id, change, token, requestId);
+                    attendeeService.performStatusChange(attendee.id, change, auth, requestId);
 
                     reloadAttendeeStatus();
                 }

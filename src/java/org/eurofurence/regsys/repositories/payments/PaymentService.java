@@ -4,6 +4,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.eurofurence.regsys.backend.HardcodedConfig;
+import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.config.ConfigService;
 import org.eurofurence.regsys.repositories.config.Configuration;
 import org.eurofurence.regsys.repositories.lowlevel.DownstreamClientNoBody;
@@ -22,7 +23,7 @@ public class PaymentService {
         serviceBaseUrl = config.downstream.paymentService;
     }
 
-    public TransactionResponse performFindTransactions(Long debitorId, String transactionIdentifier, String effectiveFromISO, String effectiveBeforeISO, String token, String requestId) {
+    public TransactionResponse performFindTransactions(Long debitorId, String transactionIdentifier, String effectiveFromISO, String effectiveBeforeISO, RequestAuth auth, String requestId) {
         List<NameValuePair> queryParams = new ArrayList<>();
         if (debitorId != null)
             queryParams.add(new BasicNameValuePair("debitor_id", debitorId.toString()));
@@ -34,20 +35,20 @@ public class PaymentService {
             queryParams.add(new BasicNameValuePair("effective_before", effectiveBeforeISO));
         String url = serviceBaseUrl + "/api/rest/v1/transactions?" + URLEncodedUtils.format(queryParams, "UTF-8");
         DownstreamClientNoBody<TransactionResponse> client = new DownstreamClientNoBody<>(TransactionResponse.class);
-        ResponseWithDto<TransactionResponse> result = client.performGet(requestId, url, "payment/findTransactions", token);
+        ResponseWithDto<TransactionResponse> result = client.performGet(requestId, url, "payment/findTransactions", auth);
         return result.dto;
     }
 
-    public String performCreateTransaction(Transaction transaction, String token, String requestId) {
+    public String performCreateTransaction(Transaction transaction, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/transactions";
         DownstreamClientWithBodyNoResponse<Transaction> client = new DownstreamClientWithBodyNoResponse<>(Transaction.class);
-        ResponseWithDto<String> result = client.performPost(requestId, url, "payment/createTransaction", transaction, token);
+        ResponseWithDto<String> result = client.performPost(requestId, url, "payment/createTransaction", transaction, auth);
         return Utils.uuidFromLocationHeader(result.location);
     }
 
-    public void performUpdateTransaction(String id, Transaction transaction, String token, String requestId) {
+    public void performUpdateTransaction(String id, Transaction transaction, RequestAuth auth, String requestId) {
         String url = serviceBaseUrl + "/api/rest/v1/transactions/" + id;
         DownstreamClientWithBodyNoResponse<Transaction> client = new DownstreamClientWithBodyNoResponse<>(Transaction.class);
-        ResponseWithDto<String> result = client.performPut(requestId, url, "payment/updateTransaction", transaction, token);
+        ResponseWithDto<String> result = client.performPut(requestId, url, "payment/updateTransaction", transaction, auth);
     }
 }

@@ -57,16 +57,20 @@ public class LoginPage extends Page {
         if (configuration.testing != null) {
             String role = getRequest().getParameter(PARAM_ROLE);
             if ("admin".equals(role)) {
-                addOrDeleteCookie(configuration.downstream.tokenCookieName, configuration.testing.adminToken);
+                addOrDeleteCookie(configuration.downstream.idTokenCookieName, configuration.testing.adminToken);
+                addOrDeleteCookie(configuration.downstream.accessTokenCookieName, configuration.testing.adminToken);
                 return redirect("page/start");
             } else if ("staff".equals(role)) {
-                addOrDeleteCookie(configuration.downstream.tokenCookieName, configuration.testing.staffToken);
+                addOrDeleteCookie(configuration.downstream.idTokenCookieName, configuration.testing.staffToken);
+                addOrDeleteCookie(configuration.downstream.accessTokenCookieName, configuration.testing.staffToken);
                 return redirect("page/start");
             } else if ("user".equals(role)) {
-                addOrDeleteCookie(configuration.downstream.tokenCookieName, configuration.testing.userToken);
+                addOrDeleteCookie(configuration.downstream.idTokenCookieName, configuration.testing.userToken);
+                addOrDeleteCookie(configuration.downstream.accessTokenCookieName, configuration.testing.userToken);
                 return redirect("page/start");
             } else if (isLoggedIn()) {
-                addOrDeleteCookie(configuration.downstream.tokenCookieName, "");
+                addOrDeleteCookie(configuration.downstream.idTokenCookieName, "");
+                addOrDeleteCookie(configuration.downstream.accessTokenCookieName, "");
                 return redirect("page/start");
             } else {
                 message = "Log in as " +

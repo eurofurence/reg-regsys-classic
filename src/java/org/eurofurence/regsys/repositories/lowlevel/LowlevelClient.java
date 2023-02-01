@@ -2,12 +2,15 @@ package org.eurofurence.regsys.repositories.lowlevel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.Header;
+import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.eurofurence.regsys.backend.Logging;
+import org.eurofurence.regsys.repositories.auth.RequestAuth;
+import org.eurofurence.regsys.repositories.config.Configuration;
 import org.eurofurence.regsys.repositories.errors.*;
 
 import java.io.IOException;
@@ -91,6 +94,28 @@ public class LowlevelClient {
         }
     }
 
+    public void requestHeaderManipulator(HttpMessage request, String requestId, RequestAuth auth, Configuration config) {
+        if (auth.apiToken != null && !"".equals(auth.apiToken)) {
+            request.addHeader("X-Api-Key", auth.apiToken);
+        } else {
+            String cookie = "";
+            if (auth.idToken != null && !"".equals(auth.idToken)) {
+                cookie += config.downstream.idTokenCookieName + "=" + auth.idToken;
+            }
+            if (auth.accessToken != null && !"".equals(auth.accessToken)) {
+                if (!"".equals(cookie)) {
+                    cookie += "; ";
+                }
+                cookie += config.downstream.accessTokenCookieName + "=" + auth.accessToken;
+            }
+            // let's hope this works...
+            request.addHeader("Cookie", cookie);
+        }
+        if (requestId != null && !"".equals(requestId)) {
+            request.addHeader("X-Request-Id", requestId);
+        }
+    }
+
     public HttpClient getClient() {
         if (cachedClient == null)
             createClient();
@@ -105,7 +130,7 @@ public class LowlevelClient {
                     .setConnectTimeout(REMOTE_REQUEST_TIMEOUT_SECONDS * 1000)
                     .setSocketTimeout(REMOTE_REQUEST_TIMEOUT_SECONDS * 1000)
                     .build();
-            cachedClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
+            cachedClient = HttpClientBuilder.create().disableCookieManagement().setDefaultRequestConfig(requestConfig).build();
 
             long done = System.currentTimeMillis();
             Logging.info("downstream http client successfully created ("+ (done - started) + " ms)");
