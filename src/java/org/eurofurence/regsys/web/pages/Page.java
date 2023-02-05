@@ -158,7 +158,7 @@ public abstract class Page extends RequestHandler {
             return cachedUserInfo;
 
         RequestAuth auth = getTokenFromRequest();
-        if (auth.isLoggedInAsUser()) {
+        if (auth.providedIdToken() && auth.providedAccessToken()) {
             try {
                 cachedUserInfo = authService.performGetFrontendUserinfo(auth, getRequestId());
                 // if this worked, we've confirmed we're logged in

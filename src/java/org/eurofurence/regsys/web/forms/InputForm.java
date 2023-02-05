@@ -752,16 +752,8 @@ public class InputForm extends Form {
             return textField(mayEdit(), TELEGRAM, attendee.telegram, displaySize, 80);
         }
 
-        public String getOptionPriceEarly(Option o) {
-            return FormHelper.toCurrencyDecimals(o.priceEarly);
-        }
-
-        public String getOptionPriceLate(Option o) {
-            return FormHelper.toCurrencyDecimals(o.priceLate);
-        }
-
-        public String getOptionPriceAtCon(Option o) {
-            return FormHelper.toCurrencyDecimals(o.priceAtCon);
+        public String getOptionPrice(Option o) {
+            return FormHelper.toCurrencyDecimals(o.price);
         }
 
         public List<Option> getPackages() {
@@ -891,24 +883,6 @@ public class InputForm extends Form {
                 return selector(mayEditAdmin(), ROOMASSIGN, values, showValuesAs, Integer.toString(attendee.getRoomId()), 1);
             } else
                 return textField(mayEditAdmin(), ROOMASSIGN, attendee.getRoomAssign(), displaySize, 20, style);
-        }
-
-        public boolean isMinor() {
-            return attendee.isMinor();
-        }
-
-        public String reportedPayment() {
-            return attendee.getReportPaydate().equals("") ?
-                    "NO" :
-                   attendee.getReportPaydate() + " " + escape(attendee.getReportPaycomment());
-        }
-
-        public String fieldRegistrationDate(int displaySize, String style) {
-            return textField(mayEditAdmin(), REGISTERED, attendee.getRegistered(), displaySize, 10, style);
-        }
-
-        public String fieldDueDate(int displaySize, String style) {
-            return textField(mayEditAdmin(), DUE_DATE, attendee.getDueDate(), displaySize, 10, style);
         }
         */
         public String fieldAdminComments() {
