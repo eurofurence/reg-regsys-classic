@@ -95,21 +95,23 @@ public class LowlevelClient {
     }
 
     public void requestHeaderManipulator(HttpMessage request, String requestId, RequestAuth auth, Configuration config) {
-        if (auth.apiToken != null && !"".equals(auth.apiToken)) {
+        if (auth.providedApiToken()) {
             request.addHeader("X-Api-Key", auth.apiToken);
         } else {
             String cookie = "";
-            if (auth.idToken != null && !"".equals(auth.idToken)) {
+            if (auth.providedIdToken()) {
                 cookie += config.downstream.idTokenCookieName + "=" + auth.idToken;
             }
-            if (auth.accessToken != null && !"".equals(auth.accessToken)) {
+            if (auth.providedAccessToken()) {
                 if (!"".equals(cookie)) {
                     cookie += "; ";
                 }
                 cookie += config.downstream.accessTokenCookieName + "=" + auth.accessToken;
             }
-            // let's hope this works...
             request.addHeader("Cookie", cookie);
+
+            // TODO this is a workaround until we have 2FA
+            request.addHeader("X-Admin-Request", "available");
         }
         if (requestId != null && !"".equals(requestId)) {
             request.addHeader("X-Request-Id", requestId);
