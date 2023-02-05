@@ -107,6 +107,7 @@ public class InputForm extends Form {
         attendee.flags = getDefaultFlags().getDbString();
         attendee.packages = getDefaultPackages().getDbString();
         attendee.options = getDefaultOptions().getDbString();
+        attendee.registrationLanguage = "en-US"; // have a default
     }
 
     // ---------- proxy methods for entity access -------
@@ -176,17 +177,6 @@ public class InputForm extends Form {
         OptionList flags = new OptionList(Option.OptionTypes.Flag, configService.getConfig().choices.flags, o -> o.adminOnly);
         flags.parseFromDbString(nvl(adminInfo.flags));
         return flags;
-    }
-
-    public OptionList getCountries() {
-        // TODO: add spelled out names to config and properly load them
-
-        OptionList ol = new OptionList(Option.OptionTypes.Choice);
-        ol.add(Option.OptionAssembler.choice("", "Northern Elbonia").setDefault());
-        for (String code: configService.getConfig().countries) {
-            ol.add(Option.OptionAssembler.choice(code, code));
-        }
-        return ol;
     }
 
     // --------- Business methods ----------------------
@@ -338,7 +328,7 @@ public class InputForm extends Form {
         private void setRegistrationLanguageFromRequest(HttpServletRequest request) {
             String selected = request.getParameter(REG_LANG);
             if (selected == null) {
-                selected = configService.getConfig().registrationLanguages.get(0);
+                selected = configService.getConfig().registrationLanguages.get(0).key();
             }
             attendee.registrationLanguage = selected;
         }
@@ -651,18 +641,27 @@ public class InputForm extends Form {
         }
 
         public String fieldCountry() {
-            return selector(mayEdit(), COUNTRY, getCountries(), attendee.country, 1, false);
+            return selector(mayEdit(), COUNTRY,
+                    configService.getConfig().countries.keyList(),
+                    configService.getConfig().countries.valueList(attendee.registrationLanguage),
+                    attendee.country, 1);
         }
 
         public String fieldSpokenLanguages() {
             String value = attendee.spokenLanguages;
             if (value == null) value = "";
             Set<String> selected = new HashSet<>(Arrays.asList(value.split(",")));
-            return selector(mayEdit(), LANG, configService.getConfig().spokenLanguages, configService.getConfig().spokenLanguages, selected, 5, true);
+            return selector(mayEdit(), LANG,
+                    configService.getConfig().spokenLanguages.keyList(),
+                    configService.getConfig().spokenLanguages.valueList(attendee.registrationLanguage),
+                    selected, 5, true);
         }
 
         public String fieldRegistrationLanguage() {
-            return selector(mayEdit(), REG_LANG, configService.getConfig().registrationLanguages, configService.getConfig().registrationLanguages, attendee.registrationLanguage, 1);
+            return selector(mayEdit(), REG_LANG,
+                    configService.getConfig().registrationLanguages.keyList(),
+                    configService.getConfig().registrationLanguages.valueList(attendee.registrationLanguage),
+                    attendee.registrationLanguage, 1);
         }
 
         public String fieldState(int displaySize) {
@@ -796,35 +795,10 @@ public class InputForm extends Form {
         }
 
         public String fieldTshirtSize(String style) {
-            List<String> values = new ArrayList<String>();
-            List<String> showValuesAs = new ArrayList<String>();
-            values.add(""); showValuesAs.add(Strings.inputForm.tshirtSizeSelectPrompt);
-            if ("ef".equals(Strings.conf.conventionId)) {
-                for (String key: configService.getConfig().tShirtSizes) {
-                    if (key.startsWith("w")) {
-                        values.add(key);
-                        String desc = key.replaceFirst("w", "") + " (Narrow Cut)";
-                        showValuesAs.add(desc);
-                    } else {
-                        values.add(key);
-                        showValuesAs.add(key + " (Regular Cut)");
-                    }
-                }
-            } else if ("mmc".equals(Strings.conf.conventionId)) {
-                values.add("none"); showValuesAs.add("kein Shirt");
-                for (String key: configService.getConfig().tShirtSizes) {
-                    if (key.startsWith("w")) {
-                        values.add(key);
-                        String desc = key.replaceFirst("w", "") + " (w)";
-                        showValuesAs.add(desc);
-                    } else {
-                        values.add(key);
-                        String desc = key.replaceFirst("m", "") + " (m)";
-                        showValuesAs.add(desc);
-                    }
-                }
-            }
-            return selector(mayEdit(), TSHIRT_SIZE, values, showValuesAs, attendee.tshirtSize, 1, style, null);
+            return selector(mayEdit(), TSHIRT_SIZE,
+                    configService.getConfig().tShirtSizes.keyList(),
+                    configService.getConfig().tShirtSizes.valueList(attendee.registrationLanguage),
+                    attendee.tshirtSize, 1, style, null);
         }
 
         public List<Option> getOptions() {

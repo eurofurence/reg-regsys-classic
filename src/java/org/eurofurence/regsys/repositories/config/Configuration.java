@@ -119,16 +119,16 @@ public class Configuration {
     public Choices choices;
 
     @JsonProperty("tshirtsizes")
-    public List<String> tShirtSizes;
+    public InternationalizedOptions tShirtSizes;
 
     @JsonProperty("spoken_languages")
-    public List<String> spokenLanguages;
+    public InternationalizedOptions spokenLanguages;
 
     @JsonProperty("registration_languages")
-    public List<String> registrationLanguages;
+    public InternationalizedOptions registrationLanguages;
 
     @JsonProperty("countries")
-    public List<String> countries;
+    public InternationalizedOptions countries;
 
     @JsonProperty("downstream")
     public DownstreamConfig downstream;
