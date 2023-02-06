@@ -4,6 +4,7 @@ import org.eurofurence.regsys.backend.HardcodedConfig;
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Constants.Permission;
 import org.eurofurence.regsys.backend.Strings;
+import org.eurofurence.regsys.backend.types.IsoDate;
 import org.eurofurence.regsys.repositories.attendees.AdminInfo;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
@@ -181,7 +182,7 @@ public class InputForm extends Form {
 
     // --------- Business methods ----------------------
 
-    public void getFromDB(long dbId) {
+    public void getFromDBThrows(long dbId) {
         RequestAuth auth = getPage().getTokenFromRequest();
         String requestId = getPage().getRequestId();
 
@@ -206,7 +207,7 @@ public class InputForm extends Form {
         return s1 != s2;
     }
 
-    private void reloadAttendeeStatus() {
+    private void reloadAttendeeStatusThrows() {
         attendeeStatus = Constants.MemberStatus.byNewRegsysValue(
                 attendeeService.performGetCurrentStatus(attendee.id, getPage().getTokenFromRequest(), getPage().getRequestId())
         );
@@ -235,7 +236,7 @@ public class InputForm extends Form {
                 }
 
                 // reload current status after the changes
-                reloadAttendeeStatus();
+                reloadAttendeeStatusThrows();
 
                 if (hasFundamentalDifference(newAttendeeStatus, attendeeStatus)) {
                     StatusChange change = new StatusChange();
@@ -247,7 +248,7 @@ public class InputForm extends Form {
                     }
                     attendeeService.performStatusChange(attendee.id, change, auth, requestId);
 
-                    reloadAttendeeStatus();
+                    reloadAttendeeStatusThrows();
                 }
             }
         } catch (DownstreamWebErrorException e) {
@@ -266,7 +267,7 @@ public class InputForm extends Form {
         try {
             transactionCalculator.loadTransactionsFor(id, getPage().getTokenFromRequest(), getPage().getRequestId());
         } catch (DownstreamException e) {
-            addError(e.getMessage());
+            getPage().addException(e);
         }
     }
 
@@ -344,14 +345,15 @@ public class InputForm extends Form {
 
             setLowlevelFromRequest(request, list, PACKAGE);
             // silently deselect options which are hidden for the current selection
-            deselectHiddenPackages(list);
+            deselectHiddenPackagesNotImplemented(list);
             // silently selects options which are mandatory (those should be shown set&readonly to the user anyways)
-            handleMandatoryPackages(list);
+            handleMandatoryPackagesNotImplemented(list);
 
             attendee.packages = list.getDbString();
         }
 
-        private void deselectHiddenPackages(OptionList list) {
+        private void deselectHiddenPackagesNotImplemented(OptionList list) {
+            // TODO downstream will reject invalid combinations, then we'll show the error
             for (Option o : list) {
                 if (!o.optionEnable || o.readonly) continue;
 
@@ -361,7 +363,8 @@ public class InputForm extends Form {
             }
         }
 
-        private void handleMandatoryPackages(OptionList list) {
+        private void handleMandatoryPackagesNotImplemented(OptionList list) {
+            // TODO downstream will reject invalid combinations, then we'll show the error
             for (Option o : list) {
                 // TODO
                 // if (o.isConstraintsMandatory(attendee.getPackages())) {
@@ -437,7 +440,7 @@ public class InputForm extends Form {
 
         private void setManualDues(String t) {
             if (t == null) t = "0";
-            adminInfo.manualDues = FormHelper.parseLong(getPage(), t, "manual_dues", adminInfo.manualDues);
+            adminInfo.manualDues = FormHelper.parseCurrencyDecimals(getPage(), t, "manual_dues", adminInfo.manualDues);
         }
 
         private void setManualDueDesc(String t) {
@@ -556,9 +559,12 @@ public class InputForm extends Form {
         }
 
         public boolean isOverdue() {
-            // TODO
+            String dueDate = transactionCalculator.getDueDate();
+            if (!"".equals(dueDate)) {
+                String today = new IsoDate().getIsoFormat();
+                return today.compareTo(dueDate) > 0;
+            }
             return false;
-            // return attendee.isOverdue();
         }
 
         public String getFullPrice() {
@@ -783,7 +789,7 @@ public class InputForm extends Form {
 
         public String fieldManualDues(int displaySize, String style) {
             if (auth(Permission.ADMIN)) {
-                return textField(mayEditAdmin(), MANUAL_DUES, str(adminInfo.manualDues), displaySize, 20, style);
+                return textField(mayEditAdmin(), MANUAL_DUES, FormHelper.toCurrencyDecimals(adminInfo.manualDues), displaySize, 20, style);
             } else {
                 String manualDueDisplay = Float.toString(adminInfo.manualDues);
                 return manualDueDisplay.equals("") ? "0.00 &euro;" : manualDueDisplay;

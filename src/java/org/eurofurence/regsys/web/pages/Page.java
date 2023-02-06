@@ -10,6 +10,9 @@ import org.eurofurence.regsys.repositories.attendees.AttendeeService;
 import org.eurofurence.regsys.repositories.auth.AuthService;
 import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.auth.UserInfo;
+import org.eurofurence.regsys.repositories.errors.DownstreamException;
+import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
+import org.eurofurence.regsys.repositories.errors.ErrorDto;
 import org.eurofurence.regsys.repositories.errors.ForbiddenException;
 import org.eurofurence.regsys.repositories.errors.UnauthorizedException;
 import org.eurofurence.regsys.service.TransactionCalculator;
@@ -111,6 +114,30 @@ public abstract class Page extends RequestHandler {
      */
     public synchronized void addError(String message) {
         errors.add(message);
+    }
+
+    /**
+     * Add errors coming from an exception to the list. If it wraps additional error info, that is added, too.
+     */
+    public synchronized void addException(Throwable t) {
+        errors.add(t.getMessage());
+        if (t instanceof DownstreamWebErrorException) {
+            addWebErrors(((DownstreamWebErrorException) t).getErr());
+        }
+    }
+
+    public void addWebErrors(ErrorDto err) {
+        if (err != null && err.details != null) {
+            err.details.forEach(
+                    (k, v) -> {
+                        if (v != null) {
+                            v.forEach(
+                                    msg -> addError(k + ": " + msg)
+                            );
+                        }
+                    }
+            );
+        }
     }
 
     /**
