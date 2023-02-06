@@ -31,9 +31,7 @@ public class Option {
     public boolean                optionDefault; // initial default value
 
     // Properties only relevant for Optiontypes Accomodation & Sales Option
-    public long                   priceEarly;   // only for type 2 or 3
-    public long                   priceLate;    // only for type 2 or 3
-    public long                   priceAtCon;   // only for type 2 or 3
+    public long                   price;   // only for type 2 or 3
     public float                  vat;          // value added tax, in percent
 
     // Properties only relevant for Optiontype Accomodation
@@ -62,9 +60,7 @@ public class Option {
         this.description = fromConfiguration.description;
         this.optionDefault= fromConfiguration.defaultValue;
         this.optionEnable = fromConfiguration.defaultValue;
-        this.priceEarly = fromConfiguration.priceEarly;
-        this.priceLate = fromConfiguration.priceLate;
-        this.priceAtCon = fromConfiguration.priceAtCon;
+        this.price = fromConfiguration.price;
         this.vat = fromConfiguration.vatPercent;
         this.readonly = fromConfiguration.readOnly;
         this.adminOnly = fromConfiguration.adminOnly;
@@ -79,9 +75,7 @@ public class Option {
         private String                 shortname;
         private String                 description;
         private boolean                optionDefault;
-        private long                   priceEarly;
-        private long                   priceLate;
-        private long                   priceAtCon;
+        private long                   price;
         private float                  vat;
         // private Constants.DueDateType  dueDateType;
         private int                    bedsPerRoom;
@@ -124,9 +118,7 @@ public class Option {
             o.description = this.description;
             o.optionEnable = o.optionDefault = this.optionDefault;
             o.searchSetting = -1;
-            o.priceEarly = this.priceEarly;
-            o.priceLate = this.priceLate;
-            o.priceAtCon = this.priceAtCon;
+            o.price = this.price;
             o.vat = this.vat;
             //o.dueDateType = this.dueDateType;
             o.adminOnly = this.adminOnly;

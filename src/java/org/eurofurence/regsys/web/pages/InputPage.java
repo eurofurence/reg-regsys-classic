@@ -116,6 +116,7 @@ public class InputPage extends Page {
             try {
                 the_id = Integer.parseInt(param_id_string);
             } catch (Exception e) {
+                addError("invalid id parameter, must be a valid integer");
                 // a non-integer parameter has been given.
                 return false;
             }
@@ -124,9 +125,9 @@ public class InputPage extends Page {
         if (the_id != 0) {
             if (mayView() && the_id > 0) {
                 try {
-                    inputForm.getFromDB(the_id);
+                    inputForm.getFromDBThrows(the_id);
                 } catch (Exception e) {
-                    addError(e.getMessage());
+                    addException(e);
                     inputForm.initialize(); // blank totally
                 }
             } else {
@@ -164,7 +165,6 @@ public class InputPage extends Page {
                 if (!hasPermission(Constants.Permission.ADMIN) && (the_id != 0) && !isMyBadgeNumber(the_id)) {
                     Map<String, String> params = new HashMap<>();
                     params.put("error", Strings.inputPage.permCanOnlyEditYourself);
-                    // TODO reset page (for showing errors and as target for forbidden stuff)
                     return forward("page/start", params);
                 }
 
@@ -195,16 +195,6 @@ public class InputPage extends Page {
             }
 
             inputForm.updateTransactionCache(the_id);
-        }
-
-        // ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ----------
-
-        if (hasPermission(Constants.Permission.ADMIN) || hasPermission(Constants.Permission.VIEW)) {
-            // if an admin might just accept a yet non-participating member, set the due dates accordlingly
-            if (hasPermission(Constants.Permission.ADMIN) && !inputForm.getStatus().isParticipating()) {
-                // TODO
-                // inputForm.tentativeSetDueDates();
-            }
         }
 
         // ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ----------

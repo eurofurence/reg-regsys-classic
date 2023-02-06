@@ -7,7 +7,14 @@ import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
+import org.eurofurence.regsys.repositories.auth.AuthService;
 import org.eurofurence.regsys.repositories.auth.RequestAuth;
+import org.eurofurence.regsys.repositories.auth.UserInfo;
+import org.eurofurence.regsys.repositories.errors.DownstreamException;
+import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
+import org.eurofurence.regsys.repositories.errors.ErrorDto;
+import org.eurofurence.regsys.repositories.errors.ForbiddenException;
+import org.eurofurence.regsys.repositories.errors.UnauthorizedException;
 import org.eurofurence.regsys.service.TransactionCalculator;
 import org.eurofurence.regsys.web.forms.Form;
 import org.eurofurence.regsys.web.forms.NavbarForm;
@@ -110,6 +117,30 @@ public abstract class Page extends RequestHandler {
     }
 
     /**
+     * Add errors coming from an exception to the list. If it wraps additional error info, that is added, too.
+     */
+    public synchronized void addException(Throwable t) {
+        errors.add(t.getMessage());
+        if (t instanceof DownstreamWebErrorException) {
+            addWebErrors(((DownstreamWebErrorException) t).getErr());
+        }
+    }
+
+    public void addWebErrors(ErrorDto err) {
+        if (err != null && err.details != null) {
+            err.details.forEach(
+                    (k, v) -> {
+                        if (v != null) {
+                            v.forEach(
+                                    msg -> addError(k + ": " + msg)
+                            );
+                        }
+                    }
+            );
+        }
+    }
+
+    /**
      * Obtain the accumulated list of errors since instantiation or since the last reset.
      *
      * We actually produce a copy of the errors list, so we can html-escape each one
@@ -141,11 +172,33 @@ public abstract class Page extends RequestHandler {
         return getConfiguration().web.enableRegistration;
     }
 
-    // attendee and permissions
+    // auth
 
-    private final AttendeeService attendeeService = new AttendeeService();
-    public AttendeeService getAttendeeService() {
-        return attendeeService;
+    private final AuthService authService = new AuthService();
+    public AuthService getAuthService() {
+        return authService;
+    }
+
+    private UserInfo cachedUserInfo;
+    public UserInfo getUserInfo() {
+        if (cachedUserInfo != null)
+            return cachedUserInfo;
+
+        RequestAuth auth = getTokenFromRequest();
+        if (auth.providedIdToken() && auth.providedAccessToken()) {
+            try {
+                cachedUserInfo = authService.performGetFrontendUserinfo(auth, getRequestId());
+                // if this worked, we've confirmed we're logged in
+            } catch (UnauthorizedException | ForbiddenException ignored) {
+                // login failed to validate
+                cachedUserInfo = new UserInfo();
+            }
+        } else {
+            // not logged in
+            cachedUserInfo = new UserInfo();
+        }
+
+        return cachedUserInfo;
     }
 
     private Set<Constants.Permission> cachedPermissionsFromRequest;
@@ -153,17 +206,20 @@ public abstract class Page extends RequestHandler {
         if (cachedPermissionsFromRequest != null)
             return cachedPermissionsFromRequest;
 
-        RequestAuth auth = getTokenFromRequest();
-
         Set<Constants.Permission> result = new HashSet<>();
-        if ("".equals(auth)) {
+
+        RequestAuth auth = getTokenFromRequest();
+        // local safety check, avoids error logs in auth service
+        if ("".equals(auth.idToken) || "".equals(auth.accessToken)) {
             cachedPermissionsFromRequest = result;
             return result;
         }
 
+        UserInfo userInfo = getUserInfo();
+        // worked, so logged in
         result.add(Constants.Permission.LOGIN);
 
-        if (attendeeService.performHasRole("admin", auth, getRequestId())) {
+        if (userInfo.groups != null && userInfo.groups.contains(getConfiguration().downstream.adminGroup)) {
             result.add(Constants.Permission.STATS);
             result.add(Constants.Permission.ADMIN);
             result.add(Constants.Permission.EXPORT_CONBOOK);
@@ -207,6 +263,13 @@ public abstract class Page extends RequestHandler {
         RequestAuth auth = getTokenFromRequest();
         boolean unauthorized = auth.idToken == null || "".equals(auth.idToken) || auth.accessToken == null || "".equals(auth.accessToken);
         return !unauthorized;
+    }
+
+    // attendee
+
+    private final AttendeeService attendeeService = new AttendeeService();
+    public AttendeeService getAttendeeService() {
+        return attendeeService;
     }
 
     protected List<Long> cachedMyBadgeNumbers;

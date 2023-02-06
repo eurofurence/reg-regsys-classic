@@ -14,6 +14,7 @@ downstream:
   id_token_cookie_name: 'JWT'
   access_token_cookie_name: 'AUTH'
   api_token: 'api-token-must-be-pretty-long'
+  admin_group: 'admin'
   nosecounter_token: 'nosecounter-test-token'
   dd_token: 'localtoken'
   secu_token: 'localtoken'
@@ -29,376 +30,1192 @@ choices:
   flags:
     hc:
       description: 'Wheelchair'
-      help_url: 'help/opt_wheelchair.html'
     anon:
       description: 'Legal Name is Confidential'
-      help_url: 'help/opt_anonymous.html'
     ev:
       description: 'Eurofurence e.V. Member'
-      help_url: 'help/opt_member.html'
+    digi-book:
+      description: 'Digital only convention booklet'
     guest:
       description: 'Guest of the Convention'
-      help_url: 'help/guest.html'
       admin_only: true
     skip_ban_check:
       description: 'Bypass ban check for this attendee'
-      help_url: 'help/skip_ban_check.html'
       admin_only: true
   packages:
     room-none:
       description: 'No Room'
-      help_url: 'help/room_none.html'
       vat_percent: 7
       default: true
       read_only: true
     attendance:
       description: 'Entrance Fee (Convention Ticket)'
-      help_url: 'help/fee_basic.html'
-      price_early: 9500
-      price_late: 11000
-      price_atcon: 13500
+      price: 12000
       vat_percent: 19
       default: true
-      read_only: true
     stage:
       description: 'Entrance Fee (Stage Ticket)'
-      help_url: 'help/fee_stage.html'
-      price_early: 500
-      price_late: 500
-      price_atcon: 500
+      price: 500
       vat_percent: 19
       default: true
-      read_only: true
     sponsor:
       description: 'Sponsor Upgrade'
-      help_url: 'help/fee_sponsor.html'
-      price_early: 6500
-      price_late: 6500
-      price_atcon: 6500
+      price: 8000
       vat_percent: 19
     sponsor2:
       description: 'Supersponsor Upgrade'
-      help_url: 'help/fee_sponsor2.html'
-      price_early: 16000
-      price_late: 16000
-      price_atcon: 16000
+      price: 19000
       vat_percent: 19
       constraint: '!sponsor'
       constraint_msg: 'Please choose only one of Sponsor or Supersponsor.'
-    day-thu:
-      description: 'Day Guest (Thursday)'
-      help_url: 'help/fee_day_thu.html'
-      price_early: 7000
-      price_late: 7000
-      price_atcon: 7000
+    tshirt:
+      description: 'Paid T-Shirt (non-sponsor)'
+      price: 2000
       vat_percent: 19
-      read_only: true
+      constraint: '!sponsor,!sponsor2'
+      constraint_msg: 'Sponsors and supersponsors get their T-Shirt for free.'
+    day-sun:
+      description: 'Day Guest (Sunday)'
+      price: 7000
+      vat_percent: 19
       constraint: '!attendance,!stage'
       constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
-    day-fri:
-      description: 'Day Guest (Friday)'
-      help_url: 'help/fee_day_fri.html'
-      price_early: 7000
-      price_late: 7000
-      price_atcon: 7000
+    day-mon:
+      description: 'Day Guest (Monday)'
+      price: 7000
       vat_percent: 19
-      read_only: true
       constraint: '!attendance,!stage'
       constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
-    day-sat:
-      description: 'Day Guest (Saturday)'
-      help_url: 'help/fee_day_sat.html'
-      price_early: 7000
-      price_late: 7000
-      price_atcon: 7000
+    day-tue:
+      description: 'Day Guest (Tuesday)'
+      price: 7000
       vat_percent: 19
-      read_only: true
+      constraint: '!attendance,!stage'
+      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
+    day-wed:
+      description: 'Day Guest (Wednesday)'
+      price: 7000
+      vat_percent: 19
       constraint: '!attendance,!stage'
       constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
   options:
     art:
       description: 'Artist'
-      help_url: 'help/opt_artist.html'
     anim:
       description: 'Animator'
-      help_url: 'help/opt_animator.html'
     music:
       description: 'Musician'
-      help_url: 'help/opt_musician.html'
     suit:
       description: 'Fursuiter'
-      help_url: 'help/opt_fursuiter.html'
 tshirtsizes:
-  - 'XS'
-  - 'wXS'
-  - 'S'
-  - 'wS'
-  - 'M'
-  - 'wM'
-  - 'L'
-  - 'wL'
-  - 'XL'
-  - 'wXL'
-  - 'XXL'
-  - 'wXXL'
-  - '3XL'
-  - 'w3XL'
-  - '4XL'
-  - 'w4XL'
+  - 'XS':
+      'en-US': 'XS (Regular Cut)'
+      'de-DE': 'XS (weit geschnitten)'
+  - 'wXS':
+      'en-US': 'XS (Narrow Cut)'
+      'de-DE': 'XS (schmal geschnitten)'
+  - 'S':
+      'en-US': 'S (Regular Cut)'
+      'de-DE': 'S (weit geschnitten)'
+  - 'wS':
+      'en-US': 'S (Narrow Cut)'
+      'de-DE': 'S (schmal geschnitten)'
+  - 'M':
+      'en-US': 'M (Regular Cut)'
+      'de-DE': 'M (weit geschnitten)'
+  - 'wM':
+      'en-US': 'M (Narrow Cut)'
+      'de-DE': 'M (schmal geschnitten)'
+  - 'L':
+      'en-US': 'L (Regular Cut)'
+      'de-DE': 'L (weit geschnitten)'
+  - 'wL':
+      'en-US': 'L (Narrow Cut)'
+      'de-DE': 'L (schmal geschnitten)'
+  - 'XL':
+      'en-US': 'XL (Regular Cut)'
+      'de-DE': 'XL (weit geschnitten)'
+  - 'wXL':
+      'en-US': 'XL (Narrow Cut)'
+      'de-DE': 'XL (schmal geschnitten)'
+  - 'XXL':
+      'en-US': 'XXL (Regular Cut)'
+      'de-DE': 'XXL (weit geschnitten)'
+  - 'wXXL':
+      'en-US': 'XXL (Narrow Cut)'
+      'de-DE': 'XXL (schmal geschnitten)'
+  - '3XL':
+      'en-US': '3XL (Regular Cut)'
+      'de-DE': '3XL (weit geschnitten)'
+  - 'w3XL':
+      'en-US': '3XL (Narrow Cut)'
+      'de-DE': '3XL (schmal geschnitten)'
+  - '4XL':
+      'en-US': '4XL (Regular Cut)'
+      'de-DE': '4XL (weit geschnitten)'
+  - 'w4XL':
+      'en-US': '4XL (Narrow Cut)'
+      'de-DE': '4XL (schmal geschnitten)'
+# spoken languages list converted from primary entries (no -XY) in https://github.com/mozilla/language-mapping-list
+#
+# The MIT License (MIT)
+#
+# Copyright (c) 2013 Ali Al Dallal
+#
+# https://github.com/mozilla/language-mapping-list/blob/master/LICENSE
 spoken_languages:
-  - 'en-US'
-  - 'de-DE'
+  - ach:
+      default: Lwo
+      en-US: Acholi
+  - ady:
+      default: Адыгэбзэ
+      en-US: Adyghe
+  - af:
+      default: Afrikaans
+      en-US: Afrikaans
+  - ak:
+      default: Tɕɥi
+      en-US: Akan
+  - ar:
+      default: العربية
+      en-US: Arabic
+  - az:
+      default: Azərbaycan dili
+      en-US: Azerbaijani
+  - bg:
+      default: Български
+      en-US: Bulgarian
+  - bn:
+      default: বাংলা
+      en-US: Bengali
+  - br:
+      default: Brezhoneg
+      en-US: Breton
+  - ca:
+      default: Català
+      en-US: Catalan
+  - cak:
+      default: Maya Kaqchikel
+      en-US: Kaqchikel
+  - cs:
+      default: Čeština
+      en-US: Czech
+  - cy:
+      default: Cymraeg
+      en-US: Welsh
+  - da:
+      default: Dansk
+      en-US: Danish
+  - de:
+      default: Deutsch
+      en-US: German
+  - dsb:
+      default: Dolnoserbšćina
+      en-US: Lower Sorbian
+  - el:
+      default: Ελληνικά
+      en-US: Greek
+  - en:
+      default: English
+      en-US: English
+  - eo:
+      default: Esperanto
+      en-US: Esperanto
+  - es:
+      default: Español
+      en-US: Spanish
+  - et:
+      default: eesti keel
+      en-US: Estonian
+  - eu:
+      default: Euskara
+      en-US: Basque
+  - fa:
+      default: فارسی
+      en-US: Persian
+  - ff:
+      default: Fulah
+      en-US: Fulah
+  - fi:
+      default: Suomi
+      en-US: Finnish
+  - fo:
+      default: Føroyskt
+      en-US: Faroese
+  - fr:
+      default: Français
+      en-US: French
+  - ga:
+      default: Gaeilge
+      en-US: Irish
+  - gd:
+      default: Gàidhlig
+      en-US: Gaelic
+  - gl:
+      default: Galego
+      en-US: Galician
+  - gv:
+      default: Gaelg
+      en-US: Manx
+  - he:
+      default: עברית‏
+      en-US: Hebrew
+  - hi:
+      default: हिन्दी
+      en-US: Hindi
+  - hr:
+      default: Hrvatski
+      en-US: Croatian
+  - hsb:
+      default: Hornjoserbšćina
+      en-US: Upper Sorbian
+  - ht:
+      default: Kreyòl
+      en-US: Haitian Creole
+  - hu:
+      default: Magyar
+      en-US: Hungarian
+  - hy:
+      default: Հայերեն
+      en-US: Armenian
+  - id:
+      default: Bahasa Indonesia
+      en-US: Indonesian
+  - is:
+      default: Íslenska
+      en-US: Icelandic
+  - it:
+      default: Italiano
+      en-US: Italian
+  - ja:
+      default: 日本語
+      en-US: Japanese
+  - km:
+      default: ភាសាខ្មែរ
+      en-US: Khmer
+  - kl:
+      default: kalaallisut
+      en-US: Greenlandic
+  - kab:
+      default: Taqbaylit
+      en-US: Kabyle
+  - kn:
+      default: ಕನ್ನಡ
+      en-US: Kannada
+  - ko:
+      default: 한국어
+      en-US: Korean
+  - kw:
+      default: Kernewek
+      en-US: Cornish
+  - la:
+      default: Latin
+      en-US: Latin
+  - lb:
+      default: Lëtzebuergesch
+      en-US: Luxembourgish
+  - lt:
+      default: Lietuvių
+      en-US: Lithuanian
+  - lv:
+      default: Latviešu
+      en-US: Latvian
+  - mai:
+      default: 'मैथिली, মৈথিলী'
+      en-US: Maithili
+  - mk:
+      default: Македонски
+      en-US: Macedonian
+  - ml:
+      default: മലയാളം
+      en-US: Malayalam
+  - mr:
+      default: मराठी
+      en-US: Marathi
+  - ms:
+      default: Bahasa Melayu
+      en-US: Malay
+  - mt:
+      default: Malti
+      en-US: Maltese
+  - my:
+      default: ဗမာစကာ
+      en-US: Burmese
+    'no':
+      default: Norsk
+      en-US: Norwegian
+  - nb:
+      default: Norsk (bokmål)
+      en-US: Norwegian (bokmal)
+  - ne:
+      default: नेपाली
+      en-US: Nepali
+  - nl:
+      default: Nederlands
+      en-US: Dutch
+  - oc:
+      default: Occitan
+      en-US: Occitan
+  - pa:
+      default: ਪੰਜਾਬੀ
+      en-US: Punjabi
+  - pl:
+      default: Polski
+      en-US: Polish
+  - pt:
+      default: Português
+      en-US: Portuguese
+  - ro:
+      default: Română
+      en-US: Romanian
+  - ru:
+      default: Русский
+      en-US: Russian
+  - sh:
+      default: српскохрватски
+      en-US: Serbo-Croatian
+  - sk:
+      default: Slovenčina
+      en-US: Slovak
+  - sl:
+      default: Slovenščina
+      en-US: Slovenian
+  - sq:
+      default: Shqip
+      en-US: Albanian
+  - sr:
+      default: Српски
+      en-US: Serbian
+  - su:
+      default: Basa Sunda
+      en-US: Sundanese
+  - sv:
+      default: Svenska
+      en-US: Swedish
+  - sw:
+      default: Kiswahili
+      en-US: Swahili
+  - ta:
+      default: தமிழ்
+      en-US: Tamil
+  - te:
+      default: తెలుగు
+      en-US: Telugu
+  - tg:
+      default: забо́ни тоҷикӣ́
+      en-US: Tajik
+  - th:
+      default: ภาษาไทย
+      en-US: Thai
+  - fil:
+      default: Filipino
+      en-US: Filipino
+  - tlh:
+      default: tlhIngan-Hol
+      en-US: Klingon
+  - tr:
+      default: Türkçe
+      en-US: Turkish
+  - uk:
+      default: Українська
+      en-US: Ukrainian
+  - ur:
+      default: اردو
+      en-US: Urdu
+  - uz:
+      default: O'zbek
+      en-US: Uzbek
+  - vi:
+      default: Tiếng Việt
+      en-US: Vietnamese
+  - yi:
+      default: ייִדיש
+      en-US: Yiddish
+  - zh:
+      default: 中文
+      en-US: Chinese
 registration_languages:
-  - 'en-US'
+  - 'en-US':
+      en-US: English
+      de-DE: Englisch
+  - 'de-DE':
+      en-US: German
+      de-DE: Deutsch
 countries:
-  - 'AF'
-  - 'AN'
-  - 'AX'
-  - 'AL'
-  - 'DZ'
-  - 'AS'
-  - 'AD'
-  - 'AO'
-  - 'AI'
-  - 'AQ'
-  - 'AG'
-  - 'AR'
-  - 'AM'
-  - 'AW'
-  - 'AU'
-  - 'AT'
-  - 'AZ'
-  - 'BS'
-  - 'BH'
-  - 'BD'
-  - 'BB'
-  - 'BY'
-  - 'BE'
-  - 'BZ'
-  - 'BJ'
-  - 'BM'
-  - 'BT'
-  - 'BO'
-  - 'BQ'
-  - 'BA'
-  - 'BW'
-  - 'BV'
-  - 'BR'
-  - 'IO'
-  - 'BN'
-  - 'BG'
-  - 'BF'
-  - 'BI'
-  - 'CV'
-  - 'KH'
-  - 'CM'
-  - 'CA'
-  - 'KY'
-  - 'CF'
-  - 'TD'
-  - 'CL'
-  - 'CN'
-  - 'CX'
-  - 'CC'
-  - 'CO'
-  - 'KM'
-  - 'CG'
-  - 'CD'
-  - 'CK'
-  - 'CR'
-  - 'CI'
-  - 'HR'
-  - 'CU'
-  - 'CW'
-  - 'CY'
-  - 'CZ'
-  - 'DK'
-  - 'DJ'
-  - 'DM'
-  - 'DO'
-  - 'EC'
-  - 'EG'
-  - 'SV'
-  - 'GQ'
-  - 'ER'
-  - 'EE'
-  - 'SZ'
-  - 'ET'
-  - 'FK'
-  - 'FO'
-  - 'FJ'
-  - 'FI'
-  - 'FR'
-  - 'GF'
-  - 'PF'
-  - 'TF'
-  - 'GA'
-  - 'GM'
-  - 'GE'
-  - 'DE'
-  - 'GH'
-  - 'GI'
-  - 'GR'
-  - 'GL'
-  - 'GD'
-  - 'GP'
-  - 'GU'
-  - 'GT'
-  - 'GG'
-  - 'GN'
-  - 'GW'
-  - 'GY'
-  - 'HT'
-  - 'HM'
-  - 'VA'
-  - 'HN'
-  - 'HK'
-  - 'HU'
-  - 'IS'
-  - 'IN'
-  - 'ID'
-  - 'IR'
-  - 'IQ'
-  - 'IE'
-  - 'IM'
-  - 'IL'
-  - 'IT'
-  - 'JM'
-  - 'JP'
-  - 'JE'
-  - 'JO'
-  - 'KZ'
-  - 'KE'
-  - 'KI'
-  - 'KP'
-  - 'KR'
-  - 'KW'
-  - 'KG'
-  - 'LA'
-  - 'LV'
-  - 'LB'
-  - 'LS'
-  - 'LR'
-  - 'LY'
-  - 'LI'
-  - 'LT'
-  - 'LU'
-  - 'MO'
-  - 'MG'
-  - 'MW'
-  - 'MY'
-  - 'MV'
-  - 'ML'
-  - 'MT'
-  - 'MH'
-  - 'MQ'
-  - 'MR'
-  - 'MU'
-  - 'YT'
-  - 'MX'
-  - 'FM'
-  - 'MD'
-  - 'MC'
-  - 'MN'
-  - 'ME'
-  - 'MS'
-  - 'MA'
-  - 'MZ'
-  - 'MM'
-  - 'NA'
-  - 'NR'
-  - 'NP'
-  - 'NL'
-  - 'NC'
-  - 'NZ'
-  - 'NI'
-  - 'NE'
-  - 'NG'
-  - 'NU'
-  - 'NF'
-  - 'MK'
-  - 'MP'
-  - 'NO'
-  - 'OM'
-  - 'PK'
-  - 'PW'
-  - 'PS'
-  - 'PA'
-  - 'PG'
-  - 'PY'
-  - 'PE'
-  - 'PH'
-  - 'PN'
-  - 'PL'
-  - 'PT'
-  - 'PR'
-  - 'QA'
-  - 'RE'
-  - 'RO'
-  - 'RU'
-  - 'RW'
-  - 'BL'
-  - 'SH'
-  - 'KN'
-  - 'LC'
-  - 'MF'
-  - 'PM'
-  - 'VC'
-  - 'WS'
-  - 'SM'
-  - 'ST'
-  - 'SA'
-  - 'SN'
-  - 'RS'
-  - 'SC'
-  - 'SL'
-  - 'SG'
-  - 'SX'
-  - 'SK'
-  - 'SI'
-  - 'SB'
-  - 'SO'
-  - 'ZA'
-  - 'GS'
-  - 'SS'
-  - 'ES'
-  - 'LK'
-  - 'SD'
-  - 'SR'
-  - 'SJ'
-  - 'SE'
-  - 'CH'
-  - 'SY'
-  - 'TW'
-  - 'TJ'
-  - 'TZ'
-  - 'TH'
-  - 'TL'
-  - 'TG'
-  - 'TK'
-  - 'TO'
-  - 'TT'
-  - 'TN'
-  - 'TR'
-  - 'TM'
-  - 'TC'
-  - 'TV'
-  - 'UG'
-  - 'UA'
-  - 'AE'
-  - 'GB'
-  - 'US'
-  - 'UM'
-  - 'UY'
-  - 'UZ'
-  - 'VU'
-  - 'VE'
-  - 'VN'
-  - 'VG'
-  - 'VI'
-  - 'WF'
-  - 'EH'
-  - 'YE'
-  - 'ZM'
-  - 'ZW'
-  - 'XK'
+  - 'AC':
+      'en-US': 'Ascension'
+      'de-DE': 'Ascension'
+  - 'AD':
+      'en-US': 'Andorra'
+      'de-DE': 'Andorra'
+  - 'AE':
+      'en-US': 'United Arab Emirates'
+      'de-DE': 'United Arab Emirates'
+  - 'AF':
+      'en-US': 'Afghanistan'
+      'de-DE': 'Afghanistan'
+  - 'AG':
+      'en-US': 'Antigua and Barbuda'
+      'de-DE': 'Antigua und Barbuda'
+  - 'AI':
+      'en-US': 'Anguilla'
+      'de-DE': 'Anguilla'
+  - 'AL':
+      'en-US': 'Albania'
+      'de-DE': 'Albanien'
+  - 'AM':
+      'en-US': 'Armenia'
+      'de-DE': 'Armenien'
+  - 'AO':
+      'en-US': 'Angola'
+      'de-DE': 'Angola'
+  - 'AQ':
+      'en-US': 'Antarctica'
+      'de-DE': 'Antarktis'
+  - 'AR':
+      'en-US': 'Argentina'
+      'de-DE': 'Argentina'
+  - 'AS':
+      'en-US': 'American Samoa'
+      'de-DE': 'Amerikanisch-Samoa'
+  - 'AT':
+      'en-US': 'Austria'
+      'de-DE': 'Österreich'
+  - 'AU':
+      'en-US': 'Australia'
+      'de-DE': 'Australien'
+  - 'AW':
+      'en-US': 'Aruba'
+      'de-DE': 'Aruba'
+  - 'AX':
+      'en-US': 'Åland Islands'
+      'de-DE': 'Åland'
+  - 'AZ':
+      'en-US': 'Azerbaijan'
+      'de-DE': 'Aserbaidschan'
+  - 'BA':
+      'en-US': 'Bosnia and Herzegovina'
+      'de-DE': 'Bosnien und Herzegowina'
+  - 'BB':
+      'en-US': 'Barbados'
+      'de-DE': 'Barbados'
+  - 'BD':
+      'en-US': 'Bangladesh'
+      'de-DE': 'Bangladesch'
+  - 'BE':
+      'en-US': 'Belgium'
+      'de-DE': 'Belgium'
+  - 'BF':
+      'en-US': 'Burkina Faso'
+      'de-DE': 'BurkinaFaso'
+  - 'BG':
+      'en-US': 'Bulgaria'
+      'de-DE': 'Bulgarien'
+  - 'BH':
+      'en-US': 'Bahrain'
+      'de-DE': 'Bahrain'
+  - 'BI':
+      'en-US': 'Burundi'
+      'de-DE': 'Burundi'
+  - 'BJ':
+      'en-US': 'Benin'
+      'de-DE': 'Benin'
+  - 'BL':
+      'en-US': 'Saint Barthélemy'
+      'de-DE': 'Saint-Barthélemy'
+  - 'BM':
+      'en-US': 'Bermuda'
+      'de-DE': 'Bermuda'
+  - 'BN':
+      'en-US': 'Brunei Darussalam'
+      'de-DE': 'Brunei'
+  - 'BO':
+      'en-US': 'Bolivia'
+      'de-DE': 'Bolivien'
+  - 'BQ':
+      'en-US': 'Bonaire'
+      'de-DE': 'Bonaire, Saba, Sint Eustatius'
+  - 'BR':
+      'en-US': 'Brazil'
+      'de-DE': 'Brasilien'
+  - 'BS':
+      'en-US': 'Bahamas'
+      'de-DE': 'Bahamas'
+  - 'BT':
+      'en-US': 'Bhutan'
+      'de-DE': 'Bhutan'
+  - 'BU':
+      'en-US': 'Myanmar'
+      'de-DE': 'Myanmar'
+  - 'BV':
+      'en-US': 'Bouvet Island'
+      'de-DE': 'Bouvetinsel'
+  - 'BW':
+      'en-US': 'Botswana'
+      'de-DE': 'Botswana'
+  - 'BY':
+      'en-US': 'Belarus'
+      'de-DE': 'Belarus'
+  - 'BZ':
+      'en-US': 'Belize'
+      'de-DE': 'Belize'
+  - 'CA':
+      'en-US': 'Canada'
+      'de-DE': 'Kanada'
+  - 'CC':
+      'en-US': 'Cocos (Keeling) Islands'
+      'de-DE': 'Kokosinseln'
+  - 'CD':
+      'en-US': 'Congo (Democratic Republic of the)'
+      'de-DE': 'Congo (Democratic Republic of the)'
+  - 'CF':
+      'en-US': 'Central African Republic'
+      'de-DE': 'Zentralafrikanische Republik'
+  - 'CG':
+      'en-US': 'Congo'
+      'de-DE': 'Republik Kongo'
+  - 'CH':
+      'en-US': 'Switzerland'
+      'de-DE': 'Schweiz (Confoederatio Helvetica)'
+  - 'CI':
+      'en-US': "Côte d'Ivoire"
+      'de-DE': "Elfenbeinküste (Côte d’Ivoire)"
+  - 'CK':
+      'en-US': 'Cook Islands'
+      'de-DE': 'Cookinseln'
+  - 'CL':
+      'en-US': 'Chile'
+      'de-DE': 'Chile'
+  - 'CM':
+      'en-US': 'Cameroon'
+      'de-DE': 'Kamerun'
+  - 'CN':
+      'en-US': 'China'
+      'de-DE': 'Volksrepublik China'
+  - 'CO':
+      'en-US': 'Colombia'
+      'de-DE': 'Colombia'
+  - 'CP':
+      'en-US': 'Clipperton'
+      'de-DE': 'Clipperton'
+  - 'CR':
+      'en-US': 'Costa Rica'
+      'de-DE': 'CostaRica'
+  - 'CU':
+      'en-US': 'Cuba'
+      'de-DE': 'Kuba'
+  - 'CV':
+      'en-US': 'Cabo Verde'
+      'de-DE': 'Cabo Verde'
+  - 'CW':
+      'en-US': 'Curaçao'
+      'de-DE': 'Curaçao'
+  - 'CX':
+      'en-US': 'Christmas Island'
+      'de-DE': 'Weihnachtsinsel'
+  - 'CY':
+      'en-US': 'Cyprus'
+      'de-DE': 'Zypern'
+  - 'CZ':
+      'en-US': 'Czechia'
+      'de-DE': 'Tschechien'
+  - 'DE':
+      'en-US': 'Germany'
+      'de-DE': 'Germany'
+  - 'DG':
+      'en-US': 'Diego Garcia'
+      'de-DE': 'Diego Garcia'
+  - 'DJ':
+      'en-US': 'Djibouti'
+      'de-DE': 'Dschibuti'
+  - 'DK':
+      'en-US': 'Denmark'
+      'de-DE': 'Denmark'
+  - 'DM':
+      'en-US': 'Dominica'
+      'de-DE': 'Dominica'
+  - 'DO':
+      'en-US': 'Dominican Republic'
+      'de-DE': 'Dominikanische Republik'
+  - 'DZ':
+      'en-US': 'Algeria'
+      'de-DE': 'Algerien'
+  - 'EA':
+      'en-US': 'Ceuta, Melilla'
+      'de-DE': 'Ceuta, Melilla'
+  - 'EC':
+      'en-US': 'Ecuador'
+      'de-DE': 'Ecuador'
+  - 'EE':
+      'en-US': 'Estonia'
+      'de-DE': 'Estonia'
+  - 'EG':
+      'en-US': 'Egypt'
+      'de-DE': 'Egypt'
+  - 'EH':
+      'en-US': 'Western Sahara'
+      'de-DE': 'Westsahara'
+  - 'ER':
+      'en-US': 'Eritrea'
+      'de-DE': 'Eritrea'
+  - 'ES':
+      'en-US': 'Spain'
+      'de-DE': 'Spanien'
+  - 'ET':
+      'en-US': 'Ethiopia'
+      'de-DE': 'Äthiopien'
+  - 'FI':
+      'en-US': 'Finland'
+      'de-DE': 'Finnland'
+  - 'FJ':
+      'en-US': 'Fiji'
+      'de-DE': 'Fidschi'
+  - 'FK':
+      'en-US': 'Falkland Islands '
+      'de-DE': 'Falklandinseln'
+  - 'FM':
+      'en-US': 'Micronesia'
+      'de-DE': 'Föderierte Staaten von Mikronesien'
+  - 'FO':
+      'en-US': 'Faroe Islands'
+      'de-DE': 'Färöer'
+  - 'FR':
+      'en-US': 'France'
+      'de-DE': 'Frankreich'
+  - 'FX':
+      'en-US': 'Frankreich France métropolitaine'
+      'de-DE': 'Frankreich France métropolitaine'
+  - 'GA':
+      'en-US': 'Gabon'
+      'de-DE': 'Gabun'
+  - 'GB':
+      'en-US': 'United Kingdom'
+      'de-DE': 'Vereinigtes Königreich'
+  - 'GD':
+      'en-US': 'Grenada'
+      'de-DE': 'Grenada'
+  - 'GE':
+      'en-US': 'Georgia'
+      'de-DE': 'Georgien'
+  - 'GF':
+      'en-US': 'French Guiana'
+      'de-DE': 'French Guiana'
+  - 'GG':
+      'en-US': 'Guernsey'
+      'de-DE': 'Guernsey (Kanalinsel)'
+  - 'GH':
+      'en-US': 'Ghana'
+      'de-DE': 'Ghana'
+  - 'GI':
+      'en-US': 'Gibraltar'
+      'de-DE': 'Gibraltar'
+  - 'GL':
+      'en-US': 'Greenland'
+      'de-DE': 'Grönland'
+  - 'GM':
+      'en-US': 'Gambia'
+      'de-DE': 'Gambia'
+  - 'GN':
+      'en-US': 'Guinea'
+      'de-DE': 'Guinea'
+  - 'GP':
+      'en-US': 'Guadeloupe'
+      'de-DE': 'Guadeloupe'
+  - 'GQ':
+      'en-US': 'Equatorial Guinea'
+      'de-DE': 'Äquatorialguinea'
+  - 'GR':
+      'en-US': 'Greece'
+      'de-DE': 'Griechenland'
+  - 'GS':
+      'en-US': 'South Georgia and the South Sandwich Islands'
+      'de-DE': 'South Georgia and the South Sandwich Islands'
+  - 'GT':
+      'en-US': 'Guatemala'
+      'de-DE': 'Guatemala'
+  - 'GU':
+      'en-US': 'Guam'
+      'de-DE': 'Guam'
+  - 'GW':
+      'en-US': 'Guinea-Bissau'
+      'de-DE': 'Guinea-Bissau'
+  - 'GY':
+      'en-US': 'Guyana'
+      'de-DE': 'Guyana'
+  - 'HK':
+      'en-US': 'Hong Kong'
+      'de-DE': 'Hongkong'
+  - 'HM':
+      'en-US': 'Heard Island and McDonald Islands'
+      'de-DE': 'Heard und McDonaldinseln'
+  - 'HN':
+      'en-US': 'Honduras'
+      'de-DE': 'Honduras'
+  - 'HR':
+      'en-US': 'Croatia'
+      'de-DE': 'Kroatien'
+  - 'HT':
+      'en-US': 'Haiti'
+      'de-DE': 'Haiti'
+  - 'HU':
+      'en-US': 'Hungary'
+      'de-DE': 'Hungary'
+  - 'IC':
+      'en-US': 'Kanarische Inseln'
+      'de-DE': 'Kanarische Inseln'
+  - 'ID':
+      'en-US': 'Indonesia'
+      'de-DE': 'Indonesien'
+  - 'IE':
+      'en-US': 'Ireland'
+      'de-DE': 'Irland'
+  - 'IL':
+      'en-US': 'Israel'
+      'de-DE': 'Israel'
+  - 'IM':
+      'en-US': 'Isle of Man'
+      'de-DE': 'Isle of Man'
+  - 'IN':
+      'en-US': 'India'
+      'de-DE': 'Indien'
+  - 'IO':
+      'en-US': 'British Indian Ocean Territory'
+      'de-DE': 'Britisches Territorium im Indischen Ozean'
+  - 'IQ':
+      'en-US': 'Iraq'
+      'de-DE': 'Iraq'
+  - 'IR':
+      'en-US': 'Iran'
+      'de-DE': 'Iran'
+  - 'IS':
+      'en-US': 'Iceland'
+      'de-DE': 'Island'
+  - 'IT':
+      'en-US': 'Italy'
+      'de-DE': 'Italien'
+  - 'JE':
+      'en-US': 'Jersey'
+      'de-DE': 'Jersey (Kanalinsel)'
+  - 'JM':
+      'en-US': 'Jamaica'
+      'de-DE': 'Jamaika'
+  - 'JO':
+      'en-US': 'Jordan'
+      'de-DE': 'Jordanien'
+  - 'JP':
+      'en-US': 'Japan'
+      'de-DE': 'Japan'
+  - 'KE':
+      'en-US': 'Kenya'
+      'de-DE': 'Kenia'
+  - 'KG':
+      'en-US': 'Kyrgyzstan'
+      'de-DE': 'Kirgisistan'
+  - 'KH':
+      'en-US': 'Cambodia'
+      'de-DE': 'Kambodscha'
+  - 'KI':
+      'en-US': 'Kiribati'
+      'de-DE': 'Kiribati'
+  - 'KM':
+      'en-US': 'Comoros'
+      'de-DE': 'Comoros'
+  - 'KN':
+      'en-US': 'Saint Kitts and Nevis'
+      'de-DE': 'St. Kitts und Nevis'
+  - 'KP':
+      'en-US': 'Korea (North)'
+      'de-DE': 'Nordkorea'
+  - 'KR':
+      'en-US': 'Korea (South)'
+      'de-DE': 'Südkorea'
+  - 'KW':
+      'en-US': 'Kuwait'
+      'de-DE': 'Kuwait'
+  - 'KY':
+      'en-US': 'Cayman Islands'
+      'de-DE': 'Cayman Islands (Kaimaninseln)'
+  - 'KZ':
+      'en-US': 'Kazakhstan'
+      'de-DE': 'Kazakhstan'
+  - 'LA':
+      'en-US': 'Lao'
+      'de-DE': 'Laos'
+  - 'LB':
+      'en-US': 'Lebanon'
+      'de-DE': 'Lebanon'
+  - 'LC':
+      'en-US': 'Saint Lucia'
+      'de-DE': 'St. Lucia'
+  - 'LI':
+      'en-US': 'Liechtenstein'
+      'de-DE': 'Liechtenstein'
+  - 'LK':
+      'en-US': 'Sri Lanka'
+      'de-DE': 'Sri Lanka'
+  - 'LR':
+      'en-US': 'Liberia'
+      'de-DE': 'Liberia'
+  - 'LS':
+      'en-US': 'Lesotho'
+      'de-DE': 'Lesotho'
+  - 'LT':
+      'en-US': 'Lithuania'
+      'de-DE': 'Litauen'
+  - 'LU':
+      'en-US': 'Luxembourg'
+      'de-DE': 'Luxemburg'
+  - 'LV':
+      'en-US': 'Latvia'
+      'de-DE': 'Lettland'
+  - 'LY':
+      'en-US': 'Libya'
+      'de-DE': 'Libya'
+  - 'MA':
+      'en-US': 'Morocco'
+      'de-DE': 'Marokko'
+  - 'MC':
+      'en-US': 'Monaco'
+      'de-DE': 'Monaco'
+  - 'MD':
+      'en-US': 'Moldova'
+      'de-DE': 'Moldau (Moldawien)'
+  - 'ME':
+      'en-US': 'Montenegro'
+      'de-DE': 'Montenegro'
+  - 'MF':
+      'en-US': 'Saint Martin (French part)'
+      'de-DE': 'Saint-Martin (französischer Teil)'
+  - 'MG':
+      'en-US': 'Madagascar'
+      'de-DE': 'Madagaskar'
+  - 'MH':
+      'en-US': 'Marshall Islands'
+      'de-DE': 'Marshallinseln'
+  - 'MK':
+      'en-US': 'North Macedonia'
+      'de-DE': 'Nordmazedonien'
+  - 'ML':
+      'en-US': 'Mali'
+      'de-DE': 'Mali'
+  - 'MM':
+      'en-US': 'Myanmar'
+      'de-DE': 'Myanmar'
+  - 'MN':
+      'en-US': 'Mongolia'
+      'de-DE': 'Mongolei'
+  - 'MO':
+      'en-US': 'Macao'
+      'de-DE': 'Macau'
+  - 'MP':
+      'en-US': 'Northern Mariana Islands'
+      'de-DE': 'Nördliche Marianen'
+  - 'MQ':
+      'en-US': 'Martinique'
+      'de-DE': 'Martinique'
+  - 'MR':
+      'en-US': 'Mauritania'
+      'de-DE': 'Mauretanien'
+  - 'MS':
+      'en-US': 'Montserrat'
+      'de-DE': 'Montserrat'
+  - 'MT':
+      'en-US': 'Malta'
+      'de-DE': 'Malta'
+  - 'MU':
+      'en-US': 'Mauritius'
+      'de-DE': 'Mauritius'
+  - 'MV':
+      'en-US': 'Maldives'
+      'de-DE': 'Maldives'
+  - 'MW':
+      'en-US': 'Malawi'
+      'de-DE': 'Malawi'
+  - 'MX':
+      'en-US': 'Mexico'
+      'de-DE': 'Mexiko'
+  - 'MY':
+      'en-US': 'Malaysia'
+      'de-DE': 'Malaysia'
+  - 'MZ':
+      'en-US': 'Mozambique'
+      'de-DE': 'Mosambik'
+  - 'NA':
+      'en-US': 'Namibia'
+      'de-DE': 'Namibia'
+  - 'NC':
+      'en-US': 'New Caledonia'
+      'de-DE': 'Neukaledonien'
+  - 'NE':
+      'en-US': 'Niger'
+      'de-DE': 'Niger'
+  - 'NF':
+      'en-US': 'Norfolk Island'
+      'de-DE': 'Norfolkinsel'
+  - 'NG':
+      'en-US': 'Nigeria'
+      'de-DE': 'Nigeria'
+  - 'NI':
+      'en-US': 'Nicaragua'
+      'de-DE': 'Nicaragua'
+  - 'NL':
+      'en-US': 'Netherlands'
+      'de-DE': 'Niederlande'
+  - 'NO':
+      'en-US': 'Norway'
+      'de-DE': 'Norwegen'
+  - 'NP':
+      'en-US': 'Nepal'
+      'de-DE': 'Nepal'
+  - 'NR':
+      'en-US': 'Nauru'
+      'de-DE': 'Nauru'
+  - 'NT':
+      'en-US': 'Neutrale Zone'
+      'de-DE': 'Neutrale Zone'
+  - 'NU':
+      'en-US': 'Niue'
+      'de-DE': 'Niue'
+  - 'NZ':
+      'en-US': 'New Zealand'
+      'de-DE': 'New Zealand'
+  - 'OM':
+      'en-US': 'Oman'
+      'de-DE': 'Oman'
+  - 'PA':
+      'en-US': 'Panama'
+      'de-DE': 'Panama'
+  - 'PE':
+      'en-US': 'Peru'
+      'de-DE': 'Peru'
+  - 'PF':
+      'en-US': 'French Polynesia'
+      'de-DE': 'French Polynesia'
+  - 'PG':
+      'en-US': 'Papua New Guinea'
+      'de-DE': 'Papua-Neuguinea'
+  - 'PH':
+      'en-US': 'Philippines'
+      'de-DE': 'Philippinen'
+  - 'PK':
+      'en-US': 'Pakistan'
+      'de-DE': 'Pakistan'
+  - 'PL':
+      'en-US': 'Poland'
+      'de-DE': 'Polen'
+  - 'PM':
+      'en-US': 'Saint Pierre and Miquelon'
+      'de-DE': 'Saint-Pierre und Miquelon'
+  - 'PN':
+      'en-US': 'Pitcairn'
+      'de-DE': 'Pitcairninseln'
+  - 'PR':
+      'en-US': 'Puerto Rico'
+      'de-DE': 'PuertoRico'
+  - 'PS':
+      'en-US': 'Palestine, State of'
+      'de-DE': 'Palestine, State of'
+  - 'PT':
+      'en-US': 'Portugal'
+      'de-DE': 'Portugal'
+  - 'PW':
+      'en-US': 'Palau'
+      'de-DE': 'Palau'
+  - 'PY':
+      'en-US': 'Paraguay'
+      'de-DE': 'Paraguay'
+  - 'QA':
+      'en-US': 'Qatar'
+      'de-DE': 'Qatar'
+  - 'RE':
+      'en-US': 'Réunion'
+      'de-DE': 'Réunion'
+  - 'RO':
+      'en-US': 'Romania'
+      'de-DE': 'Rumänien'
+  - 'RS':
+      'en-US': 'Serbia'
+      'de-DE': 'Serbia'
+  - 'RU':
+      'en-US': 'Russian Federation'
+      'de-DE': 'Russland'
+  - 'RW':
+      'en-US': 'Rwanda'
+      'de-DE': 'Ruanda'
+  - 'SA':
+      'en-US': 'Saudi Arabia'
+      'de-DE': 'Saudi-Arabien'
+  - 'SB':
+      'en-US': 'Solomon Islands'
+      'de-DE': 'Salomonen'
+  - 'SC':
+      'en-US': 'Seychelles'
+      'de-DE': 'Seychellen'
+  - 'SD':
+      'en-US': 'Sudan'
+      'de-DE': 'Sudan'
+  - 'SE':
+      'en-US': 'Sweden'
+      'de-DE': 'Schweden'
+  - 'SG':
+      'en-US': 'Singapore'
+      'de-DE': 'Singapur'
+  - 'SH':
+      'en-US': 'Saint Helena'
+      'de-DE': 'St.Helena, Ascension und Tristan daCunha'
+  - 'SI':
+      'en-US': 'Slovenia'
+      'de-DE': 'Slovenia'
+  - 'SJ':
+      'en-US': 'Svalbard'
+      'de-DE': 'Spitzbergen und Jan Mayen'
+  - 'SK':
+      'en-US': 'Slovakia'
+      'de-DE': 'Slowakei'
+  - 'SL':
+      'en-US': 'Sierra Leone'
+      'de-DE': 'Sierra Leone'
+  - 'SM':
+      'en-US': 'San Marino'
+      'de-DE': 'SanMarino'
+  - 'SN':
+      'en-US': 'Senegal'
+      'de-DE': 'Senegal'
+  - 'SO':
+      'en-US': 'Somalia'
+      'de-DE': 'Somalia'
+  - 'SR':
+      'en-US': 'Suriname'
+      'de-DE': 'Suriname'
+  - 'SS':
+      'en-US': 'South Sudan'
+      'de-DE': 'South Sudan'
+  - 'ST':
+      'en-US': 'Sao Tome and Principe'
+      'de-DE': 'SãoTomé undPríncipe'
+  - 'SV':
+      'en-US': 'El Salvador'
+      'de-DE': 'El Salvador'
+  - 'SX':
+      'en-US': 'Sint Maarten (Dutch part)'
+      'de-DE': 'SintMaarten'
+  - 'SY':
+      'en-US': 'Syrian Arab Republic'
+      'de-DE': 'Syrien'
+  - 'SZ':
+      'en-US': 'Eswatini'
+      'de-DE': 'Eswatini'
+  - 'TA':
+      'en-US': 'Tristan da Cunha'
+      'de-DE': 'Tristan da Cunha'
+  - 'TC':
+      'en-US': 'Turks and Caicos Islands'
+      'de-DE': 'Turks- und Caicosinseln'
+  - 'TD':
+      'en-US': 'Chad'
+      'de-DE': 'Tschad'
+  - 'TF':
+      'en-US': 'French Southern Territories'
+      'de-DE': 'French Southern Territories'
+  - 'TG':
+      'en-US': 'Togo'
+      'de-DE': 'Togo'
+  - 'TH':
+      'en-US': 'Thailand'
+      'de-DE': 'Thailand'
+  - 'TJ':
+      'en-US': 'Tajikistan'
+      'de-DE': 'Tadschikistan'
+  - 'TK':
+      'en-US': 'Tokelau'
+      'de-DE': 'Tokelau'
+  - 'TL':
+      'en-US': 'Timor-Leste'
+      'de-DE': 'Osttimor (Timor-Leste)'
+  - 'TM':
+      'en-US': 'Turkmenistan'
+      'de-DE': 'Turkmenistan'
+  - 'TN':
+      'en-US': 'Tunisia'
+      'de-DE': 'Tunesien'
+  - 'TO':
+      'en-US': 'Tonga'
+      'de-DE': 'Tonga'
+  - 'TR':
+      'en-US': 'Türkiye '
+      'de-DE': 'Türkei'
+  - 'TT':
+      'en-US': 'Trinidad and Tobago'
+      'de-DE': 'Trinidad und Tobago'
+  - 'TV':
+      'en-US': 'Tuvalu'
+      'de-DE': 'Tuvalu'
+  - 'TW':
+      'en-US': 'Taiwan'
+      'de-DE': 'Taiwan'
+  - 'TZ':
+      'en-US': 'Tanzania, the United Republic of'
+      'de-DE': 'Tanzania, the United Republic of'
+  - 'UA':
+      'en-US': 'Ukraine'
+      'de-DE': 'Ukraine'
+  - 'UG':
+      'en-US': 'Uganda'
+      'de-DE': 'Uganda'
+  - 'UM':
+      'en-US': 'United States Minor Outlying Islands'
+      'de-DE': 'United States Minor Outlying Islands'
+  - 'US':
+      'en-US': 'United States of America'
+      'de-DE': 'Vereinigte Staaten'
+  - 'UY':
+      'en-US': 'Uruguay'
+      'de-DE': 'Uruguay'
+  - 'UZ':
+      'en-US': 'Uzbekistan'
+      'de-DE': 'Usbekistan'
+  - 'VA':
+      'en-US': 'Holy See'
+      'de-DE': 'Holy See'
+  - 'VC':
+      'en-US': 'Saint Vincent and the Grenadines'
+      'de-DE': 'Saint Vincent and the Grenadines'
+  - 'VE':
+      'en-US': 'Venezuela'
+      'de-DE': 'Venezuela'
+  - 'VG':
+      'en-US': 'Virgin Islands (British)'
+      'de-DE': 'Britische Jungferninseln'
+  - 'VI':
+      'en-US': 'Virgin Islands (U.S.)'
+      'de-DE': 'Amerikanische Jungferninseln'
+  - 'VN':
+      'en-US': 'Viet Nam'
+      'de-DE': 'Vietnam'
+  - 'VU':
+      'en-US': 'Vanuatu'
+      'de-DE': 'Vanuatu'
+  - 'WF':
+      'en-US': 'Wallis and Futuna'
+      'de-DE': 'Wallis und Futuna'
+  - 'WS':
+      'en-US': 'Samoa'
+      'de-DE': 'Samoa'
+  - 'YE':
+      'en-US': 'Yemen'
+      'de-DE': 'Jemen'
+  - 'YT':
+      'en-US': 'Mayotte'
+      'de-DE': 'Mayotte'
+  - 'ZA':
+      'en-US': 'South Africa'
+      'de-DE': 'Südafrika'
+  - 'ZM':
+      'en-US': 'Zambia'
+      'de-DE': 'Sambia'
+  - 'ZR':
+      'en-US': 'Demokratische Republik Kongo'
+      'de-DE': 'Demokratische Republik Kongo'
+  - 'ZW':
+      'en-US': 'Zimbabwe'
+      'de-DE': 'Simbabwe'

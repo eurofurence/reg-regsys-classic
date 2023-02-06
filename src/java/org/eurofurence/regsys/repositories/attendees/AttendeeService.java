@@ -170,17 +170,4 @@ public class AttendeeService {
         ResponseWithDto<Countdown> result = client.performGet(requestId, url,"attendee/countdown", auth);
         return result.dto;
     }
-
-    // --- unofficial - this may move to auth service at some point ---
-
-    public boolean performHasRole(String role, RequestAuth auth, String requestId) {
-        String url = serviceBaseUrl + "/api/rest/v1/roles/" + role;
-        DownstreamClientNoBodyNoResponse client = new DownstreamClientNoBodyNoResponse();
-        try {
-            ResponseWithDto<String> result = client.performGet(requestId, url,"attendee/roles", auth);
-        } catch (UnauthorizedException | ForbiddenException e) {
-            return false;
-        }
-        return true;
-    }
 }

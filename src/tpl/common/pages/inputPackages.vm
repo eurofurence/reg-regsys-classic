@@ -1,17 +1,13 @@
             <TABLE class="prices" width="100%">
               <TR>
                 <TD colspan="2" class="input" valign="middle"></TD>
-                <TH class="prices" ALIGN="center">Early Bird<br>(before April 1st)</TH>
-                <TH class="prices" ALIGN="center">Regular<br>(starting April 1st)</TH>
-                <TH class="prices" ALIGN="center">Late<br>(starting June 1st)</TH>
+                <TH class="prices" ALIGN="center">Price</TH>
               </TR>
               #foreach ($option in $form.getPackages())##
               <TR>
                 <TH class="prices" align="center">$form.fieldPackage($option)</TH>
                 <TH class="prices"><label for="$form.getPackageParam($option)">$form.getOptionName($option)</label></TH>
-                <TD class="prices">$form.getOptionPriceEarly($option) &euro; </TD>
-                <TD class="prices">$form.getOptionPriceLate($option) &euro; </TD>
-                <TD class="prices">$form.getOptionPriceAtCon($option) &euro; </TD>
+                <TD class="prices">$form.getOptionPrice($option) &euro; </TD>
               </TR>
               #end##
             </TABLE>

@@ -10,17 +10,8 @@ public class Configuration {
         @JsonProperty("description")
         public String description;
 
-        @JsonProperty("help_url")
-        public String helpUrl;
-
-        @JsonProperty("price_early")
-        public int priceEarly;
-
-        @JsonProperty("price_late")
-        public int priceLate;
-
-        @JsonProperty("price_atcon")
-        public int priceAtCon;
+        @JsonProperty("price")
+        public int price;
 
         @JsonProperty("vat_percent")
         public float vatPercent;
@@ -74,6 +65,9 @@ public class Configuration {
         @JsonProperty("api_token")
         public String apiToken; // needed for the interfaces
 
+        @JsonProperty("admin_group")
+        public String adminGroup;
+
         @JsonProperty("nosecounter_token")
         public String nosecounterToken; // needed for the interfaces
 
@@ -125,16 +119,16 @@ public class Configuration {
     public Choices choices;
 
     @JsonProperty("tshirtsizes")
-    public List<String> tShirtSizes;
+    public InternationalizedOptions tShirtSizes;
 
     @JsonProperty("spoken_languages")
-    public List<String> spokenLanguages;
+    public InternationalizedOptions spokenLanguages;
 
     @JsonProperty("registration_languages")
-    public List<String> registrationLanguages;
+    public InternationalizedOptions registrationLanguages;
 
     @JsonProperty("countries")
-    public List<String> countries;
+    public InternationalizedOptions countries;
 
     @JsonProperty("downstream")
     public DownstreamConfig downstream;

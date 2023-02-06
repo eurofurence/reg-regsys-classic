@@ -4,6 +4,7 @@ import org.eurofurence.regsys.backend.HardcodedConfig;
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Constants.Permission;
 import org.eurofurence.regsys.backend.Strings;
+import org.eurofurence.regsys.backend.types.IsoDate;
 import org.eurofurence.regsys.repositories.attendees.AdminInfo;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
@@ -107,6 +108,7 @@ public class InputForm extends Form {
         attendee.flags = getDefaultFlags().getDbString();
         attendee.packages = getDefaultPackages().getDbString();
         attendee.options = getDefaultOptions().getDbString();
+        attendee.registrationLanguage = "en-US"; // have a default
     }
 
     // ---------- proxy methods for entity access -------
@@ -178,20 +180,9 @@ public class InputForm extends Form {
         return flags;
     }
 
-    public OptionList getCountries() {
-        // TODO: add spelled out names to config and properly load them
-
-        OptionList ol = new OptionList(Option.OptionTypes.Choice);
-        ol.add(Option.OptionAssembler.choice("", "Northern Elbonia").setDefault());
-        for (String code: configService.getConfig().countries) {
-            ol.add(Option.OptionAssembler.choice(code, code));
-        }
-        return ol;
-    }
-
     // --------- Business methods ----------------------
 
-    public void getFromDB(long dbId) {
+    public void getFromDBThrows(long dbId) {
         RequestAuth auth = getPage().getTokenFromRequest();
         String requestId = getPage().getRequestId();
 
@@ -216,7 +207,7 @@ public class InputForm extends Form {
         return s1 != s2;
     }
 
-    private void reloadAttendeeStatus() {
+    private void reloadAttendeeStatusThrows() {
         attendeeStatus = Constants.MemberStatus.byNewRegsysValue(
                 attendeeService.performGetCurrentStatus(attendee.id, getPage().getTokenFromRequest(), getPage().getRequestId())
         );
@@ -245,7 +236,7 @@ public class InputForm extends Form {
                 }
 
                 // reload current status after the changes
-                reloadAttendeeStatus();
+                reloadAttendeeStatusThrows();
 
                 if (hasFundamentalDifference(newAttendeeStatus, attendeeStatus)) {
                     StatusChange change = new StatusChange();
@@ -257,7 +248,7 @@ public class InputForm extends Form {
                     }
                     attendeeService.performStatusChange(attendee.id, change, auth, requestId);
 
-                    reloadAttendeeStatus();
+                    reloadAttendeeStatusThrows();
                 }
             }
         } catch (DownstreamWebErrorException e) {
@@ -276,7 +267,7 @@ public class InputForm extends Form {
         try {
             transactionCalculator.loadTransactionsFor(id, getPage().getTokenFromRequest(), getPage().getRequestId());
         } catch (DownstreamException e) {
-            addError(e.getMessage());
+            getPage().addException(e);
         }
     }
 
@@ -338,7 +329,7 @@ public class InputForm extends Form {
         private void setRegistrationLanguageFromRequest(HttpServletRequest request) {
             String selected = request.getParameter(REG_LANG);
             if (selected == null) {
-                selected = configService.getConfig().registrationLanguages.get(0);
+                selected = configService.getConfig().registrationLanguages.get(0).key();
             }
             attendee.registrationLanguage = selected;
         }
@@ -354,14 +345,15 @@ public class InputForm extends Form {
 
             setLowlevelFromRequest(request, list, PACKAGE);
             // silently deselect options which are hidden for the current selection
-            deselectHiddenPackages(list);
+            deselectHiddenPackagesNotImplemented(list);
             // silently selects options which are mandatory (those should be shown set&readonly to the user anyways)
-            handleMandatoryPackages(list);
+            handleMandatoryPackagesNotImplemented(list);
 
             attendee.packages = list.getDbString();
         }
 
-        private void deselectHiddenPackages(OptionList list) {
+        private void deselectHiddenPackagesNotImplemented(OptionList list) {
+            // TODO downstream will reject invalid combinations, then we'll show the error
             for (Option o : list) {
                 if (!o.optionEnable || o.readonly) continue;
 
@@ -371,7 +363,8 @@ public class InputForm extends Form {
             }
         }
 
-        private void handleMandatoryPackages(OptionList list) {
+        private void handleMandatoryPackagesNotImplemented(OptionList list) {
+            // TODO downstream will reject invalid combinations, then we'll show the error
             for (Option o : list) {
                 // TODO
                 // if (o.isConstraintsMandatory(attendee.getPackages())) {
@@ -447,7 +440,7 @@ public class InputForm extends Form {
 
         private void setManualDues(String t) {
             if (t == null) t = "0";
-            adminInfo.manualDues = FormHelper.parseLong(getPage(), t, "manual_dues", adminInfo.manualDues);
+            adminInfo.manualDues = FormHelper.parseCurrencyDecimals(getPage(), t, "manual_dues", adminInfo.manualDues);
         }
 
         private void setManualDueDesc(String t) {
@@ -566,9 +559,12 @@ public class InputForm extends Form {
         }
 
         public boolean isOverdue() {
-            // TODO
+            String dueDate = transactionCalculator.getDueDate();
+            if (!"".equals(dueDate)) {
+                String today = new IsoDate().getIsoFormat();
+                return today.compareTo(dueDate) > 0;
+            }
             return false;
-            // return attendee.isOverdue();
         }
 
         public String getFullPrice() {
@@ -651,18 +647,27 @@ public class InputForm extends Form {
         }
 
         public String fieldCountry() {
-            return selector(mayEdit(), COUNTRY, getCountries(), attendee.country, 1, false);
+            return selector(mayEdit(), COUNTRY,
+                    configService.getConfig().countries.keyList(),
+                    configService.getConfig().countries.valueList(attendee.registrationLanguage),
+                    attendee.country, 1);
         }
 
         public String fieldSpokenLanguages() {
             String value = attendee.spokenLanguages;
             if (value == null) value = "";
             Set<String> selected = new HashSet<>(Arrays.asList(value.split(",")));
-            return selector(mayEdit(), LANG, configService.getConfig().spokenLanguages, configService.getConfig().spokenLanguages, selected, 5, true);
+            return selector(mayEdit(), LANG,
+                    configService.getConfig().spokenLanguages.keyList(),
+                    configService.getConfig().spokenLanguages.valueList(attendee.registrationLanguage),
+                    selected, 5, true);
         }
 
         public String fieldRegistrationLanguage() {
-            return selector(mayEdit(), REG_LANG, configService.getConfig().registrationLanguages, configService.getConfig().registrationLanguages, attendee.registrationLanguage, 1);
+            return selector(mayEdit(), REG_LANG,
+                    configService.getConfig().registrationLanguages.keyList(),
+                    configService.getConfig().registrationLanguages.valueList(attendee.registrationLanguage),
+                    attendee.registrationLanguage, 1);
         }
 
         public String fieldState(int displaySize) {
@@ -752,16 +757,8 @@ public class InputForm extends Form {
             return textField(mayEdit(), TELEGRAM, attendee.telegram, displaySize, 80);
         }
 
-        public String getOptionPriceEarly(Option o) {
-            return FormHelper.toCurrencyDecimals(o.priceEarly);
-        }
-
-        public String getOptionPriceLate(Option o) {
-            return FormHelper.toCurrencyDecimals(o.priceLate);
-        }
-
-        public String getOptionPriceAtCon(Option o) {
-            return FormHelper.toCurrencyDecimals(o.priceAtCon);
+        public String getOptionPrice(Option o) {
+            return FormHelper.toCurrencyDecimals(o.price);
         }
 
         public List<Option> getPackages() {
@@ -792,7 +789,7 @@ public class InputForm extends Form {
 
         public String fieldManualDues(int displaySize, String style) {
             if (auth(Permission.ADMIN)) {
-                return textField(mayEditAdmin(), MANUAL_DUES, str(adminInfo.manualDues), displaySize, 20, style);
+                return textField(mayEditAdmin(), MANUAL_DUES, FormHelper.toCurrencyDecimals(adminInfo.manualDues), displaySize, 20, style);
             } else {
                 String manualDueDisplay = Float.toString(adminInfo.manualDues);
                 return manualDueDisplay.equals("") ? "0.00 &euro;" : manualDueDisplay;
@@ -804,35 +801,10 @@ public class InputForm extends Form {
         }
 
         public String fieldTshirtSize(String style) {
-            List<String> values = new ArrayList<String>();
-            List<String> showValuesAs = new ArrayList<String>();
-            values.add(""); showValuesAs.add(Strings.inputForm.tshirtSizeSelectPrompt);
-            if ("ef".equals(Strings.conf.conventionId)) {
-                for (String key: configService.getConfig().tShirtSizes) {
-                    if (key.startsWith("w")) {
-                        values.add(key);
-                        String desc = key.replaceFirst("w", "") + " (Narrow Cut)";
-                        showValuesAs.add(desc);
-                    } else {
-                        values.add(key);
-                        showValuesAs.add(key + " (Regular Cut)");
-                    }
-                }
-            } else if ("mmc".equals(Strings.conf.conventionId)) {
-                values.add("none"); showValuesAs.add("kein Shirt");
-                for (String key: configService.getConfig().tShirtSizes) {
-                    if (key.startsWith("w")) {
-                        values.add(key);
-                        String desc = key.replaceFirst("w", "") + " (w)";
-                        showValuesAs.add(desc);
-                    } else {
-                        values.add(key);
-                        String desc = key.replaceFirst("m", "") + " (m)";
-                        showValuesAs.add(desc);
-                    }
-                }
-            }
-            return selector(mayEdit(), TSHIRT_SIZE, values, showValuesAs, attendee.tshirtSize, 1, style, null);
+            return selector(mayEdit(), TSHIRT_SIZE,
+                    configService.getConfig().tShirtSizes.keyList(),
+                    configService.getConfig().tShirtSizes.valueList(attendee.registrationLanguage),
+                    attendee.tshirtSize, 1, style, null);
         }
 
         public List<Option> getOptions() {
@@ -891,24 +863,6 @@ public class InputForm extends Form {
                 return selector(mayEditAdmin(), ROOMASSIGN, values, showValuesAs, Integer.toString(attendee.getRoomId()), 1);
             } else
                 return textField(mayEditAdmin(), ROOMASSIGN, attendee.getRoomAssign(), displaySize, 20, style);
-        }
-
-        public boolean isMinor() {
-            return attendee.isMinor();
-        }
-
-        public String reportedPayment() {
-            return attendee.getReportPaydate().equals("") ?
-                    "NO" :
-                   attendee.getReportPaydate() + " " + escape(attendee.getReportPaycomment());
-        }
-
-        public String fieldRegistrationDate(int displaySize, String style) {
-            return textField(mayEditAdmin(), REGISTERED, attendee.getRegistered(), displaySize, 10, style);
-        }
-
-        public String fieldDueDate(int displaySize, String style) {
-            return textField(mayEditAdmin(), DUE_DATE, attendee.getDueDate(), displaySize, 10, style);
         }
         */
         public String fieldAdminComments() {
