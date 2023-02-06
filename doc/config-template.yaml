@@ -34,6 +34,8 @@ choices:
       description: 'Legal Name is Confidential'
     ev:
       description: 'Eurofurence e.V. Member'
+    digi-book:
+      description: 'Digital only convention booklet'
     guest:
       description: 'Guest of the Convention'
       admin_only: true
@@ -48,7 +50,7 @@ choices:
       read_only: true
     attendance:
       description: 'Entrance Fee (Convention Ticket)'
-      price: 9500
+      price: 12000
       vat_percent: 19
       default: true
     stage:
@@ -58,28 +60,40 @@ choices:
       default: true
     sponsor:
       description: 'Sponsor Upgrade'
-      price: 6500
+      price: 8000
       vat_percent: 19
     sponsor2:
       description: 'Supersponsor Upgrade'
-      price: 16000
+      price: 19000
       vat_percent: 19
       constraint: '!sponsor'
       constraint_msg: 'Please choose only one of Sponsor or Supersponsor.'
-    day-thu:
-      description: 'Day Guest (Thursday)'
+    tshirt:
+      description: 'Paid T-Shirt (non-sponsor)'
+      price: 2000
+      vat_percent: 19
+      constraint: '!sponsor,!sponsor2'
+      constraint_msg: 'Sponsors and supersponsors get their T-Shirt for free.'
+    day-sun:
+      description: 'Day Guest (Sunday)'
       price: 7000
       vat_percent: 19
       constraint: '!attendance,!stage'
       constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
-    day-fri:
-      description: 'Day Guest (Friday)'
+    day-mon:
+      description: 'Day Guest (Monday)'
       price: 7000
       vat_percent: 19
       constraint: '!attendance,!stage'
       constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
-    day-sat:
-      description: 'Day Guest (Saturday)'
+    day-tue:
+      description: 'Day Guest (Tuesday)'
+      price: 7000
+      vat_percent: 19
+      constraint: '!attendance,!stage'
+      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
+    day-wed:
+      description: 'Day Guest (Wednesday)'
       price: 7000
       vat_percent: 19
       constraint: '!attendance,!stage'
