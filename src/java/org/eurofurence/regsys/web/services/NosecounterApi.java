@@ -158,10 +158,12 @@ public class NosecounterApi extends AbstractAttendeeListService {
     // ------------------------ mapper -----------------------------------------
 
     private void register(SortedMap<String, Integer> map, String key) {
-        if (map.containsKey(key)) {
-            map.put(key, map.get(key) + 1);
-        } else {
-            map.put(key, 1);
+        if (map != null && key != null) {
+            if (map.containsKey(key)) {
+                map.put(key, map.get(key) + 1);
+            } else {
+                map.put(key, 1);
+            }
         }
     }
 

@@ -83,6 +83,9 @@ public class ServiceException extends RuntimeException {
     private void log() {
         try {
             Logging.error("[" + requestId + "] service call failed: " + getMessage());
+            if (getCause() != null) {
+                Logging.exception(getCause());
+            }
         } catch (Exception ignored) {
         }
     }
