@@ -32,10 +32,15 @@ choices:
       description: 'Wheelchair'
     anon:
       description: 'Legal Name is Confidential'
-    ev:
-      description: 'Eurofurence e.V. Member'
     digi-book:
       description: 'Digital only convention booklet'
+    ev:
+      description: 'Eurofurence e.V. Member'
+      read_only: true
+    terms-accepted:
+      description: 'Accepted the terms'
+      default: true
+      read_only: true
     guest:
       description: 'Guest of the Convention'
       admin_only: true
@@ -341,7 +346,7 @@ spoken_languages:
   - my:
       default: ဗမာစကာ
       en-US: Burmese
-    'no':
+  - 'no':
       default: Norsk
       en-US: Norwegian
   - nb:
@@ -544,9 +549,6 @@ countries:
   - 'BT':
       'en-US': 'Bhutan'
       'de-DE': 'Bhutan'
-  - 'BU':
-      'en-US': 'Myanmar'
-      'de-DE': 'Myanmar'
   - 'BV':
       'en-US': 'Bouvet Island'
       'de-DE': 'Bouvetinsel'
@@ -682,9 +684,6 @@ countries:
   - 'FR':
       'en-US': 'France'
       'de-DE': 'Frankreich'
-  - 'FX':
-      'en-US': 'Frankreich France métropolitaine'
-      'de-DE': 'Frankreich France métropolitaine'
   - 'GA':
       'en-US': 'Gabon'
       'de-DE': 'Gabun'
@@ -970,9 +969,6 @@ countries:
   - 'NR':
       'en-US': 'Nauru'
       'de-DE': 'Nauru'
-  - 'NT':
-      'en-US': 'Neutrale Zone'
-      'de-DE': 'Neutrale Zone'
   - 'NU':
       'en-US': 'Niue'
       'de-DE': 'Niue'
@@ -1213,9 +1209,6 @@ countries:
   - 'ZM':
       'en-US': 'Zambia'
       'de-DE': 'Sambia'
-  - 'ZR':
-      'en-US': 'Demokratische Republik Kongo'
-      'de-DE': 'Demokratische Republik Kongo'
   - 'ZW':
       'en-US': 'Zimbabwe'
       'de-DE': 'Simbabwe'
