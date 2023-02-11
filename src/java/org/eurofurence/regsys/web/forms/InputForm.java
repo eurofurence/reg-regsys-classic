@@ -110,6 +110,7 @@ public class InputForm extends Form {
         attendee.packages = getDefaultPackages().getDbString();
         attendee.options = getDefaultOptions().getDbString();
         attendee.registrationLanguage = "en-US"; // have a default
+        attendee.country = "DE"; // have a default
     }
 
     // ---------- proxy methods for entity access -------
