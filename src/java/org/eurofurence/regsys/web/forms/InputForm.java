@@ -49,6 +49,7 @@ public class InputForm extends Form {
     public static final String PHONE         = "param_phone";
     public static final String BIRTHDAY      = "param_birthday";
     public static final String GENDER        = "param_gender";
+    public static final String PRONOUNS      = "param_pronouns";
     public static final String ROOM          = "param_room";
     public static final String PARTNER       = "param_partner";
     public static final String TELEGRAM      = "param_telegram";
@@ -109,6 +110,7 @@ public class InputForm extends Form {
         attendee.packages = getDefaultPackages().getDbString();
         attendee.options = getDefaultOptions().getDbString();
         attendee.registrationLanguage = "en-US"; // have a default
+        attendee.country = "DE"; // have a default
     }
 
     // ---------- proxy methods for entity access -------
@@ -433,6 +435,7 @@ public class InputForm extends Form {
             setOptionsFromRequest(request);
             attendee.partner = nvl(request.getParameter(PARTNER));
             attendee.telegram = nvl(request.getParameter(TELEGRAM));
+            attendee.pronouns = nvl(request.getParameter(PRONOUNS));
             attendee.tshirtSize = nvl(request.getParameter(TSHIRT_SIZE));
             attendee.userComments = nvl(request.getParameter(USER_COMMENTS));
             checkReadTOS(request.getParameter(READ_TOS)); // adds an error if not checked (on initial reg)
@@ -757,6 +760,10 @@ public class InputForm extends Form {
             return textField(mayEdit(), TELEGRAM, attendee.telegram, displaySize, 80);
         }
 
+        public String fieldPronouns(int displaySize) {
+            return textField(mayEdit(), PRONOUNS, attendee.pronouns, displaySize, 80);
+        }
+
         public String getOptionPrice(Option o) {
             return FormHelper.toCurrencyDecimals(o.price);
         }
@@ -791,8 +798,8 @@ public class InputForm extends Form {
             if (auth(Permission.ADMIN)) {
                 return textField(mayEditAdmin(), MANUAL_DUES, FormHelper.toCurrencyDecimals(adminInfo.manualDues), displaySize, 20, style);
             } else {
-                String manualDueDisplay = Float.toString(adminInfo.manualDues);
-                return manualDueDisplay.equals("") ? "0.00 &euro;" : manualDueDisplay;
+                String manualDueDisplay = FormHelper.toCurrencyDecimals(adminInfo.manualDues);
+                return manualDueDisplay.equals("") ? "0.00&nbsp;&euro;" : manualDueDisplay + "&nbsp;&euro;";
             }
         }
 

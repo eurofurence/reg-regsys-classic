@@ -98,6 +98,12 @@
           </TD>
         </TR>
 #end##
+#if ($!confShowPronouns)##
+          <TR>
+              <TD class="label" ALIGN="right" VALIGN="middle">$strPronouns</TD>
+              <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldPronouns(40)</TD>
+          </TR>
+#end##
         <TR>
           <TD class="label" ALIGN="right" VALIGN="top">$strPersonalFlags</TD>
           <TD class="input" ALIGN="left" VALIGN="middle">
@@ -145,7 +151,7 @@
         </TR>
         <TR>
           <TD></TD>
-          <TD ALIGN="left" VALIGN="top" colspan="2">
+          <TD ALIGN="left" VALIGN="top">
             #parse( "inputPackages.vm" )
           </TD>
         </TR>
@@ -197,9 +203,6 @@
             <table border="0">
               <tr>
                 <td class="input">$form.fieldUserComments()</td>
-              </tr>
-              <tr>
-                <td class="input" valign="top">$strCommentsMessage</td>
               </tr>
             </table>
           </TD>
@@ -367,7 +370,6 @@
           <TD class="label" ALIGN="right" VALIGN="middle" nowrap="nowrap"></TD>
           <TD class="input" ALIGN="left" VALIGN="middle" colspan="2">
             $form.getSubmitButton("$strSubmitCompleteRegistrationRequest","submit","if(!document.getElementById('readTOS').checked){alert('$strMustAgreeTOSPopup');return false}")
-            $strLegalNoticeMessage
           </TD>
         </TR>
 #else##

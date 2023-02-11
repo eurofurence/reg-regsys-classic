@@ -55,6 +55,7 @@
 #set( $strGenderFemale = "Female")##
 #set( $strGenderOther = "Other")##
 #set( $strGenderNotprovided = "Don't wish to say")##
+#set( $strPronouns = "Pronouns")##
 #set( $strPersonalFlags = "Options")##
 #set( $strAccomodationHeading = "Accomodation")##
 #set( $strAccomodationMessage = "When we accept your registration, you will find the necessary information when you log in.")##
@@ -65,15 +66,14 @@
 #set( $strTShirtSize = "T-Shirt size")##
 #set( $strOptions = "Options")##
 #set( $strComments = "Comments")##
-#set( $strCommentsMessage = "This field is for additional information regarding your registration. Do not use this field to ask us questions, because there is no good way for us to answer! If you have questions, please use the appropriate email adresses as listed under the ""contact"" section on the homepage! Thank you!")##
 #set( $strCompleteRegistrationHeading = "Complete Registration")##
-#set( $strAgreeTOSMessage = "Yes, I agree to the <a href=""$termsURL"" target=""_blank"">Terms and Conditions</a>. I also acknowledge that Eurofurence e.V. reserves the right to reject registrations for any reason.<br/> I am aware that I will have to sign the <a href=""$waiverURL"" target=""_blank"">Liability Waiver</a> when I arrive, and I agree to its terms.<br/> I agree to adhere to the <a href=""$rulesURL"" target=""_blank"">Rules of Conduct</a> during my time at Eurofurence.<br/>I understand that:<ul>   <li>a valid certificate of a full vaccination against COVID-19 with an EU approved vaccine must be presented on site at check-in. The definition of what constitutes a ""full vacination"" is subject to change by both local and federal authorities based on the current state of science.</li><li>a mask (FFP2 / N95 / KN95 or better) will have to be worn in public spaces.</li><li>a certified antigen test not older than 24 hours or PCR test not older than 48 hours will be required on site at check-in.</li><li>the hotel and convention center may impose additional rules and restrictions, such as the type of events allowed, how events are run, or the maximum number of people in a room.</li><li>in case of cancellation of the event (e.g. due to unexpected changes of the pandemic situation) you are legally entitled to a full refund of your convention fee. However, we can't offer refunds of any kind if you have to cancel your attendance for reasons that are either personal in nature or beyond our control.</li></ul>")##
-#set( $strLegalNoticeMessage = "<p><b>Legal Notice:</b> by clicking this button you ask Eurofurence e.V. to offer you a place at EF. The actual contract offer is made when we accept your registration and e-mail you the payment details, which you can then accept by sending your payment.</p> <p><i>German Translation:</i></p> <p><b>Wichtiger Hinweis:</b> durch Klick auf diesen Button schlie&szlig;t du noch <b>keinen</b> Vertrag ab, der dich zu einer Zahlung verpflichten w&uuml;rde, sondern stellst eine Anfrage nach einem Teilnahmeplatz. Ein Vertrag kommt erst zustande, wenn Eurofurence e.V. dir eine e-Mail schickt, dass deine Registrierung akzeptiert wurde (Vertragsangebot), und du dein Einverst&auml;ndnis erkl&auml;rst, indem du fristgem&auml;&szlig; bezahlst (Annahme des Vertrags).</p>")##
-#set( $strMustAgreeTOSPopup = "You must read and agree to the Terms and Conditions to register for Eurofurence.")##
+#set( $strAgreeTOSMessage = "I accept the <a href=""$rulesURL"" target=""_blank"">Rules</a> and <a href=""$termsURL"" target=""_blank"">Conditions</a>.")##
+#set( $strMustAgreeTOSPopup = "You must read and agree to the Rules and Conditions to register for Eurofurence.")##
 #set( $strSubmitCompleteRegistrationRequest = "Complete Registration Request")##
 #set( $strTelegram = "Telegram")##
 #set( $confShowTelegram = 1)##
 #set( $confShowGender = 0)##
+#set( $confShowPronouns = 1)##
 #set( $strSubmitSave = "Save Changes")##
 ##
 #set( $strRoomSharing = "Room Sharing")##

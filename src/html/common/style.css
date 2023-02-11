@@ -662,7 +662,7 @@ td.prices
         font-weight: bold;
         color: #000000;
         vertical-align:top;
-        text-align:center;
+        text-align:right;
         border-collapse: collapse;
 }
 
