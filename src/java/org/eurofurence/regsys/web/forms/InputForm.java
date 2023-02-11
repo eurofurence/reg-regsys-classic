@@ -797,8 +797,8 @@ public class InputForm extends Form {
             if (auth(Permission.ADMIN)) {
                 return textField(mayEditAdmin(), MANUAL_DUES, FormHelper.toCurrencyDecimals(adminInfo.manualDues), displaySize, 20, style);
             } else {
-                String manualDueDisplay = Float.toString(adminInfo.manualDues);
-                return manualDueDisplay.equals("") ? "0.00 &euro;" : manualDueDisplay;
+                String manualDueDisplay = FormHelper.toCurrencyDecimals(adminInfo.manualDues);
+                return manualDueDisplay.equals("") ? "0.00&nbsp;&euro;" : manualDueDisplay + "&nbsp;&euro;";
             }
         }
 
