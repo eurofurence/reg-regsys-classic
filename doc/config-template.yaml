@@ -161,283 +161,188 @@ tshirtsizes:
   - 'w4XL':
       'en-US': '4XL (Narrow Cut)'
       'de-DE': '4XL (schmal geschnitten)'
-# spoken languages list converted from primary entries (no -XY) in https://github.com/mozilla/language-mapping-list
-#
-# The MIT License (MIT)
-#
-# Copyright (c) 2013 Ali Al Dallal
-#
-# https://github.com/mozilla/language-mapping-list/blob/master/LICENSE
 spoken_languages:
   - ach:
-      default: Lwo
       en-US: Acholi
   - ady:
-      default: Адыгэбзэ
       en-US: Adyghe
   - af:
-      default: Afrikaans
       en-US: Afrikaans
   - ak:
-      default: Tɕɥi
       en-US: Akan
   - ar:
-      default: العربية
       en-US: Arabic
   - az:
-      default: Azərbaycan dili
       en-US: Azerbaijani
   - bg:
-      default: Български
       en-US: Bulgarian
   - bn:
-      default: বাংলা
       en-US: Bengali
   - br:
-      default: Brezhoneg
       en-US: Breton
   - ca:
-      default: Català
       en-US: Catalan
   - cak:
-      default: Maya Kaqchikel
       en-US: Kaqchikel
   - cs:
-      default: Čeština
       en-US: Czech
   - cy:
-      default: Cymraeg
       en-US: Welsh
   - da:
-      default: Dansk
       en-US: Danish
   - de:
-      default: Deutsch
       en-US: German
   - dsb:
-      default: Dolnoserbšćina
       en-US: Lower Sorbian
   - el:
-      default: Ελληνικά
       en-US: Greek
   - en:
-      default: English
       en-US: English
   - eo:
-      default: Esperanto
       en-US: Esperanto
   - es:
-      default: Español
       en-US: Spanish
   - et:
-      default: eesti keel
       en-US: Estonian
   - eu:
-      default: Euskara
       en-US: Basque
   - fa:
-      default: فارسی
       en-US: Persian
   - ff:
-      default: Fulah
       en-US: Fulah
   - fi:
-      default: Suomi
       en-US: Finnish
+  - fil:
+      en-US: Filipino
   - fo:
-      default: Føroyskt
       en-US: Faroese
   - fr:
-      default: Français
       en-US: French
   - ga:
-      default: Gaeilge
       en-US: Irish
   - gd:
-      default: Gàidhlig
       en-US: Gaelic
   - gl:
-      default: Galego
       en-US: Galician
   - gv:
-      default: Gaelg
       en-US: Manx
   - he:
-      default: עברית‏
       en-US: Hebrew
   - hi:
-      default: हिन्दी
       en-US: Hindi
   - hr:
-      default: Hrvatski
       en-US: Croatian
   - hsb:
-      default: Hornjoserbšćina
       en-US: Upper Sorbian
   - ht:
-      default: Kreyòl
       en-US: Haitian Creole
   - hu:
-      default: Magyar
       en-US: Hungarian
   - hy:
-      default: Հայերեն
       en-US: Armenian
   - id:
-      default: Bahasa Indonesia
       en-US: Indonesian
   - is:
-      default: Íslenska
       en-US: Icelandic
   - it:
-      default: Italiano
       en-US: Italian
   - ja:
-      default: 日本語
       en-US: Japanese
   - km:
-      default: ភាសាខ្មែរ
       en-US: Khmer
   - kl:
-      default: kalaallisut
       en-US: Greenlandic
   - kab:
-      default: Taqbaylit
       en-US: Kabyle
   - kn:
-      default: ಕನ್ನಡ
       en-US: Kannada
   - ko:
-      default: 한국어
       en-US: Korean
   - kw:
-      default: Kernewek
       en-US: Cornish
   - la:
-      default: Latin
       en-US: Latin
   - lb:
-      default: Lëtzebuergesch
       en-US: Luxembourgish
   - lt:
-      default: Lietuvių
       en-US: Lithuanian
   - lv:
-      default: Latviešu
       en-US: Latvian
   - mai:
-      default: 'मैथिली, মৈথিলী'
       en-US: Maithili
   - mk:
-      default: Македонски
       en-US: Macedonian
   - ml:
-      default: മലയാളം
       en-US: Malayalam
   - mr:
-      default: मराठी
       en-US: Marathi
   - ms:
-      default: Bahasa Melayu
       en-US: Malay
   - mt:
-      default: Malti
       en-US: Maltese
   - my:
-      default: ဗမာစကာ
       en-US: Burmese
-  - 'no':
-      default: Norsk
+  - no:
       en-US: Norwegian
   - nb:
-      default: Norsk (bokmål)
       en-US: Norwegian (bokmal)
   - ne:
-      default: नेपाली
       en-US: Nepali
   - nl:
-      default: Nederlands
       en-US: Dutch
   - oc:
-      default: Occitan
       en-US: Occitan
   - pa:
-      default: ਪੰਜਾਬੀ
       en-US: Punjabi
   - pl:
-      default: Polski
       en-US: Polish
   - pt:
-      default: Português
       en-US: Portuguese
   - ro:
-      default: Română
       en-US: Romanian
   - ru:
-      default: Русский
       en-US: Russian
   - sh:
-      default: српскохрватски
       en-US: Serbo-Croatian
   - sk:
-      default: Slovenčina
       en-US: Slovak
   - sl:
-      default: Slovenščina
       en-US: Slovenian
   - sq:
-      default: Shqip
       en-US: Albanian
   - sr:
-      default: Српски
       en-US: Serbian
   - su:
-      default: Basa Sunda
       en-US: Sundanese
   - sv:
-      default: Svenska
       en-US: Swedish
   - sw:
-      default: Kiswahili
       en-US: Swahili
   - ta:
-      default: தமிழ்
       en-US: Tamil
   - te:
-      default: తెలుగు
       en-US: Telugu
   - tg:
-      default: забо́ни тоҷикӣ́
       en-US: Tajik
   - th:
-      default: ภาษาไทย
       en-US: Thai
-  - fil:
-      default: Filipino
+  - tl:
       en-US: Filipino
   - tlh:
-      default: tlhIngan-Hol
       en-US: Klingon
   - tr:
-      default: Türkçe
       en-US: Turkish
   - uk:
-      default: Українська
       en-US: Ukrainian
   - ur:
-      default: اردو
       en-US: Urdu
   - uz:
-      default: O'zbek
       en-US: Uzbek
   - vi:
-      default: Tiếng Việt
       en-US: Vietnamese
   - yi:
-      default: ייִדיש
       en-US: Yiddish
   - zh:
-      default: 中文
       en-US: Chinese
 registration_languages:
   - 'en-US':
