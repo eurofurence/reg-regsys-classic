@@ -55,6 +55,7 @@
 #set( $strGenderFemale = "Weiblich")##
 #set( $strGenderOther = "Sonstige")##
 #set( $strGenderNotprovided = "Mag ich nicht sagen")##
+#set( $strPronouns = "Pronomina")##
 #set( $strPersonalFlags = "Optionen")##
 #set( $strAccomodationHeading = "Unterbringung")##
 #set( $strAccomodationMessage = "Das Buchen der Zimmer erfolgt zu einem sp&auml;teren Zeitpunkt.")##
@@ -74,7 +75,8 @@
 #set( $strSubmitSave = "&Auml;nderungen speichern")##
 #set( $strPartner = "Lebenspartner(in)")##
 #set( $confShowPartner = 1)##
-#set( $confShowGender = 1)##
+#set( $confShowGender = 0)##
+#set( $confShowPronouns = 1)##
 ##
 #set( $strRoomSharing = "Zimmerpartner")##
 #set( $strRoomSharingInitialMsg = "Wenn du einen Zimmertyp mit mehreren Betten w&auml;hlst, kannst du sp&auml;ter an dieser Stelle die Anmeldenummer deiner Zimmerpartner eintragen, sobald deine Anmeldung akzeptiert wurde.")##

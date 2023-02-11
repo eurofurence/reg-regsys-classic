@@ -55,6 +55,7 @@
 #set( $strGenderFemale = "Female")##
 #set( $strGenderOther = "Other")##
 #set( $strGenderNotprovided = "Don't wish to say")##
+#set( $strPronouns = "Pronouns")##
 #set( $strPersonalFlags = "Options")##
 #set( $strAccomodationHeading = "Accomodation")##
 #set( $strAccomodationMessage = "When we accept your registration, you will find the necessary information when you log in.")##
@@ -74,6 +75,7 @@
 #set( $strTelegram = "Telegram")##
 #set( $confShowTelegram = 1)##
 #set( $confShowGender = 0)##
+#set( $confShowPronouns = 1)##
 #set( $strSubmitSave = "Save Changes")##
 ##
 #set( $strRoomSharing = "Room Sharing")##

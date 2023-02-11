@@ -98,6 +98,12 @@
           </TD>
         </TR>
 #end##
+#if ($!confShowPronouns)##
+          <TR>
+              <TD class="label" ALIGN="right" VALIGN="middle">$strPronouns</TD>
+              <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldPronouns(40)</TD>
+          </TR>
+#end##
         <TR>
           <TD class="label" ALIGN="right" VALIGN="top">$strPersonalFlags</TD>
           <TD class="input" ALIGN="left" VALIGN="middle">
