@@ -66,7 +66,6 @@
 #set( $strTShirtSize = "T-Shirt size")##
 #set( $strOptions = "Options")##
 #set( $strComments = "Comments")##
-#set( $strCommentsMessage = "This field is for additional information regarding your registration. Do not use this field to ask us questions, because there is no good way for us to answer! If you have questions, please use the appropriate email adresses as listed under the ""contact"" section on the homepage! Thank you!")##
 #set( $strCompleteRegistrationHeading = "Complete Registration")##
 #set( $strAgreeTOSMessage = "Yes, I agree to the <a href=""$termsURL"" target=""_blank"">Terms and Conditions</a>. I also acknowledge that Eurofurence e.V. reserves the right to reject registrations for any reason.<br/> I agree to adhere to the <a href=""$rulesURL"" target=""_blank"">Rules of Conduct</a> during my time at Eurofurence.")##
 #set( $strMustAgreeTOSPopup = "You must read and agree to the Terms and Conditions to register for Eurofurence.")##

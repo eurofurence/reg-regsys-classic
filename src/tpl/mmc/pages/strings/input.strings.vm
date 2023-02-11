@@ -66,7 +66,6 @@
 #set( $strTShirtSize = "Gr&ouml;&szlig;e des T-Shirt")##
 #set( $strOptions = "Optionen")##
 #set( $strComments = "Kommentare")##
-#set( $strCommentsMessage = "Dieses Feld ist nur f&uuml;r zus&auml;tzliche Informationen bez&uuml;glich Deiner Registrierung gedacht. Bitte stelle etwaige Fragen &uuml;ber die Kontakt-Sektion auf unserer Webseite. Fragen in diesem Feld werden von uns ignoriert.")##
 #set( $strCompleteRegistrationHeading = "Registrierung vollst&auml;ndig")##
 #set( $strAgreeTOSMessage = "Ja, ich stimme der <a href=""$rulesURL"" target=""_blank"">Hausordnung der MMC </a> vollst&auml;ndig zu. Ich akzeptiere, dass die MMC meine Registrierung ohne Angabe von Gr&uuml;nden ablehnen darf.")##
 #set( $strMustAgreeTOSPopup = "Du musst der Hausordnung der MMC zustimmen, um die Anmeldung zu vervollst&auml;ndigen.")##

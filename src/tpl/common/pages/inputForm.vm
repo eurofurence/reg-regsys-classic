@@ -204,9 +204,6 @@
               <tr>
                 <td class="input">$form.fieldUserComments()</td>
               </tr>
-              <tr>
-                <td class="input" valign="top">$strCommentsMessage</td>
-              </tr>
             </table>
           </TD>
         </TR>
