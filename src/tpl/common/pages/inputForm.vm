@@ -373,7 +373,6 @@
           <TD class="label" ALIGN="right" VALIGN="middle" nowrap="nowrap"></TD>
           <TD class="input" ALIGN="left" VALIGN="middle" colspan="2">
             $form.getSubmitButton("$strSubmitCompleteRegistrationRequest","submit","if(!document.getElementById('readTOS').checked){alert('$strMustAgreeTOSPopup');return false}")
-            $strLegalNoticeMessage
           </TD>
         </TR>
 #else##
