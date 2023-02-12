@@ -117,6 +117,9 @@ public class StringsEF {
         public String notifyEmailsSent = "Emails have been sent to %1$d of %2$d attendees.";
         public String errorLoadList = "Error loading list of templates: ";
         public String errorsMsg = "There were errors (see the box above).";
+        public String nullError = "Could not obtain attendees information - no mails were sent: got null or empty list";
+        public String sendError = "Downstream error while mailing attendee with id %1$s. Skipping and proceeding. Error was: ";
+        public String permMail = "Permission denied to mail attendee with id %1$s. Skipping and proceeding.";
     }
 
     public static class CommentsPageMsgs {

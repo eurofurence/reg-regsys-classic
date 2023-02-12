@@ -24,7 +24,6 @@
 #set($strNavExport = "Export")##
 #set($strNavManageBans = "Manage&nbsp;Bans")##
 #set($strNavEditAnnouncements = "Edit&nbsp;Announcements")##
-#set($strNavSendAnnouncements = "Send&nbsp;Announcements")##
 #set($strNavMarkOverdue = "Mark&nbsp;Overdue")##
 #set($strNavSendNotifications = "Send&nbsp;Notifications")##
 #set($strNavEditOwnRegistration = "Edit&nbsp;my&nbsp;Registration")##

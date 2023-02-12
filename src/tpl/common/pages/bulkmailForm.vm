@@ -1,6 +1,6 @@
     <TABLE>
         <TR>
-            <TD class="label" ALIGN="right" VALIGN="middle"><B>$strformAnnouncement %></B></TD>
+            <TD class="label" ALIGN="right" VALIGN="middle"><B>$strformAnnouncement</B></TD>
             <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldCidSelector()</TD>
         </TR>
         <TR>
