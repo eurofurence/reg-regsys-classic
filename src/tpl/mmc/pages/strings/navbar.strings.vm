@@ -24,7 +24,6 @@
 #set($strNavExport = "Exportieren")##
 #set($strNavManageBans = "Sperrungen&nbsp;verwalten")##
 #set($strNavEditAnnouncements = "Bearbeite&nbsp;Ank&uuml;ndigungen")##
-#set($strNavSendAnnouncements = "Sende&nbsp;Ank&uuml;ndigungen")##
 #set($strNavMarkOverdue = "Markiere&nbsp;offene&nbsp;Zahlungen")##
 #set($strNavSendNotifications = "Sende&nbsp;Benachrichtigungen")##
 #set($strNavEditOwnRegistration = "Bearbeite&nbsp;meine&nbsp;Registrierung")##

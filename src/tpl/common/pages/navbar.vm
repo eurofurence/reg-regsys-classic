@@ -52,7 +52,6 @@
 ##
 #if( $navbar.showAnnouncementsEditAndSend() )##
       <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.EditAnnouncementsURL">$strNavEditAnnouncements</a><br/>
-      <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.SendAnnouncementsURL">$strNavSendAnnouncements</a><br/>
       <hr class="navigation"/>
 #end##
 ##

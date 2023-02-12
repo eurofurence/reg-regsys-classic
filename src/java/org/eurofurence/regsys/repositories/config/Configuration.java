@@ -2,7 +2,6 @@ package org.eurofurence.regsys.repositories.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
 import java.util.Map;
 
 public class Configuration {
@@ -98,6 +97,9 @@ public class Configuration {
 
         @JsonProperty("context_path")
         public String contextPath; // no slashes
+
+        @JsonProperty("regsys_public_url")
+        public String regsysPublicUrl; // full url
 
         @JsonProperty("enable_dev_cors_header")
         public String enableDevCorsHeader; // set to "true" to enable this, NOT FOR PRODUCTION
