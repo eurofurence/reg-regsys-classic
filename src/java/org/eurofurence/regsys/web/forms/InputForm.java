@@ -311,11 +311,14 @@ public class InputForm extends Form {
      */
     public class ParameterParser {
         private void setLowlevelFromRequest(HttpServletRequest request, OptionList list, String paramPrefix) {
+            boolean isAdmin = getPage().hasPermission(Permission.ADMIN);
             for (Option o: list) {
                 String parname = paramPrefix + o.code;
                 String value = request.getParameter(parname); // may be null when NOT selected
                 if (value == null) value = "0";
-                o.optionEnable = "1".equals(value);
+                if (isAdmin || !o.readonly) {
+                    o.optionEnable = "1".equals(value);
+                }
             }
         }
 
