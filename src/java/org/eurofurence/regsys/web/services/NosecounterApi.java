@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.backend.persistence.TypeChecks;
+import org.eurofurence.regsys.backend.types.IsoDate;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 
@@ -243,8 +244,6 @@ public class NosecounterApi extends AbstractAttendeeListService {
             status = Constants.MemberStatus.byNewRegsysValue(attendee.status);
         } catch (Exception ignored) {
         }
-        if (!status.isParticipating())
-            return; // drops cancelled, deleted, waiting, unknown status
 
         Set<String> flags = mapOptionList(attendee.flags);
         Set<String> packages = mapOptionList(attendee.packages);
@@ -254,10 +253,23 @@ public class NosecounterApi extends AbstractAttendeeListService {
         boolean isDay = packages.stream().anyMatch(v -> v.startsWith("day_"));
         boolean isRegular = !isGuest && !isDay;
 
-        Calendar firstDayOfCon = Calendar.getInstance();
-        firstDayOfCon.setTime(TypeChecks.parseStaticDate(getFirstDayOfCon()));
+        int age = 18;
+        try {
+            Calendar firstDayOfCon = Calendar.getInstance();
+            firstDayOfCon.setTime(TypeChecks.parseStaticDate(getFirstDayOfCon()));
 
-        int age = 18; // TODO attendee.getAge(firstDayOfCon);
+            Calendar dateOfBirth = Calendar.getInstance();
+            dateOfBirth.setTime(new IsoDate().fromIsoFormat(attendee.birthday).getAsDate());
+
+            age = dateOfBirth.get(Calendar.YEAR) - firstDayOfCon.get(Calendar.YEAR);
+            if (firstDayOfCon.get(Calendar.MONTH) > dateOfBirth.get(Calendar.MONTH) ||
+                    (firstDayOfCon.get(Calendar.MONTH) == dateOfBirth.get(Calendar.MONTH) && firstDayOfCon.get(Calendar.DATE) > dateOfBirth.get(Calendar.DATE))) {
+                age--;
+            }
+        } catch (Exception ignored) {
+
+        }
+
         String gender = attendee.gender;
         String shirtsize = attendee.tshirtSize;
         String country = attendee.country;
