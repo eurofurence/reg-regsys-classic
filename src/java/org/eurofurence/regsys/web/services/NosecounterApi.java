@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.backend.persistence.TypeChecks;
+import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 
 import javax.servlet.http.HttpServletResponse;
@@ -222,7 +223,7 @@ public class NosecounterApi extends AbstractAttendeeListService {
             case 2019: return "14.08.2019";
             case 2020: return "19.08.2020";
             case 2022: return "24.08.2022";
-            case 2023: return "02.08.2023";
+            case 2023: return "03.09.2023";
             default: return Strings.conf.conStart;
         }
     }
@@ -315,6 +316,11 @@ public class NosecounterApi extends AbstractAttendeeListService {
     private static ResponseCache<AbstractResponseDTO> cache = new ResponseCache<>(ONE_MINUTE_IN_MILLIS);
 
     // -------------------- implementation -------------------------------------
+
+    @Override
+    protected void finderAdditionalSetup(AttendeeSearchCriteria.AttendeeSearchSingleCriterion criterion) {
+        criterion.status = Arrays.asList("new", "approved", "partially paid", "paid", "checked in", "waiting");
+    }
 
     @Override
     protected void parseParameters() {
