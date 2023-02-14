@@ -261,9 +261,9 @@ public class NosecounterApi extends AbstractAttendeeListService {
             Calendar dateOfBirth = Calendar.getInstance();
             dateOfBirth.setTime(new IsoDate().fromIsoFormat(attendee.birthday).getAsDate());
 
-            age = dateOfBirth.get(Calendar.YEAR) - firstDayOfCon.get(Calendar.YEAR);
-            if (firstDayOfCon.get(Calendar.MONTH) > dateOfBirth.get(Calendar.MONTH) ||
-                    (firstDayOfCon.get(Calendar.MONTH) == dateOfBirth.get(Calendar.MONTH) && firstDayOfCon.get(Calendar.DATE) > dateOfBirth.get(Calendar.DATE))) {
+            age = firstDayOfCon.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR);
+            if (dateOfBirth.get(Calendar.MONTH) > firstDayOfCon.get(Calendar.MONTH) ||
+                    (dateOfBirth.get(Calendar.MONTH) == firstDayOfCon.get(Calendar.MONTH) && dateOfBirth.get(Calendar.DATE) > firstDayOfCon.get(Calendar.DATE))) {
                 age--;
             }
         } catch (Exception ignored) {
