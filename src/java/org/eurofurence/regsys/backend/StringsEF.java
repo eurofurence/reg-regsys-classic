@@ -12,17 +12,14 @@ import org.eurofurence.regsys.backend.enums.RoomManagementOption;
 public class StringsEF {
     public static class ConfigStrings {
         public String conventionId = "ef";
-        public String conventionLongname = "Eurofurence 26";
+        public String conventionLongname = "Eurofurence 27";
         public String conventionShortname = "EF";
-        public String convention = "EF26";
-        public String conventionHumanReadableDate = "August 24-28, 2022"; // used in the navbar
-        public String conventionYear = "2022"; // used in lots of places on the web page and for credit card payment subject
+        public String convention = "EF27";
+        public String conventionHumanReadableDate = "September 3-7, 2023"; // used in the navbar
+        public String conventionYear = "2023"; // used in lots of places on the web page and for credit card payment subject
 
-        public String policiesURL = "https://www.eurofurence.org/EF26/policies";
-        public String hotelDescriptionURL = "https://www.eurofurence.org/EF26/hotel";
         public String termsURL = "https://help.eurofurence.org/legal/terms";
         public String rulesURL = "https://help.eurofurence.org/legal/roc";
-        public String waiverURL = "https://help.eurofurence.org/legal/liability";
 
         public String regMgmtEmailNontechnical = "nobody@eurofurence.org"; // otrs ticket queue
         public String regMgmtEmailTechnical = "nobody@eurofurence.org";
@@ -46,11 +43,11 @@ public class StringsEF {
 
         public String defaultBirthday = "31.12.1900";
 
-        public String paymentStart = "01.01.2022";
-        public String paymentEnd = "31.12.2023";
+        public String paymentStart = "01.01.2023";
+        public String paymentEnd = "31.12.2024";
 
-        public String conStart = "24.08.2022";
-        public String conEnd = "28.08.2022";
+        public String conStart = "03.09.2023";
+        public String conEnd = "07.09.2023";
 
         /* okay, so these are not strings, but it is useful to separate out all configuration */
 

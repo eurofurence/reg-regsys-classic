@@ -210,7 +210,6 @@ public class InputPage extends Page {
         veloContext.put("wasNew", wasNew);
 
         veloContext.put("termsURL", Strings.conf.termsURL);
-        veloContext.put("waiverURL", Strings.conf.waiverURL);
         veloContext.put("rulesURL",  Strings.conf.rulesURL);
 
         return Page.renderTemplate(getServletContext(), "html.vm", veloContext);
