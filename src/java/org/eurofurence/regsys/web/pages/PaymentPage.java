@@ -47,6 +47,9 @@ public class PaymentPage extends Page {
     public String handleRequest() throws ServletException {
         refreshSessionTimeout();
 
+        if (!hasPermission(Constants.Permission.ADMIN))
+            return redirect("page/start"); // use new regsys now!
+
         if (!isLoggedIn()) {
             return redirect("page/start");
         }

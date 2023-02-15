@@ -188,12 +188,12 @@ public class NavbarForm extends Form {
     }
 
     public boolean showEditOwnRegistration() {
-        if (getPage().isRegistrationEnabled()) {
-            return loggedInRegisteredAttendeeStatusCondition(status ->
-                    (status != Constants.MemberStatus.DELETED)
-                            && (status != Constants.MemberStatus.CANCELLED)
-            );
-        }
+//        if (getPage().isRegistrationEnabled()) {
+//            return loggedInRegisteredAttendeeStatusCondition(status ->
+//                    (status != Constants.MemberStatus.DELETED)
+//                            && (status != Constants.MemberStatus.CANCELLED)
+//            );
+//        }
         return false;
     }
 
@@ -204,13 +204,13 @@ public class NavbarForm extends Form {
     // view own payments
 
     public boolean showViewOwnPayments() {
-        if (getPage().isRegistrationEnabled()) {
-            return loggedInRegisteredAttendeeStatusCondition(status ->
-                    (status != Constants.MemberStatus.DELETED)
-                            && (status != Constants.MemberStatus.CANCELLED)
-                            && (status != Constants.MemberStatus.NEW)
-            );
-        }
+//        if (getPage().isRegistrationEnabled()) {
+//            return loggedInRegisteredAttendeeStatusCondition(status ->
+//                    (status != Constants.MemberStatus.DELETED)
+//                            && (status != Constants.MemberStatus.CANCELLED)
+//                            && (status != Constants.MemberStatus.NEW)
+//            );
+//        }
         return false;
     }
 
@@ -234,22 +234,22 @@ public class NavbarForm extends Form {
     // new registration
 
     public boolean showNewRegistration() {
-        if (getPage().isRegistrationEnabled()) {
-            if (getPage().isLoggedIn()) {
-                if (!getPage().readonlyExceptAdmin()) {
-                    Attendee attendee;
-                    try {
-                        attendee = getPage().getLoggedInAttendee();
-                    } catch (UnauthorizedException e) {
-                        Logging.warn("authorization expired - during navbar render, getLoggedInAttendee failed but isLoggedIn is true");
-                        return false;
-                    }
-                    if (attendee.id == null || attendee.id <= 0) {
-                        return true;
-                    }
-                }
-            }
-        }
+//        if (getPage().isRegistrationEnabled()) {
+//            if (getPage().isLoggedIn()) {
+//                if (!getPage().readonlyExceptAdmin()) {
+//                    Attendee attendee;
+//                    try {
+//                        attendee = getPage().getLoggedInAttendee();
+//                    } catch (UnauthorizedException e) {
+//                        Logging.warn("authorization expired - during navbar render, getLoggedInAttendee failed but isLoggedIn is true");
+//                        return false;
+//                    }
+//                    if (attendee.id == null || attendee.id <= 0) {
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
         return false;
     }
 

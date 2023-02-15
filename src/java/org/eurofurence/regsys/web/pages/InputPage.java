@@ -145,6 +145,9 @@ public class InputPage extends Page {
     public String handleRequest() throws ServletException {
         refreshSessionTimeout();
 
+        if (!hasPermission(Constants.Permission.ADMIN))
+            return redirect("page/start"); // use new regsys now!
+
         if (!isRegistrationEnabled()) {
             return forward("page/start");
         }
