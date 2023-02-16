@@ -24,6 +24,8 @@ public class StringsEF {
         public String regMgmtEmailNontechnical = "nobody@eurofurence.org"; // otrs ticket queue
         public String regMgmtEmailTechnical = "nobody@eurofurence.org";
 
+        public String goLiveTime = "18.02.2023 20:00:00"; // expects Europe/Berlin timezone
+
         public String goLiveDateFormat = "dd MMMM yyyy, HH:mm:ss";
         public String goLiveDatePrefix = "Saturday, ";
 

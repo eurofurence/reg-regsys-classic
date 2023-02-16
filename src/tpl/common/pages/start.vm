@@ -1,18 +1,46 @@
 #parse( "strings/start.strings.vm")
   <td class="contentbox">
-#parse( "local/localmessage.vm" )
    <div class="pageheader">$strTitle</div>
    <hr class="contentbox"/>
 
- #parse( "message.vm" )
- #parse( "messagePreparedForConvention.vm" )
+      <div class="contentbox">
+          Registration for $page.ConNameLong is going to open soon...<br/><br/>
 
-#if( $page.isRegistrationEnabled() )##
- #parse( "startWelcome.vm")    
+          but ...<br/><br/>
 
-#else##
-       <div class="contentbox">$strOffline</div><br/>
-#end##
+          You're <b>in the wrong place</b>!<br/><br/>
+      </div>
 
+      <div class="pageheader">Step 1: Make an account</div>
+      <hr class="contentbox"/>
+      <div class="contentbox">
+          Create your <a href="https://identity.eurofurence.org/">eurofurence.org</a> account and confirm your email address.<br/><br/>
+
+          You can do this part right now! <a href="https://identity.eurofurence.org/">Click here</a>!<br/><br/>
+
+          <i>This account will stay with you over the years.</i><br/><br/>
+      </div>
+
+      <div class="pageheader">Step 2: Wait, then register</div>
+      <hr class="contentbox"/>
+      <div class="contentbox">
+          Then you have to wait until...<br/><br/>
+
+          $page.getRegstartDateFor("CET") - Berlin (Germany)<br/>
+          $page.getRegstartDateFor("GMT") - London (United Kingdom - England)<br/>
+          $page.getRegstartDateFor("PST") - Los Angeles (U.S.A. - California)<br/>
+          $page.getRegstartDateFor("EST") - Philadelphia (U.S.A. - Pennsylvania)<br/><br/>
+
+          <b>$page.Countdown</b><br/><br/><br/>
+
+          At this time, when you're logged in, you'll get a new link in your personal dashboard:<br/>
+          <img src="../images/dashboard.png" alt="dashboard showing registration link"/>
+      </div>
+
+      <div class="pageheader">Goodbye</div>
+      <hr class="contentbox"/>
+      <div class="contentbox">
+          This registration system has served EF for 22 years, and this is the last time you're going to see it.<br/><br/>
+      </div>
   </td>
 ##
