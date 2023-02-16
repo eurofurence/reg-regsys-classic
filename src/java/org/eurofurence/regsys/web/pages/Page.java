@@ -5,17 +5,10 @@ import org.apache.velocity.app.Velocity;
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.backend.Strings;
-import org.eurofurence.regsys.repositories.attendees.Attendee;
-import org.eurofurence.regsys.repositories.attendees.AttendeeService;
-import org.eurofurence.regsys.repositories.auth.AuthService;
-import org.eurofurence.regsys.repositories.auth.RequestAuth;
-import org.eurofurence.regsys.repositories.auth.UserInfo;
-import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
 import org.eurofurence.regsys.repositories.errors.ErrorDto;
 import org.eurofurence.regsys.repositories.errors.ForbiddenException;
 import org.eurofurence.regsys.repositories.errors.UnauthorizedException;
-import org.eurofurence.regsys.service.TransactionCalculator;
 import org.eurofurence.regsys.web.forms.Form;
 import org.eurofurence.regsys.web.forms.NavbarForm;
 import org.eurofurence.regsys.web.servlets.RequestHandler;
@@ -172,166 +165,6 @@ public abstract class Page extends RequestHandler {
         return getConfiguration().web.enableRegistration;
     }
 
-    // auth
-
-    private final AuthService authService = new AuthService();
-    public AuthService getAuthService() {
-        return authService;
-    }
-
-    private UserInfo cachedUserInfo;
-    public UserInfo getUserInfo() {
-        if (cachedUserInfo != null)
-            return cachedUserInfo;
-
-        RequestAuth auth = getTokenFromRequest();
-        if (auth.providedIdToken() && auth.providedAccessToken()) {
-            try {
-                cachedUserInfo = authService.performGetFrontendUserinfo(auth, getRequestId());
-                // if this worked, we've confirmed we're logged in
-            } catch (UnauthorizedException | ForbiddenException ignored) {
-                // login failed to validate
-                cachedUserInfo = new UserInfo();
-            }
-        } else {
-            // not logged in
-            cachedUserInfo = new UserInfo();
-        }
-
-        return cachedUserInfo;
-    }
-
-    private Set<Constants.Permission> cachedPermissionsFromRequest;
-    public Set<Constants.Permission> getPermissionsFromRequest() {
-        if (cachedPermissionsFromRequest != null)
-            return cachedPermissionsFromRequest;
-
-        Set<Constants.Permission> result = new HashSet<>();
-
-        RequestAuth auth = getTokenFromRequest();
-        // local safety check, avoids error logs in auth service
-        if ("".equals(auth.idToken) || "".equals(auth.accessToken)) {
-            cachedPermissionsFromRequest = result;
-            return result;
-        }
-
-        UserInfo userInfo = getUserInfo();
-        // worked, so logged in
-        result.add(Constants.Permission.LOGIN);
-
-        if (userInfo.groups != null && userInfo.groups.contains(getConfiguration().downstream.adminGroup)) {
-            result.add(Constants.Permission.STATS);
-            result.add(Constants.Permission.ADMIN);
-            result.add(Constants.Permission.EXPORT_CONBOOK);
-            result.add(Constants.Permission.ACCOUNTING);
-            result.add(Constants.Permission.VIEW);
-            result.add(Constants.Permission.ANNOUNCE);
-        }
-
-        cachedPermissionsFromRequest = result;
-        return result;
-    }
-
-    private String nvl(String v) {
-        return v == null ? "" : v;
-    }
-
-    private RequestAuth cachedTokensFromRequest;
-    public RequestAuth getTokenFromRequest() {
-        if (cachedTokensFromRequest != null)
-            return cachedTokensFromRequest;
-
-        RequestAuth result = new RequestAuth();
-
-        Cookie[] cookies = getRequest().getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (nvl(configuration.downstream.idTokenCookieName).equals(nvl(cookie.getName()))) {
-                    result.idToken = nvl(cookie.getValue());
-                }
-                if (nvl(configuration.downstream.accessTokenCookieName).equals(nvl(cookie.getName()))) {
-                    result.accessToken = nvl(cookie.getValue());
-                }
-            }
-        }
-
-        cachedTokensFromRequest = result;
-        return result;
-    }
-
-    public boolean isLoggedIn() {
-        RequestAuth auth = getTokenFromRequest();
-        boolean unauthorized = auth.idToken == null || "".equals(auth.idToken) || auth.accessToken == null || "".equals(auth.accessToken);
-        return !unauthorized;
-    }
-
-    // attendee
-
-    private final AttendeeService attendeeService = new AttendeeService();
-    public AttendeeService getAttendeeService() {
-        return attendeeService;
-    }
-
-    protected List<Long> cachedMyBadgeNumbers;
-    public List<Long> getMyBadgeNumbers() {
-        if (cachedMyBadgeNumbers == null) {
-            cachedMyBadgeNumbers = getAttendeeService().performGetBadgeNumbers(getTokenFromRequest(), getRequestId());
-        }
-        return cachedMyBadgeNumbers;
-    }
-
-    public boolean isMyBadgeNumber(long id) {
-        for (Long no: getMyBadgeNumbers()) {
-            if (no != null && no == id) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected Attendee cachedLoggedInAttendee;
-    public Attendee getLoggedInAttendee() {
-        if (cachedLoggedInAttendee == null) {
-            List<Long> badgeNumbers = getMyBadgeNumbers();
-            if (badgeNumbers.isEmpty()) {
-                cachedLoggedInAttendee = new Attendee();
-                cachedLoggedInAttendeeStatus = Constants.MemberStatus.NEW;
-            } else {
-                cachedLoggedInAttendee = getAttendeeService().performGetAttendee(badgeNumbers.get(0), getTokenFromRequest(), getRequestId());
-                cachedLoggedInAttendeeStatus = Constants.MemberStatus.byNewRegsysValue(
-                        getAttendeeService().performGetCurrentStatus(cachedLoggedInAttendee.id, getTokenFromRequest(), getRequestId())
-                );
-            }
-        }
-        return cachedLoggedInAttendee;
-    }
-
-    protected Constants.MemberStatus cachedLoggedInAttendeeStatus = Constants.MemberStatus.NEW;
-    public Constants.MemberStatus getLoggedInAttendeeStatus() {
-        getLoggedInAttendee(); // ensure status set
-        return cachedLoggedInAttendeeStatus;
-    }
-
-    public TransactionCalculator getMyTransactionCalculator() {
-        List<Long> badgeNumbers = getMyBadgeNumbers();
-        if (badgeNumbers.isEmpty()) {
-            return null;
-        }
-
-        TransactionCalculator instance = new TransactionCalculator();
-        instance.loadTransactionsFor(badgeNumbers.get(0), getTokenFromRequest(), getRequestId());
-        return instance;
-    }
-
-    /**
-     * Check that the currently logged in attendee has a permission.
-     *
-     * Note: ADMINs are considered to have all permissions.
-     */
-    public boolean hasPermission(Constants.Permission permission) {
-        return getPermissionsFromRequest().contains(permission);
-    }
-
     // used by messagePreparedForConvention.vm
 
     public boolean showBeforeConventionAnnouncement() {
@@ -399,7 +232,6 @@ public abstract class Page extends RequestHandler {
     public void handle() {
         getResponse().setContentType("text/html; charset=utf-8");
         try {
-            getPermissionsFromRequest(); // check attsrv available
             String page = handleRequest();
             getResponse().getWriter().print(page);
         } catch (Exception e) {

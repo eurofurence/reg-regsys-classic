@@ -5,7 +5,7 @@
 
   <display-name>Eurofurence Registration System</display-name>
   <description>
-        The Eurofurence Registration System, (C) 1999-2022 Eurofurence e.V.
+        The Eurofurence Registration System, (C) 1999-2023 Eurofurence e.V.
   </description>
 
     <filter>
@@ -29,10 +29,6 @@
     </listener>
 
     <servlet>
-        <servlet-name>service</servlet-name>
-        <servlet-class>org.eurofurence.regsys.web.servlets.service.ServiceServlet</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>page</servlet-name>
         <servlet-class>org.eurofurence.regsys.web.servlets.page.PageServlet</servlet-class>
     </servlet>
@@ -41,10 +37,6 @@
         <servlet-class>org.eurofurence.regsys.web.servlets.error.ErrorServlet</servlet-class>
     </servlet>
 
-    <servlet-mapping>
-        <servlet-name>service</servlet-name>
-        <url-pattern>/service/*</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>page</servlet-name>
         <url-pattern>/page/*</url-pattern>

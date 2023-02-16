@@ -1,7 +1,0 @@
-#parse( "strings/login.strings.vm" )
-  <td class="contentbox">
-    <div class="pageheader">$strTitle</div>
-    <hr class="contentbox">
-
-    <div class="contentbox">$message</div>
-  </td>

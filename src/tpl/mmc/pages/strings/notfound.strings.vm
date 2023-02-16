@@ -1,3 +1,0 @@
-## Strings used in the not found page
-#set($strTitle = "MMC Registrierung")##
-#set($strNotFound = "Seite nicht gefunden")##

@@ -1,5 +1,0 @@
-## Strings used in the login form
-##
-## the ## at the end of lines prevents blank lines in the output of this template
-##
-#set($strTitle = "Login Simulator")##

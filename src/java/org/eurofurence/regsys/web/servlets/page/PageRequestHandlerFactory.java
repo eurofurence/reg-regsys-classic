@@ -12,22 +12,7 @@ public class PageRequestHandlerFactory {
     protected static Supplier<Page> defaultSupplier = NotFoundPage::new;
 
     static {
-        suppliersByPathInfo.put("/accounting", AccountingPage::new);
-        suppliersByPathInfo.put("/announcements", AnnouncementsPage::new);
-        suppliersByPathInfo.put("/bans", BansPage::new);
-        suppliersByPathInfo.put("/bulkmail", BulkmailPage::new);
-        suppliersByPathInfo.put("/comments", CommentsPage::new);
-        suppliersByPathInfo.put("/email", ResendStatusEmailPage::new);
-        suppliersByPathInfo.put("/export", ExportPage::new);
-        suppliersByPathInfo.put("/input", InputPage::new);
-        suppliersByPathInfo.put("/list", ListPage::new);
-        suppliersByPathInfo.put("/mass-approve", MassApprovePage::new);
-        suppliersByPathInfo.put("/payment", PaymentPage::new);
-        suppliersByPathInfo.put("/search", SearchPage::new);
         suppliersByPathInfo.put("/start", StartPage::new);
-        suppliersByPathInfo.put("/stats", StatsPage::new);
-
-        suppliersByPathInfo.put("/login", LoginPage::new);
     }
 
     public static Page createByPathInfo(String pathInfo) {

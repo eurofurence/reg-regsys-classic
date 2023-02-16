@@ -10,10 +10,10 @@ build: perm
 	./gradlew --no-daemon --console=plain clean war
 
 deploy:
-	cp build/libs/reg-regsys-classic-*.war $(INSTBASE)/$(WARNAME)
+	cp build/libs/reg-regsys-classic-*.war $(INSTBASE)/regsys.war
 
 undeploy:
-	rm -f $(INSTBASE)/$(WARNAME)
+	rm -f $(INSTBASE)/regsys.war
 
 install: build deploy
 
