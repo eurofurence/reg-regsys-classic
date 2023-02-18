@@ -763,7 +763,7 @@ public class InputForm extends Form {
         }
 
         public String fieldFlag(Option o) {
-            return checkbox(mayEdit(), FLAG + o.code, "1", o.optionEnable ? "1" : "0", "check", o.readonly);
+            return checkbox(mayEdit(), FLAG + o.code, "1", o.optionEnable ? "1" : "0", "check", false);
         }
 
         public String getFlagParam(Option o) {
@@ -867,7 +867,7 @@ public class InputForm extends Form {
         }
 
         public String fieldOption(Option o) {
-            return checkbox(mayEdit(), OPTION + o.code, "1", o.optionEnable ? "1" : "0", "check", o.readonly);
+            return checkbox(mayEdit(), OPTION + o.code, "1", o.optionEnable ? "1" : "0", "check", false);
         }
 
         public String getOptionParam(Option o) {
