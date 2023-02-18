@@ -565,36 +565,71 @@ public class InputForm extends Form {
         }
 
         public boolean isOverdue() {
-            String dueDate = transactionCalculator.getDueDate();
-            if (!"".equals(dueDate)) {
-                String today = new IsoDate().getIsoFormat();
-                return today.compareTo(dueDate) > 0;
+            try {
+                String dueDate = transactionCalculator.getDueDate();
+                if (!"".equals(dueDate)) {
+                    String today = new IsoDate().getIsoFormat();
+                    return today.compareTo(dueDate) > 0;
+                }
+            } catch (Exception e) {
+                addError(Strings.inputForm.dbError + "payment service error");
+                return false;
             }
             return false;
         }
 
         public String getFullPrice() {
-            return FormHelper.toCurrencyDecimals(transactionCalculator.getTotalDues());
+            try {
+                return FormHelper.toCurrencyDecimals(transactionCalculator.getTotalDues());
+            } catch (Exception e) {
+                addError(Strings.inputForm.dbError + "payment service error");
+                return "UNAVAILABLE";
+            }
         }
 
         public String getAmountDue() {
-            return FormHelper.toCurrencyDecimals(transactionCalculator.getTotalDues());
+            try {
+                return FormHelper.toCurrencyDecimals(transactionCalculator.getTotalDues());
+            } catch (Exception e) {
+                addError(Strings.inputForm.dbError + "payment service error");
+                return "UNAVAILABLE";
+            }
         }
 
         public String getRemainingDues() {
-            return FormHelper.toCurrencyDecimals(transactionCalculator.getRemainingDues());
+            try {
+                return FormHelper.toCurrencyDecimals(transactionCalculator.getRemainingDues());
+            } catch (Exception e) {
+                addError(Strings.inputForm.dbError + "payment service error");
+                return "UNAVAILABLE";
+            }
         }
 
         public String getDueDate() {
-            return transactionCalculator.getDueDate();
+            try {
+                return transactionCalculator.getDueDate();
+            } catch (Exception e) {
+                addError(Strings.inputForm.dbError + "payment service error");
+                return "UNAVAILABLE";
+            }
         }
 
         public boolean getPaymentsPending() {
-            return transactionCalculator.getOpenPayments() > 0;
+            try {
+                return transactionCalculator.getOpenPayments() > 0;
+            } catch (Exception e) {
+                addError(Strings.inputForm.dbError + "payment service error");
+                return false;
+            }
         }
 
         public boolean hasRemainingDues() {
-            return transactionCalculator.getRemainingDues() > 0;
+            try {
+                return transactionCalculator.getRemainingDues() > 0;
+            } catch (Exception e) {
+                addError(Strings.inputForm.dbError + "payment service error");
+                return false;
+            }
         }
 
         // form fields

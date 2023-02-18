@@ -29,6 +29,8 @@ public class SearchForm extends Form {
     public static final String SUBMIT_SEARCH      = "search";
 
     public static final String ID            = "search_id";
+    public static final String MIN_ID        = "search_min_id";
+    public static final String MAX_ID        = "search_max_id";
     public static final String ORDER_BY      = "search_order";
     public static final String NICK          = "search_nick";
     public static final String STATUS        = "search_status";
@@ -52,6 +54,8 @@ public class SearchForm extends Form {
 
     private String sortBy;
     private String sortOrder;
+    private long   minId;
+    private long   maxId;
 
     // result
 
@@ -67,6 +71,8 @@ public class SearchForm extends Form {
 
     public void initialize() {
         attendeeFinder = new AttendeeSearchCriteria.AttendeeSearchSingleCriterion();
+        minId = 0L;
+        maxId = 0L;
     }
 
     // ---------- proxy methods for entity access -------
@@ -76,6 +82,20 @@ public class SearchForm extends Form {
             return "";
         else
             return Long.toString(attendeeFinder.ids.get(0));
+    }
+
+    protected String getSearchMinId() {
+        if (minId <= 0)
+            return "";
+        else
+            return Long.toString(minId);
+    }
+
+    protected String getSearchMaxId() {
+        if (maxId <= 0)
+            return "";
+        else
+            return Long.toString(maxId);
     }
 
     protected String getSearchStatus() {
@@ -113,7 +133,8 @@ public class SearchForm extends Form {
         criteria.matchAny.add(attendeeFinder);
         criteria.sortBy = sortBy;
         criteria.sortOrder = sortOrder;
-        // TODO add extra fields
+        criteria.minId = minId;
+        criteria.maxId = maxId;
         return criteria;
     }
 
@@ -291,6 +312,26 @@ public class SearchForm extends Form {
             }
         }
 
+        private void setSearchMinId(String t) {
+            if (t == null || t.equals("")) t = "-1";
+            long v = FormHelper.parseLong(getPage(), t, MIN_ID, -1);
+            if (v > 0) {
+                minId = v;
+            } else {
+                minId = 0L;
+            }
+        }
+
+        private void setSearchMaxId(String t) {
+            if (t == null || t.equals("")) t = "-1";
+            long v = FormHelper.parseLong(getPage(), t, MAX_ID, -1);
+            if (v > 0) {
+                maxId = v;
+            } else {
+                maxId = 0L;
+            }
+        }
+
         private void setSearchOrder(String t) {
             if (t == null || t.equals("")) t = "id";
             for (String allowed: getAllowedOrders()) {
@@ -448,6 +489,8 @@ public class SearchForm extends Form {
 
         public void parse(HttpServletRequest request) {
             setSearchId(request.getParameter(ID));
+            setSearchMinId(request.getParameter(MIN_ID));
+            setSearchMaxId(request.getParameter(MAX_ID));
             setSearchOrder(nvl(request.getParameter(ORDER_BY)));
             attendeeFinder.nickname = request.getParameter(NICK);
             setSearchStatus(request.getParameter(STATUS));
@@ -503,6 +546,14 @@ public class SearchForm extends Form {
 
         public String fieldId(int displaySize, String style) {
             return Form.textField(true, ID, getSearchId(), displaySize, 10, style);
+        }
+
+        public String fieldMinId(int displaySize, String style) {
+            return Form.textField(true, MIN_ID, getSearchMinId(), displaySize, 10, style);
+        }
+
+        public String fieldMaxId(int displaySize, String style) {
+            return Form.textField(true, MAX_ID, getSearchMaxId(), displaySize, 10, style);
         }
 
         public String fieldOrderBy(String style) {
