@@ -141,7 +141,7 @@ public class StringsEF {
         public String invalidUpdatedParam = "Invalid value '%1$s' for param_updated.";
         public String roommateNotFound = "Roommate number %1$d not found";
         public String roommateNotGiven = "No roommate specified";
-        public String dbError = "Database error: ";
+        public String dbError = "Downstream error: ";
         public String permError = "Permission denied: ";
         public String sessionErrorCouldNotSetupAuth = "Couldn't set authentication for this session. You might need to close your browser and login again. You should get an email "
                 + "with a link to continue your registration. Otherwise, please contact " + Strings.conf.regMgmtEmailTechnical;

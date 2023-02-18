@@ -12,6 +12,14 @@ ${form.submitSearch("Search","submit_small")}
     </TR>
 
     <TR>
+      <TD class="label" ALIGN="right" VALIGN="middle">Min&nbsp;RegNo.</TD>
+      <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldMinId(10, "small")</TD>
+
+      <TD class="label" ALIGN="right" VALIGN="middle">Max&nbsp;RegNo.</TD>
+      <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldMaxId(10, "small")</TD>
+    </TR>
+
+    <TR>
       <TD class="label" ALIGN="right" VALIGN="middle">Nickname</TD>
       <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldNick(20)</TD>
 
