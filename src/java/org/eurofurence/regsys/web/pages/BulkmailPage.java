@@ -71,8 +71,9 @@ public class BulkmailPage extends Page {
         getBulkmailForm().buildListingBox();
 
         if (doExecute && !hasErrors()) {
-            getBulkmailForm().processAccept();
-            showSubmit = false;
+            if (getBulkmailForm().processAccept()) {
+                showSubmit = false;
+            }
         }
 
         // ---------- ---------- ---------- ---------- ---------- ---------- ---------- ---------- ----------

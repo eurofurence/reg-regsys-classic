@@ -70,14 +70,20 @@ public class BulkmailForm extends AttendeeSelectionForm {
         cid = nvl(request.getParameter(PARAM_CID));
     }
 
-    public void processAccept() {
+    public boolean processAccept() {
         RequestAuth auth = getPage().getTokenFromRequest();
         String requestId = getPage().getRequestId();
 
         // verify search query ran and got results
         if (attendeeResult == null || attendeeResult.attendees == null || attendeeResult.attendees.size() == 0) {
             addError(Strings.bulkmailPage.nullError);
-            return;
+            return false;
+        }
+
+        // verify we have a valid cid
+        if (cid == null || "".equals(cid) || "(null)".equals(cid)) {
+            addError(Strings.bulkmailPage.mustSelectTemplate);
+            return false;
         }
 
         String regsysUrl = getPage().getConfiguration().web.regsysPublicUrl;
@@ -113,6 +119,8 @@ public class BulkmailForm extends AttendeeSelectionForm {
                 getPage().addException(e);
             }
         }
+
+        return true;
     }
 
     // --------------------- parameter parsers --------------------------------------------------

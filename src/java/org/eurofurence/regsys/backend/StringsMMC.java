@@ -125,6 +125,7 @@ public class StringsMMC {
         public String notifyEmailsSent = "Emails wurden an %1$d von %2$d Teilnehmern in der Empf&auml;ngerliste verschickt.";
         public String errorLoadList = "Fehler beim Laden der Mailvorlagen: ";
         public String errorsMsg = "Es sind Fehler aufgetreten (siehe oben).";
+        public String mustSelectTemplate = "Bitte w&auml;hle ein Template aus";
         public String nullError = "Fehler bei Suchanfrage - keine Mails verschickt: null oder leere Liste";
         public String sendError = "Fehler beim Mailversand an Teilnehmer id %1$s. Teilnehmer &uuml;bersprungen. Fehler war: ";
         public String permMail = "Berechtigungsfehler beim Mailversand an Teilnehmer id %1$s. Teilnehmer &uuml;bersprungen.";
