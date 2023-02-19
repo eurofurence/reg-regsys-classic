@@ -9,11 +9,15 @@
          </TR>
         <TR>
           <TD class="label" ALIGN="right" VALIGN="middle"><B>Status</B></TD>
-          <TD class="input" ALIGN="left" VALIGN="middle">Confirmed</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.getEditFormStatus("big")</TD>
+        </TR>
+        <TR>
+            <TD class="label" ALIGN="right" VALIGN="middle"><B>Transaktionstyp</B></TD>
+            <TD class="input" ALIGN="left" VALIGN="middle">$form.getEditFormType("big")</TD>
         </TR>
         <TR>
           <TD class="label" ALIGN="right" VALIGN="middle"><B>Zahlungsart</B></TD>
-          <TD class="input" ALIGN="left" VALIGN="middle">$form.getEditFormPaymentType("big")</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">$form.getEditFormMethod("big")</TD>
         </TR>
         <TR>
           <TD class="label" ALIGN="right" VALIGN="middle"><B>Kommentare</B></TD>

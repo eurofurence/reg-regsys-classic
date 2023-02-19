@@ -1,27 +1,36 @@
 <script type="text/javascript">
-    function fillInForm(debitor_id, transaction_id, received, amount, transaction_status, transaction_method, comments) {
+    function fillInForm(debitor_id, transaction_id, received, amount, transaction_status, transaction_type, transaction_method, comments) {
         document.forms["paymentform"].elements["param_id"].value = debitor_id;
         document.forms["paymentform"].elements["transaction_id"].value = transaction_id;
         document.forms["paymentform"].elements["received"].value = received;
         document.forms["paymentform"].elements["amount"].value = amount;
-        var paymentStatusDropdown = document.forms["paymentform"].elements["transaction_status"];
-        for (i=paymentStatusDropdown.length-1;i>=0;i--) {
-            if (transaction_status === paymentStatusDropdown.options[i].value) {
-                paymentStatusDropdown.selectedIndex = i;
+        // status = tentative, pending, valid, deleted
+        var txStatusDropdown = document.forms["paymentform"].elements["transaction_status"];
+        for (i=txStatusDropdown.length-1;i>=0;i--) {
+            if (transaction_status === txStatusDropdown.options[i].value) {
+                txStatusDropdown.selectedIndex = i;
             }
         }
-        var paymentMethodDropdown = document.forms["paymentform"].elements["transaction_method"];
-        for (i=paymentMethodDropdown.length-1;i>=0;i--) {
-            if (transaction_method === paymentMethodDropdown.options[i].value) {
-                paymentMethodDropdown.selectedIndex = i;
+        // method = cc, internal, ...
+        var txMethodDropdown = document.forms["paymentform"].elements["transaction_method"];
+        for (i=txMethodDropdown.length-1;i>=0;i--) {
+            if (transaction_method === txMethodDropdown.options[i].value) {
+                txMethodDropdown.selectedIndex = i;
+            }
+        }
+        // type = dues or payment
+        var txTypeDropdown = document.forms["paymentform"].elements["transaction_type"];
+        for (i=txTypeDropdown.length-1;i>=0;i--) {
+            if (transaction_type === txTypeDropdown.options[i].value) {
+                txTypeDropdown.selectedIndex = i;
             }
         }
         document.forms["paymentform"].elements["comments"].value = comments;
         document.forms["paymentform"].elements["comments"].focus();
     }
     
-    function confirmCancel(debitor_id, transaction_id, received, amount, transaction_status, transaction_method, comments) {
-        res = confirm("Cancel this payment?\n"+transaction_status+" "+transaction_method+" payment of "+amount+" \u20AC");
+    function confirmCancel(debitor_id, transaction_id, received, amount, transaction_status, transaction_type, transaction_method, comments) {
+        res = confirm("Cancel this transaction?\n"+transaction_status+" "+transaction_method+" "+transaction_type+" for "+amount+" \u20AC");
         if (res) {
             document.forms["payment_delete_form"].elements["transaction_id"].value = transaction_id;
             document.forms["payment_delete_form"].submit();

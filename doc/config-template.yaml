@@ -8,6 +8,7 @@ web:
   context_path: 'regsys'
   # used for bulkmails to send users to login page
   regsys_public_url: 'http://localhost:10000/register'
+  system_language: 'en-US'
 downstream:
   auth_service: 'http://localhost:4712'
   attendee_service: 'http://localhost:9091'

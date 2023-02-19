@@ -690,7 +690,7 @@ public class InputForm extends Form {
         public String fieldCountry() {
             return selector(mayEdit(), COUNTRY,
                     configService.getConfig().countries.keyList(),
-                    configService.getConfig().countries.valueList(attendee.registrationLanguage),
+                    configService.getConfig().countries.valueList(configService.getConfig().web.systemLanguage),
                     attendee.country, 1);
         }
 
@@ -700,14 +700,14 @@ public class InputForm extends Form {
             Set<String> selected = new HashSet<>(Arrays.asList(value.split(",")));
             return selector(mayEdit(), LANG,
                     configService.getConfig().spokenLanguages.keyList(),
-                    configService.getConfig().spokenLanguages.valueList(attendee.registrationLanguage),
+                    configService.getConfig().spokenLanguages.valueListWithKey(configService.getConfig().web.systemLanguage),
                     selected, 5, true);
         }
 
         public String fieldRegistrationLanguage() {
             return selector(mayEdit(), REG_LANG,
                     configService.getConfig().registrationLanguages.keyList(),
-                    configService.getConfig().registrationLanguages.valueList(attendee.registrationLanguage),
+                    configService.getConfig().registrationLanguages.valueListWithKey(configService.getConfig().web.systemLanguage),
                     attendee.registrationLanguage, 1);
         }
 
@@ -846,9 +846,17 @@ public class InputForm extends Form {
         }
 
         public String fieldTshirtSize(String style) {
+            List<String> keys = new ArrayList<>();
+            keys.add("");
+            keys.addAll(configService.getConfig().tShirtSizes.keyList());
+
+            List<String> values = new ArrayList<>();
+            values.add(Strings.inputForm.tshirtSizeSelectPrompt);
+            values.addAll(configService.getConfig().tShirtSizes.valueList(configService.getConfig().web.systemLanguage));
+
             return selector(mayEdit(), TSHIRT_SIZE,
-                    configService.getConfig().tShirtSizes.keyList(),
-                    configService.getConfig().tShirtSizes.valueList(attendee.registrationLanguage),
+                    keys,
+                    values,
                     attendee.tshirtSize, 1, style, null);
         }
 

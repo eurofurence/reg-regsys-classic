@@ -41,4 +41,8 @@ public class InternationalizedOptions extends ArrayList<InternationalizedOptions
     public List<String> valueList(String language) {
         return stream().map(e -> e.byLanguage(language)).collect(Collectors.toList());
     }
+
+    public List<String> valueListWithKey(String language) {
+        return stream().map(e -> e.byLanguage(language) + " (" + e.key() + ")").collect(Collectors.toList());
+    }
 }

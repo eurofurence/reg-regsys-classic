@@ -16,4 +16,5 @@
 #set($strHeaderStatus = "Status")##
 #set($strHeaderMethod = "Methode")##
 #set($strHeaderComment = "Kommentar")##
+#set($strHeaderLink = "Link")##
 #set($strNeedJs = "<b>Note: Javascript ist abgeschaltet.</b> Bitte anmachen, sonst funktioniert's nicht.")##
