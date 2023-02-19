@@ -36,13 +36,13 @@ choices:
       description: 'Legal Name is Confidential'
     digi-book:
       description: 'Digital only convention booklet'
-    ev:
-      description: 'Eurofurence e.V. Member'
-      read_only: true
     terms-accepted:
       description: 'Accepted the terms'
       default: true
       read_only: true
+    ev:
+      description: 'Eurofurence e.V. Member'
+      admin_only: true
     guest:
       description: 'Guest of the Convention'
       admin_only: true
