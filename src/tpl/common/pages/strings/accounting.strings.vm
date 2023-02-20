@@ -14,14 +14,15 @@
 #set($strformMethod = "Method")##
 #set($strformSearchSubmit = "Find Payments")##
 #set($strshowAdditionalCols = "Show additional columns")##
-#set($strresultHeader = "Search Results")##
+#set($strresultHeader = "Search&nbsp;Results")##
 #set($strcolNumber = "Nr.")##
 #set($strcolNick = "Nick")##
 #set($strcolRealname = "Realname")##
 #set($strcolTotal = "Total")##
 #set($strcolAttendance = "Attendance")##
 #set($strcolMembership = "Membership")##
-#set($strcolAmount = "Amount")##
+#set($strcolAmount = "Paid&nbsp;&euro;")##
+#set($strcolAmountDue = "Due&nbsp;&euro;")##
 #set($strcolDate = "Date")##
 #set($strcolStatus = "Status")##
 #set($strcolType = "Type")##
@@ -29,6 +30,7 @@
 #set($strcolComment = "Comment")##
 #set($strnoPaymentsFound = "No matching payments were found in the database.")##
 #set($strcondensedByAmount = "Condensed by amounts:")##
-#set($strcondAmount = "Amount &euro;")##
-#set($strcondNumber = "Number of Payments")##
+#set($strcondAmount = "Paid&nbsp;&euro;")##
+#set($strcondAmountDue = "Dues&nbsp;&euro;")##
+#set($strcondNumber = "Count")##
 #set($strcondTotal = "Total Amount")##
