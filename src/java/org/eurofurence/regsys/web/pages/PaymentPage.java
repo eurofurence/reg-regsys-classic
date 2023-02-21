@@ -85,6 +85,8 @@ public class PaymentPage extends Page {
 
             getPaymentForm().initializeForAttendee(the_id);
 
+            paymentlines = getPaymentForm().getPaymentWebListing(the_id);
+
             if (!hasPermission(Constants.Permission.ADMIN)) {
                 if (!hasPermission(Constants.Permission.VIEW) && !isMyBadgeNumber(the_id)) {
                     return forward("page/start");

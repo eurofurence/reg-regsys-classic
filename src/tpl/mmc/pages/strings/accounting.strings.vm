@@ -22,6 +22,7 @@
 #set($strcolAttendance = "Teilnahme")##
 #set($strcolMembership = "Vereinsbeitrag")##
 #set($strcolAmount = "Betrag")##
+#set($strcolAmountDue = "Ford.")##
 #set($strcolDate = "Datum")##
 #set($strcolStatus = "Status")##
 #set($strcolType = "Typ")##
@@ -30,5 +31,6 @@
 #set($strnoPaymentsFound = "Es wurden keine &uml;bereinstimmenden Zahlungen in der Datenbank gefunden.")##
 #set($strcondensedByAmount = "Zusammengefasst nach Betrag:")##
 #set($strcondAmount = "Betrag &euro;")##
-#set($strcondNumber = "Anzahl der Zahlungseing&auml;nge")##
+#set($strcondAmountDue = "F&auml;llig &euro;")##
+#set($strcondNumber = "Anzahl")##
 #set($strcondTotal = "Betrag total")##

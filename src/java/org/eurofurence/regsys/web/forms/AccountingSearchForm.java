@@ -7,8 +7,12 @@ import org.eurofurence.regsys.repositories.payments.Transaction;
 import org.eurofurence.regsys.repositories.payments.TransactionResponse;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +37,8 @@ public class AccountingSearchForm extends Form {
 
     // ------------ attributes -----------------------
 
-    private String searchFrom;
-    private String searchTo;
+    private String searchFrom; // kept as iso - from
+    private String searchTo; // kept as iso - until before
     private String searchComments;
     private Set<String> searchStatus;
     private Set<String> searchTypes;
@@ -42,9 +46,8 @@ public class AccountingSearchForm extends Form {
 
     private int count = -1; // before find()
 
-    float totalSum = 0.00f;
-    float attendanceSum = 0.00f;
-    float membershipSum = 0.00f;
+    private Map<String,Map<Long,Long>> breakdownCountByAmount;
+    private Map<String,Long> totalAmounts;
 
     private List<Transaction> found = new ArrayList<>();
 
@@ -53,11 +56,60 @@ public class AccountingSearchForm extends Form {
     private final PaymentService paymentService = new PaymentService();
 
     public AccountingSearchForm() {
+        breakdownCountByAmount = new TreeMap<>();
+        breakdownCountByAmount.put(Transaction.TransactionType.DUE.getValue(), new TreeMap<>());
+        breakdownCountByAmount.put(Transaction.TransactionType.PAYMENT.getValue(), new TreeMap<>());
+        totalAmounts = new TreeMap<>();
+        totalAmounts.put(Transaction.TransactionType.DUE.getValue(), 0L);
+        totalAmounts.put(Transaction.TransactionType.PAYMENT.getValue(), 0L);
+    }
+
+    private void registerInBreakdownAndTotals(Transaction t) {
+        Long amount = 0L;
+        if (t.amount != null) {
+            amount = t.amount.grossCent;
+        }
+
+        try {
+            Long currentCount = 0L;
+            Map<Long,Long> br = breakdownCountByAmount.get(t.transactionType);
+            if (br.containsKey(amount)) {
+                currentCount = br.get(amount);
+            }
+            currentCount++;
+            br.put(amount, currentCount);
+
+            Long currentTotal = totalAmounts.get(t.transactionType);
+            currentTotal += amount;
+            totalAmounts.put(t.transactionType, currentTotal);
+        } catch (Exception e) {
+            addError("internal error, skipped transaction with type " + t.transactionType);
+        }
     }
 
     public void initialize() {
-        searchFrom = "";
-        searchTo = "";
+        // toDate default = 1st of this month
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int mon = cal.get(Calendar.MONTH);
+        cal.set(year, mon, 1);
+
+        Date toDate = cal.getTime();
+
+        // fromDate default = 1st of previous month
+        mon--;
+        if (mon < 0) {
+            mon += 12;
+            year--;
+        }
+        cal.set(year, mon, 1);
+
+        Date fromDate = cal.getTime();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        searchFrom = format.format(fromDate);
+        searchTo = format.format(toDate);
         searchComments = "";
         searchStatus = Stream.of(Transaction.Status.VALID.getValue())
                 .collect(Collectors.toSet());
@@ -91,7 +143,7 @@ public class AccountingSearchForm extends Form {
                 }
             }
             result = true;
-            count = -1; // first loadNext() advances to first
+            count = -1; // first loadNextTransaction() advances to first
         } catch (DownstreamWebErrorException e) {
             resetErrors(e.getMessage());
             addWebErrors(e.getErr());
@@ -101,10 +153,10 @@ public class AccountingSearchForm extends Form {
         return result;
     }
 
-    public boolean loadNext() {
+    public boolean loadNextTransaction() {
         count++;
         if (count < found.size()) {
-            // TODO <% totalSum += payment.getamountFloat(); %>
+            registerInBreakdownAndTotals(found.get(count));
             return true;
         } else {
             return false;
@@ -144,6 +196,43 @@ public class AccountingSearchForm extends Form {
         return null;
     }
 
+    private String tryParseOrNull(SimpleDateFormat inFormat, SimpleDateFormat outFormat, String value) {
+        try {
+            return outFormat.format(inFormat.parse(value));
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    private String isoFromHuman(String input, String defaultValue) {
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String attempt = tryParseOrNull(isoFormat, isoFormat, input);
+        if (attempt != null)
+            return attempt;
+
+        SimpleDateFormat deFormat = new SimpleDateFormat("dd.MM.yyyy");
+        attempt = tryParseOrNull(deFormat, isoFormat, input);
+        if (attempt != null)
+            return attempt;
+
+        SimpleDateFormat usFormat = new SimpleDateFormat("MM/dd/yyyy");
+        attempt = tryParseOrNull(usFormat, isoFormat, input);
+        if (attempt != null)
+            return attempt;
+
+        return defaultValue;
+    }
+
+    private String humanFromIso(String iso) {
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat deFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String attempt = tryParseOrNull(isoFormat, deFormat, iso);
+        if (attempt != null)
+            return attempt;
+
+        return "";
+    }
+
     /**
      * This inner class encapsules all functions that are provided by this form for parsing request parameters
      * - keeps some structure to the main class, separating this concern out from the regular business methods
@@ -153,8 +242,8 @@ public class AccountingSearchForm extends Form {
     public class ParameterParser {
         public boolean parseFormParams(HttpServletRequest request) {
             if (request.getParameter(PARAM_SEARCH_FROM) != null) {
-                searchFrom = nvl(request.getParameter(PARAM_SEARCH_FROM));
-                searchTo = nvl(request.getParameter(PARAM_SEARCH_TO));
+                searchFrom = isoFromHuman(nvl(request.getParameter(PARAM_SEARCH_FROM)), searchFrom);
+                searchTo = isoFromHuman(nvl(request.getParameter(PARAM_SEARCH_TO)), searchTo);
                 searchComments = nvl(request.getParameter(PARAM_SEARCH_COMMENTS));
                 searchStatus = Arrays.stream(request.getParameterValues(PARAM_SEARCH_STATUS)).collect(Collectors.toSet());
                 searchTypes = Arrays.stream(request.getParameterValues(PARAM_SEARCH_TYPE)).collect(Collectors.toSet());
@@ -183,6 +272,12 @@ public class AccountingSearchForm extends Form {
 
         // properties
 
+        // exposed navigation
+
+        public boolean loadNext() {
+            return loadNextTransaction();
+        }
+
         // attributes for the current payment
 
         public String getCount() {
@@ -190,11 +285,28 @@ public class AccountingSearchForm extends Form {
         }
 
         public String getAmount() {
-            Transaction.Amount amount = found.get(count).amount;
-            if (amount != null) {
-                return Util.toDecimals(amount.grossCent/100.0f);
+            if (Transaction.TransactionType.PAYMENT.getValue().equals(found.get(count).transactionType)) {
+                Transaction.Amount amount = found.get(count).amount;
+                if (amount != null) {
+                    return Util.toDecimals(amount.grossCent / 100.0f);
+                } else {
+                    return "???";
+                }
             } else {
-                return "null";
+                return "&nbsp;";
+            }
+        }
+
+        public String getAmountDue() {
+            if (Transaction.TransactionType.DUE.getValue().equals(found.get(count).transactionType)) {
+                Transaction.Amount amount = found.get(count).amount;
+                if (amount != null) {
+                    return Util.toDecimals(amount.grossCent / 100.0f);
+                } else {
+                    return "???";
+                }
+            } else {
+                return "&nbsp;";
             }
         }
 
@@ -229,40 +341,42 @@ public class AccountingSearchForm extends Form {
 
         // attributes for the amount breakdown (available after all loadNexts only)
 
-        public List<Map<String,String>> getAmountsBreakdown() {
-            SortedMap<Long, Integer> countsByAmount = new TreeMap<>();
-            for (Transaction t: found) {
-                if (t.amount != null && t.amount.grossCent != null) {
-                    if (countsByAmount.containsKey(t.amount.grossCent)) {
-                        Integer current = countsByAmount.get(t.amount.grossCent);
-                        countsByAmount.put(t.amount.grossCent, current+1);
-                    } else {
-                        countsByAmount.put(t.amount.grossCent, 1);
-                    }
-                }
-            }
-
-            return countsByAmount.entrySet().stream()
+        public List<Map<String,String>> getDueAmountsBreakdown() {
+            return breakdownCountByAmount.get(Transaction.TransactionType.DUE.getValue()).entrySet().stream()
                     .map(e -> {
                         Map<String,String> constructed = new HashMap<>();
-                        constructed.put("amount", Util.toDecimals(e.getKey()/100.0f));
-                        constructed.put("count", Integer.toString(e.getValue()));
+                        constructed.put("amount", Util.toCurrencyDecimals(e.getKey()));
+                        constructed.put("count", Long.toString(e.getValue()));
                         return constructed;
                     }).collect(Collectors.toList());
         }
 
-        public String getGrandTotal() {
-            return Util.toDecimals(totalSum);
+        public List<Map<String,String>> getPayAmountsBreakdown() {
+            return breakdownCountByAmount.get(Transaction.TransactionType.PAYMENT.getValue()).entrySet().stream()
+                    .map(e -> {
+                        Map<String,String> constructed = new HashMap<>();
+                        constructed.put("amount", Util.toCurrencyDecimals(e.getKey()));
+                        constructed.put("count", Long.toString(e.getValue()));
+                        return constructed;
+                    }).collect(Collectors.toList());
+        }
+
+        public String getDueGrandTotal() {
+            return Util.toCurrencyDecimals(totalAmounts.get(Transaction.TransactionType.DUE.getValue()));
+        }
+
+        public String getPayGrandTotal() {
+            return Util.toCurrencyDecimals(totalAmounts.get(Transaction.TransactionType.PAYMENT.getValue()));
         }
 
         // form fields
 
         public String fieldFrom(String style) {
-            return textField(true, PARAM_SEARCH_FROM, searchFrom, 10, 10, style);
+            return textField(true, PARAM_SEARCH_FROM, humanFromIso(searchFrom), 10, 10, style);
         }
 
         public String fieldTo(String style) {
-            return textField(true, PARAM_SEARCH_TO, searchTo, 10, 10, style);
+            return textField(true, PARAM_SEARCH_TO, humanFromIso(searchTo), 10, 10, style);
         }
 
         public String fieldComments(String style) {

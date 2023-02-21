@@ -2,6 +2,7 @@
     <TR>
         <TH class="searchlist" ALIGN="right" >$strcolNumber</TH>
         <TH class="searchlist" ALIGN="right" >$strcolAmount</TH>
+        <TH class="searchlist" ALIGN="right" >$strcolAmountDue</TH>
         <TH class="searchlist" ALIGN="left" >$strcolDate</TH>
         <TH class="searchlist" ALIGN="left" >$strcolStatus</TH>
         <TH class="searchlist" ALIGN="left" >$strcolType</TH>
@@ -14,7 +15,8 @@
 
     <TR>
         <TD class="searchlist" ALIGN="right">$form.count</TD>
-        <TD class="searchlist" ALIGN="right">$form.amount &euro;</TD>
+        <TD class="searchlist" ALIGN="right">$form.amount</TD>
+        <TD class="searchlist" ALIGN="right">$form.amountDue</TD>
         <TD class="searchlist" ALIGN="right">$form.received</TD>
         <TD class="searchlist" ALIGN="left"><a href="payment?param_id=$form.debitorId">$form.status</a></TD>
         <TD class="searchlist" ALIGN="left">$form.type</TD>
@@ -27,7 +29,8 @@
 
     <TR>
         <TH class="searchlist" ALIGN="right" ></TH>
-        <TH class="searchlist" ALIGN="right" >$form.getGrandTotal()&nbsp;&euro;</TH>
+        <TH class="searchlist" ALIGN="right" >$form.getPayGrandTotal()</TH>
+        <TH class="searchlist" ALIGN="right" >$form.getDueGrandTotal()</TH>
         <TH class="searchlist" ALIGN="left" ></TH>
         <TH class="searchlist" ALIGN="left" ></TH>
         <TH class="searchlist" ALIGN="left" ></TH>
@@ -46,12 +49,23 @@
         <TH class="searchlist" ALIGN="right" >$strcondNumber</TH>
     </TR>
 
-    #foreach($a in $form.getAmountsBreakdown())##
+    #foreach($a in $form.getPayAmountsBreakdown())##
     <TR>
         <TD class="searchlist" ALIGN="right">$a.amount</TD>
         <TD class="searchlist" ALIGN="right">$a.count</TD>
     </TR>
     #end##
+
+    <TR>
+        <TH class="searchlist" ALIGN="right" >$strcondAmountDue</TH>
+        <TH class="searchlist" ALIGN="right" >$strcondNumber</TH>
+    </TR>
+
+    #foreach($a in $form.getDueAmountsBreakdown())##
+        <TR>
+            <TD class="searchlist" ALIGN="right">$a.amount</TD>
+            <TD class="searchlist" ALIGN="right">$a.count</TD>
+        </TR>
+    #end##
 </TABLE></p>
 
-<p>$strcondTotal = $form.getGrandTotal() EUR.</p>

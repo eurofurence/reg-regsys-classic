@@ -144,6 +144,15 @@ public class PaymentForm extends Form {
         return escape(transaction.comment);
     }
 
+    public String getPaylink() {
+        if (transaction.status != null && transaction.status.equals(Transaction.Status.TENTATIVE.getValue())) {
+            if (transaction.paymentStartUrl != null && !"".equals(transaction.paymentStartUrl)) {
+                return "<a href='" + transaction.paymentStartUrl + "'>pay</a>";
+            }
+        }
+        return "&nbsp;";
+    }
+
     public void setComments(String t) {
         transaction.comment = t;
     }
@@ -253,7 +262,7 @@ public class PaymentForm extends Form {
         transaction.debitorId = the_id;
 
         if (getPage().hasPermission(Constants.Permission.ADMIN)) {
-            // initialize new payment to most probably values
+            // initialize new payment to most probable values
             IsoDate tdate = new IsoDate();
             transaction.effectiveDate = tdate.getIsoFormat();
 
@@ -320,6 +329,7 @@ public class PaymentForm extends Form {
         for (Transaction t: transactions) {
             if (id.equals(t.transactionIdentifier)) {
                 transaction = t;
+                return;
             }
         }
         getPage().addError(Strings.paymentForm.noSuchTransactionForAttendee);
@@ -376,7 +386,7 @@ public class PaymentForm extends Form {
         return false;
     }
 
-    public boolean canConfirm(boolean addErrors) {
+    public boolean canSave(boolean addErrors) {
         if (!getPage().hasPermission(Constants.Permission.ADMIN)) {
             if (addErrors)
                 addError(Strings.paymentForm.permConfirmAdminOnly);
@@ -389,19 +399,7 @@ public class PaymentForm extends Form {
             return false;
         }
 
-        if (transaction.transactionIdentifier == null || "".equals(transaction.transactionIdentifier)) {
-            if (statusIs(Transaction.Status.VALID)) {
-                return true;
-            }
-        } else {
-            if (statusIs(Transaction.Status.TENTATIVE) || statusIs(Transaction.Status.PENDING)) {
-                return true;
-            }
-        }
-
-        if (addErrors)
-            addError(String.format(Strings.paymentForm.invalidStatusForConfirm, transaction.status));
-        return false;
+        return true;
     }
 
     /** Cancels this payment (if allowed), commits to DB */
@@ -409,13 +407,19 @@ public class PaymentForm extends Form {
         if (canCancel(true)) {
             transaction.status = Transaction.Status.DELETED.getValue();
             processAndStorePayment();
+
+            // reset current transaction data so the form doesn't try to load it
+            transaction = new Transaction();
+            transaction.transactionType = Transaction.TransactionType.PAYMENT.getValue();
+            transaction.method = Transaction.Method.TRANSFER.getValue(); // most likely for admin to want to enter
+            transaction.status = Transaction.Status.VALID.getValue();
         }
     }
 
     /** sets this payment status to confirmed, commits to DB */
-    public void confirmCurrentPayment() {
-        if (canConfirm(true)) {
-            transaction.status = Transaction.Status.VALID.getValue();
+    public void saveCurrentPayment() {
+        if (canSave(true)) {
+            // transaction.status = Transaction.Status.VALID.getValue();
             processAndStorePayment();
         }
     }
@@ -441,8 +445,6 @@ public class PaymentForm extends Form {
             getById(txId);
         }
 
-        // TODO this needs more testing!!!
-
         // check for payment confirm
         if (request.getParameter(AMOUNT) != null) {
             if (Transaction.TransactionType.DUE.getValue().equals(transaction.transactionType)) {
@@ -453,15 +455,20 @@ public class PaymentForm extends Form {
             setAmount(request.getParameter(AMOUNT));
             setReceived(request.getParameter(RECEIVED));
             setMethod(request.getParameter(TRANSACTION_METHOD));
+            setStatus(request.getParameter(TRANSACTION_STATUS));
             setComments(request.getParameter(COMMENTS));
 
             if (!getPage().hasErrors()) {
-                confirmCurrentPayment();
+                saveCurrentPayment();
             }
         }
 
         // check for payment delete
         if (request.getParameter(ACTION) != null && request.getParameter(ACTION).equals("cancel")) {
+            if ("".equals(txId)) {
+                addError(Strings.paymentForm.noSuchTransactionForAttendee);
+                return;
+            }
             cancelCurrentPayment();
         }
     }
@@ -493,10 +500,10 @@ public class PaymentForm extends Form {
                     continue;
 
                 String statusHtml = "";
-                if (canConfirm(false)) {
+                if (canSave(false)) {
                     statusHtml += "<a href='#' onClick=\"fillInForm('" + getAttendeeId() + "', '" + getTransactionId()
                             + "', '" + getReceived() + "', '" + getAmount() + "', '"
-                            + getStatus().getValue() + "', '" + getMethod().getValue() + "', '"
+                            + getStatus().getValue() + "', '" + getTransactionType().getValue() + "', '" + getMethod().getValue() + "', '"
                             + getComments()
                             + "'); return false;\"><img src='../images/confirm.gif' title='confirm this payment' border=0></a>";
                     statusHtml += "&nbsp";
@@ -504,7 +511,7 @@ public class PaymentForm extends Form {
                 if (canCancel(false)) {
                     statusHtml += "<a href='#' onClick=\"confirmCancel('" + getAttendeeId() + "', '"
                             + getTransactionId() + "', '" + getReceived() + "', '" + getAmount() + "', '"
-                            + getStatus().getValue() + "', '" + getMethod().getValue() + "', '"
+                            + getStatus().getValue() + "', '" + getTransactionType().getValue() + "', '" + getMethod().getValue() + "', '"
                             + getComments()
                             + "'); return false;\"><img src='../images/delete.png' title='Cancel this payment' border=0></a>";
                 }
@@ -524,6 +531,7 @@ public class PaymentForm extends Form {
                             statusHtml,
                             escape(getMethod().getValue()),
                             escape(getComments()),
+                            getPaylink(),
                             styleClass
                     });
                 } else {
@@ -536,6 +544,7 @@ public class PaymentForm extends Form {
                             "&nbsp;",
                             escape(getMethod().getValue()),
                             escape(getComments()),
+                            "&nbsp;",
                             styleClass
                     });
                 }
@@ -556,7 +565,7 @@ public class PaymentForm extends Form {
 
         result += "<FORM ID=\"payment_delete_form\" ACTION=\"payment\" METHOD=\"POST\" accept-charset=\"UTF-8\">\n";
         result += "    " + Form.hiddenField(PaymentPage.ATTENDEE_ID, getAttendeeId()) + "\n";
-        result += "    " + Form.hiddenField(TRANSACTION_ID, "0") + "\n";
+        result += "    " + Form.hiddenField(TRANSACTION_ID, "") + "\n";
         result += "    " + Form.hiddenField(ACTION, "cancel") + "\n";
         result += "</FORM>";
 
@@ -581,6 +590,26 @@ public class PaymentForm extends Form {
 
     public String getEditFormReceived(int displaySize) {
         return Form.textField(true, RECEIVED, getReceived(), displaySize, 10);
+    }
+
+    public String getEditFormStatus(String style) {
+        String[] values = Arrays.stream(Transaction.Status.values())
+                .map(Transaction.Status::getValue)
+                .toArray(String[]::new);
+        return selector(true, TRANSACTION_STATUS,
+                values,
+                values,
+                getStatus().getValue(), 1, false, style);
+    }
+
+    public String getEditFormType(String style) {
+        String[] values = Arrays.stream(Transaction.TransactionType.values())
+                .map(Transaction.TransactionType::getValue)
+                .toArray(String[]::new);
+        return selector(true, TRANSACTION_TYPE,
+                values,
+                values,
+                getTransactionType().getValue(), 1, false, style);
     }
 
     public String getEditFormMethod(String style) {

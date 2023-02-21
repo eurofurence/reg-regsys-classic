@@ -115,6 +115,9 @@ public class Configuration {
 
         @JsonProperty("before_convention_show_announcement")
         public boolean beforeConventionShowAnnouncement;
+
+        @JsonProperty("system_language")
+        public String systemLanguage = "en-US";
     }
 
     @JsonProperty("choices")

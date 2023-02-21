@@ -8,6 +8,7 @@ web:
   context_path: 'regsys'
   # used for bulkmails to send users to login page
   regsys_public_url: 'http://localhost:10000/register'
+  system_language: 'en-US'
 downstream:
   auth_service: 'http://localhost:4712'
   attendee_service: 'http://localhost:9091'
@@ -36,13 +37,13 @@ choices:
       description: 'Legal Name is Confidential'
     digi-book:
       description: 'Digital only convention booklet'
-    ev:
-      description: 'Eurofurence e.V. Member'
-      read_only: true
     terms-accepted:
       description: 'Accepted the terms'
       default: true
       read_only: true
+    ev:
+      description: 'Eurofurence e.V. Member'
+      admin_only: true
     guest:
       description: 'Guest of the Convention'
       admin_only: true
