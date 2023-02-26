@@ -1,18 +1,15 @@
 package org.eurofurence.regsys.web.services;
 
-import org.eurofurence.regsys.backend.HardcodedConfig;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
 import org.eurofurence.regsys.repositories.auth.RequestAuth;
-import org.eurofurence.regsys.repositories.config.ConfigService;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public abstract class AbstractAttendeeListService extends Service {
     protected AttendeeService attendeeService = new AttendeeService();
-    protected ConfigService configService = new ConfigService(HardcodedConfig.CONFIG_URL);
 
     /**
      * your response DTO should inherit from this
@@ -39,7 +36,7 @@ public abstract class AbstractAttendeeListService extends Service {
         criteria.matchAny.add(criterion);
 
         RequestAuth auth = new RequestAuth();
-        auth.apiToken = configService.getConfig().downstream.apiToken;
+        auth.apiToken = getConfiguration().downstream.apiToken;
 
         try {
             AttendeeSearchResultList resultList = attendeeService.performFindAttendees(criteria, auth, getRequestId());

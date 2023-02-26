@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import org.eurofurence.regsys.web.services.DealersDenApi;
 import org.eurofurence.regsys.web.services.NosecounterApi;
 import org.eurofurence.regsys.web.services.NotFound;
+import org.eurofurence.regsys.web.services.PackageApi;
 import org.eurofurence.regsys.web.services.SecuritySystemApi;
 import org.eurofurence.regsys.web.servlets.RequestHandler;
 
@@ -19,6 +20,7 @@ public class ServiceRequestHandlerFactory {
         suppliersByPathInfo.put("/nosecounter-api", NosecounterApi::new);
         suppliersByPathInfo.put("/dealers-den-api", DealersDenApi::new);
         suppliersByPathInfo.put("/security-system-api", SecuritySystemApi::new);
+        suppliersByPathInfo.put("/package-api", PackageApi::new);
     }
 
     public static RequestHandler createByPathInfo(String pathInfo) {
