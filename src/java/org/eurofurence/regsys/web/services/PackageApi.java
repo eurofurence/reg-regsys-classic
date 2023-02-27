@@ -9,8 +9,13 @@ import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.NotFoundException;
 import org.eurofurence.regsys.web.servlets.HttpMethod;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * An API to get the package state (GET), or add (POST) or remove (DELETE) a package.
@@ -26,24 +31,32 @@ public class PackageApi extends Service {
     // --- variables ---
 
     private long attendeeId = -1L;
-    private String allowedPackageName = "";
+    private String packageName = "";
+    private Set<String> allowedPackageNames = new HashSet<>();
 
     private Attendee attendee = new Attendee();
-    private AttendeeService attendeeService = new AttendeeService();
+    private final AttendeeService attendeeService = new AttendeeService();
 
     // --- auth ---
 
-    protected Map<String,String> authForPackageByToken() {
+    protected Map<String,String> authForPackage() {
         Map<String,String> allowed = new HashMap<>();
 
         Configuration.DownstreamConfig downstream = getConfiguration().downstream;
         if (downstream != null) {
             // TODO: hardcoded for now
             if (downstream.ddToken != null && !"".equals(downstream.ddToken)) {
-                allowed.put(downstream.ddToken, "dealer-table");
+                allowed.put("dealer-half", downstream.ddToken);
+                allowed.put("dealer-full", downstream.ddToken);
+                allowed.put("dealer-double", downstream.ddToken);
+                allowed.put("dealer-quad", downstream.ddToken);
             }
             if (downstream.boatToken != null && !"".equals(downstream.boatToken)) {
-                allowed.put(downstream.boatToken, "boat-trip");
+                allowed.put("boat-trip", downstream.boatToken);
+            }
+            if (downstream.artshowToken != null && !"".equals(downstream.artshowToken)) {
+                allowed.put("artshow-table", downstream.artshowToken);
+                allowed.put("artshow-panel", downstream.artshowToken);
             }
         }
         return allowed;
@@ -51,15 +64,16 @@ public class PackageApi extends Service {
 
     protected void authenticate() {
         String token = getRequest().getParameter(PARAM_TOKEN);
-        if (token == null)
+        if (token == null || "".equals(token))
             throw new ServiceException("security.invalid.token", getRequestId());
 
-        Map<String, String> allowed = authForPackageByToken();
-        if (allowed.containsKey(token)) {
-            allowedPackageName = allowed.get(token);
-            return;
-        }
-        throw new ServiceException("security.invalid.token", getRequestId());
+        allowedPackageNames = authForPackage().entrySet().stream()
+                .filter(e -> e.getValue().equals(token))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+
+        if (allowedPackageNames.isEmpty())
+            throw new ServiceException("security.invalid.token", getRequestId());
     }
 
     // --- parameters and preparations ---
@@ -75,16 +89,18 @@ public class PackageApi extends Service {
             throw new ServiceException("packageapi.validation.failure.package", getRequestId());
 
         // check that the package is allowed to be manipulated by this api and token
-        if (!allowedPackageName.equals(pkgName))
+        if (!allowedPackageNames.contains(pkgName))
             throw new ServiceException("security.access.denied", getRequestId());
+
+        packageName = pkgName;
     }
 
     protected static class ResponseDTO {
         @JsonProperty("ok")
         public boolean ok = true;
 
-        @JsonProperty("HasPackage")
-        public boolean hasPackage = false;
+        @JsonProperty("packages")
+        public List<String> packages = new ArrayList<>();
     }
 
     protected void process() {
@@ -95,12 +111,12 @@ public class PackageApi extends Service {
 
             String temp = "," + attendee.packages + ",";
             if (getMethod() == HttpMethod.POST) {
-                if (!temp.contains(","+allowedPackageName+",")) {
-                    temp += allowedPackageName + ",";
+                if (!temp.contains(","+packageName+",")) {
+                    temp += packageName + ",";
                 }
             } else if (getMethod() == HttpMethod.DELETE) {
-                if (temp.contains(","+allowedPackageName+",")) {
-                    temp = temp.replace(allowedPackageName+",", "");
+                if (temp.contains(","+packageName+",")) {
+                    temp = temp.replace(packageName+",", "");
                 }
             }
             temp = temp.replaceFirst("^,", "");
@@ -119,7 +135,9 @@ public class PackageApi extends Service {
         ResponseDTO response = new ResponseDTO();
 
         String temp = "," + attendee.packages + ",";
-        response.hasPackage = temp.contains(","+allowedPackageName+",");
+        response.packages = allowedPackageNames.stream()
+                .filter(n -> temp.contains(","+n+","))
+                .sorted().collect(Collectors.toList());
 
         return response;
     }

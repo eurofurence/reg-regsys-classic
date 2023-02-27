@@ -76,6 +76,9 @@ public class Configuration {
         @JsonProperty("boat_token")
         public String boatToken;
 
+        @JsonProperty("artshow_token")
+        public String artshowToken;
+
         @JsonProperty("secu_token")
         public String secuToken;
 
