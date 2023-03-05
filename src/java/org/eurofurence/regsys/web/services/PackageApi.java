@@ -84,15 +84,19 @@ public class PackageApi extends Service {
             throw new ServiceException("packageapi.validation.failure.id", getRequestId());
         attendeeId = Long.parseLong(idStr);
 
-        String pkgName = getRequest().getParameter(PARAM_PACKAGE);
-        if (pkgName == null || "".equals(pkgName))
-            throw new ServiceException("packageapi.validation.failure.package", getRequestId());
+        if (getMethod() == HttpMethod.GET) {
+            packageName = "";
+        } else {
+            String pkgName = getRequest().getParameter(PARAM_PACKAGE);
+            if (pkgName == null || "".equals(pkgName))
+                throw new ServiceException("packageapi.validation.failure.package", getRequestId());
 
-        // check that the package is allowed to be manipulated by this api and token
-        if (!allowedPackageNames.contains(pkgName))
-            throw new ServiceException("security.access.denied", getRequestId());
+            // check that the package is allowed to be manipulated by this api and token
+            if (!allowedPackageNames.contains(pkgName))
+                throw new ServiceException("security.access.denied", getRequestId());
 
-        packageName = pkgName;
+            packageName = pkgName;
+        }
     }
 
     protected static class ResponseDTO {
@@ -109,21 +113,28 @@ public class PackageApi extends Service {
             downstreamAuth.apiToken = getConfiguration().downstream.apiToken;
             attendee = attendeeService.performGetAttendee(attendeeId, downstreamAuth, getRequestId());
 
+            boolean updated = false;
+
             String temp = "," + attendee.packages + ",";
             if (getMethod() == HttpMethod.POST) {
                 if (!temp.contains(","+packageName+",")) {
                     temp += packageName + ",";
+                    updated = true;
                 }
             } else if (getMethod() == HttpMethod.DELETE) {
                 if (temp.contains(","+packageName+",")) {
                     temp = temp.replace(packageName+",", "");
+                    updated = true;
                 }
             }
-            temp = temp.replaceFirst("^,", "");
-            temp = temp.replaceFirst(",$", "");
-            attendee.packages = temp;
 
-            attendeeService.performUpdateAttendee(attendee, downstreamAuth, getRequestId());
+            if (updated) {
+                temp = temp.replaceFirst("^,", "");
+                temp = temp.replaceFirst(",$", "");
+                attendee.packages = temp;
+
+                attendeeService.performUpdateAttendee(attendee, downstreamAuth, getRequestId());
+            }
         } catch (NotFoundException e) {
             throw new ServiceException("packageapi.attendee.notfound", getRequestId());
         } catch (DownstreamException e) {

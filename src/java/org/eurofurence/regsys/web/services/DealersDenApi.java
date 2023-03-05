@@ -1,5 +1,6 @@
 package org.eurofurence.regsys.web.services;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,6 +10,13 @@ import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 import org.eurofurence.regsys.repositories.config.Configuration;
 
 public class DealersDenApi extends AbstractAttendeeListService {
+    // --- parameter constants ---
+
+    private static final String PARAM_TOKEN   = "token";
+    private static final String PARAM_ID      = "id";
+
+    // --- response structure ---
+
     protected static class ListResponseDTO extends AbstractResponseDTO {
         public List<DealersDenInfoDTO> result = new LinkedList<>();
     }
@@ -37,28 +45,40 @@ public class DealersDenApi extends AbstractAttendeeListService {
 
     @Override
     protected void finderAdditionalSetup(AttendeeSearchCriteria.AttendeeSearchSingleCriterion criterion) {
-        if (singleId < 1) {
+        if (singleId < -1) {
             throw new ServiceException("dealersden.validation.failure.id", getRequestId());
         }
+        if (singleId < 1) {
+            return;
+        }
+
+        criterion.status = Arrays.asList("new", "approved", "partially paid", "paid", "checked in", "waiting", "cancelled");
         criterion.ids = Collections.singletonList(singleId);
+    }
+
+    private boolean validTokenMatch(String token, String allowedToken) {
+        if (token != null && allowedToken != null && !"".equals(allowedToken)) {
+            return allowedToken.equals(token);
+        }
+        return false;
     }
 
     @Override
     protected void authenticate() {
-        String token = getRequest().getParameter("token");
-
+        String token = getRequest().getParameter(PARAM_TOKEN);
         Configuration.DownstreamConfig downstream = getConfiguration().downstream;
-        if (downstream == null || downstream.ddToken == null || "".equals(downstream.ddToken)) {
-            throw new ServiceException("security.invalid.token", getRequestId());
+        if (downstream != null) {
+            if (validTokenMatch(token, downstream.ddToken) || validTokenMatch(token, downstream.boatToken)) {
+                return;
+            }
         }
-        if (!downstream.ddToken.equals(token)) {
-            throw new ServiceException("security.invalid.token", getRequestId());
-        }
+
+        throw new ServiceException("security.invalid.token", getRequestId());
     }
 
     @Override
     protected AbstractResponseDTO createResponse() {
-        String idStr = getRequest().getParameter("id");
+        String idStr = getRequest().getParameter(PARAM_ID);
         ListResponseDTO output = new ListResponseDTO();
         if (idStr != null) {
             if (!idStr.matches("[1-9][0-9]*"))
