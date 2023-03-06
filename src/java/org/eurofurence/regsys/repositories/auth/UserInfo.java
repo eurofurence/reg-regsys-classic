@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserInfo {
+    @JsonProperty("audiences")
+    public List<String> audiences = new ArrayList<>();
+
     @JsonProperty("subject")
     public String subject;
 
