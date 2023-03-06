@@ -348,7 +348,7 @@ public class NosecounterApi extends AbstractAttendeeListService {
     @Override
     protected void authenticate() {
         String token = getRequest().getParameter(TOKEN);
-        if (!configService.getConfig().downstream.nosecounterToken.equals(token)) {
+        if (!getConfiguration().downstream.nosecounterToken.equals(token)) {
             throw new ServiceException("security.invalid.token", HttpServletResponse.SC_FORBIDDEN, getRequestId());
         }
     }

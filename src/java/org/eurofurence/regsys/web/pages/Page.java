@@ -10,7 +10,6 @@ import org.eurofurence.regsys.repositories.attendees.AttendeeService;
 import org.eurofurence.regsys.repositories.auth.AuthService;
 import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.auth.UserInfo;
-import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
 import org.eurofurence.regsys.repositories.errors.ErrorDto;
 import org.eurofurence.regsys.repositories.errors.ForbiddenException;

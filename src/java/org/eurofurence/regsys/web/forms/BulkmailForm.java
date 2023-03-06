@@ -108,6 +108,9 @@ public class BulkmailForm extends AttendeeSelectionForm {
                 sendRequest.variables.put("due_date", att.dueDate);
                 sendRequest.variables.put("regsys_url", regsysUrl);
 
+                // variable in use by the payment failure notification system - make it possible to recognize template saves
+                sendRequest.variables.put("operation", "mail template save");
+
                 mailService.performSendMail(sendRequest, auth, requestId);
 
                 successCount++;
@@ -130,7 +133,7 @@ public class BulkmailForm extends AttendeeSelectionForm {
     // --------------------- form output methods ------------------------------------------------
 
     private boolean isStandardTemplate(String cid) {
-        return "guest".equals(cid) || cid.startsWith("change-status-");
+        return "guest".equals(cid) || cid.startsWith("change-status-") || "payment-cncrd-adapter-error".equals(cid);
     }
 
     public String fieldCidSelector() {
@@ -208,102 +211,4 @@ public class BulkmailForm extends AttendeeSelectionForm {
     public String getFormFooter() {
         return "</FORM>";
     }
-
-    // ---- legacy code ----
-
-    /*
-
-    public synchronized String sendBulkmail() {
-        DbResultSet res = null;
-        String query = "";
-        int the_id = 0;
-        int the_status = 0;
-        int count = 0;
-        String the_nick = "";
-        String the_email = "";
-
-        StringBuffer notification = new StringBuffer();
-
-        //
-        // prepare the templates
-        //
-
-        org.eurofurence.regsys.backend.Template bulkMessage = new org.eurofurence.regsys.backend.Template();
-
-        bulkMessage.setTemplateFromString(announcement.getBody());
-
-        //
-        // send the emails
-        //
-
-        if (testAnnouncement()) {
-            try {
-                query = "SELECT id, nick, status, email FROM " + Config.MEMBERS_TABLE_NAME + " ORDER BY id";
-
-                db.connect();
-                res = db.executeQuery(query, ps -> {});
-                while (res.get().next()) {
-                    the_id = res.get().getInt("id");
-                    the_status = res.get().getInt("status");
-                    // Default: send to all noncancelled, nonwaiting, non-new members
-                    if (((bulkIdListing == null) && (the_status < 8) && (the_status > 0))
-                            || ((bulkIdListing != null) && (bulkIdListing.containsKey(Integer.toString(the_id))))) {
-                        the_nick = res.get().getString("nick");
-                        the_email = res.get().getString("email");
-                        count++;
-
-                        if (DEBUG) System.out.println("Processing member " + the_nick);
-
-                        member.getFromDB(the_id);
-                        String dueDate = member.getDueDate();
-                        // general registration info
-                        bulkMessage.reset();
-                        bulkMessage.assign("%ID%", Integer.toString(member.getId()));
-                        bulkMessage.assign("%NICK%", member.getNick());
-                        bulkMessage.assign("%TYPE%", member.getType());
-                        bulkMessage.assign("%DUES%", SessionBeanHelper.toDecimals(member.getAmountDue()) + " EUR");
-                        bulkMessage.assign("%REMAINING%", SessionBeanHelper
-                                .toDecimals(member.getRemainingDues() > 0.00f ? member.getRemainingDues() : 0.00f)
-                                + " EUR");
-                        bulkMessage.assign("%DUEDATE%", dueDate);
-
-                        // send an email to that user, then reset updated flag.
-                        email.subject = MailEncoding.encodeForEmail(announcement.getSubject());
-                        email.message = MailEncoding.encodeForEmail(bulkMessage.parse());
-                        email.sender = bulkSender;
-                        email.from = bulkSender;
-
-                        email.sendMail(member.getEmail());
-
-                        notification.append(WebFormBean.escape(Integer.toString(count) + ". " + the_nick + " ("
-                                + Integer.toString(the_id) + ") <" + the_email + ">")
-                                + "\n");
-
-                    }
-                }
-                db.disconnect();
-            } catch (java.sql.SQLException e) {
-                resetErrors("SQL: " + e.getMessage());
-            } catch (DbException e) {
-                resetErrors(e.getMessage());
-            }
-        } else {
-            return ""; // empty string denotes that no emails have been sent
-        }
-
-        return notification.toString();
-    }
-
-    public synchronized String sendBulkmailTest() {
-        Hashtable<String, String> keep = bulkIdListing;
-        try {
-            bulkIdListing = new Hashtable<String, String>();
-            bulkIdListing.put(Integer.toString(auth.getMemberId()), "1");
-
-            return sendBulkmail();
-        } finally {
-            bulkIdListing = keep;
-        }
-    }
-    */
 }
