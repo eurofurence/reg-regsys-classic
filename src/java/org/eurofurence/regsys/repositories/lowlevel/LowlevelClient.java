@@ -6,6 +6,7 @@ import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.eurofurence.regsys.backend.Logging;
@@ -59,8 +60,9 @@ public class LowlevelClient {
 
         HttpClient httpClient = getClient();
 
+        HttpResponse response = null;
         try {
-            HttpResponse response = httpClient.execute(request);
+            response = httpClient.execute(request);
 
             int status = response.getStatusLine().getStatusCode();
             if (status >= 300) {
@@ -94,6 +96,15 @@ public class LowlevelClient {
             Logging.error("[" + requestId + "] downstream " + requestName + " failed: " + e.getMessage());
             DownstreamException wrap = new DownstreamException("http.request.failure", e);
             throw wrap;
+        } finally {
+            if (response instanceof CloseableHttpResponse) {
+                try {
+                    ((CloseableHttpResponse) response).close();
+                    Logging.info("[" + requestId + "] closing " + requestName);
+                } catch (IOException e) {
+                    Logging.warn("[" + requestId + "] closing " + requestName + " failed: " + e.getMessage());
+                }
+            }
         }
     }
 
