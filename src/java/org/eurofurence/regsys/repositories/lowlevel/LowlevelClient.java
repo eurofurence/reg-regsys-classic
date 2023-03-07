@@ -8,6 +8,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.repositories.auth.RequestAuth;
@@ -56,7 +57,7 @@ public class LowlevelClient {
     public void performGivenRequest(String requestId, String requestName, HttpUriRequest request, IOExceptionThrowingResponseConsumer<InputStream> successResponseReceiver) {
         long started = System.currentTimeMillis();
 
-        Logging.info("[" + requestId + "] downstream " + requestName + " starting... ");
+        // Logging.info("[" + requestId + "] downstream " + requestName + " starting... ");
 
         HttpClient httpClient = getClient();
 
@@ -97,14 +98,15 @@ public class LowlevelClient {
             DownstreamException wrap = new DownstreamException("http.request.failure", e);
             throw wrap;
         } finally {
-            if (response instanceof CloseableHttpResponse) {
-                try {
-                    ((CloseableHttpResponse) response).close();
-                    Logging.info("[" + requestId + "] closing " + requestName);
-                } catch (IOException e) {
-                    Logging.warn("[" + requestId + "] closing " + requestName + " failed: " + e.getMessage());
-                }
-            }
+            HttpClientUtils.closeQuietly(response);
+//            if (response instanceof CloseableHttpResponse) {
+//                try {
+//                    ((CloseableHttpResponse) response).close();
+//                    Logging.info("[" + requestId + "] closing " + requestName);
+//                } catch (IOException e) {
+//                    Logging.warn("[" + requestId + "] closing " + requestName + " failed: " + e.getMessage());
+//                }
+//            }
         }
     }
 
