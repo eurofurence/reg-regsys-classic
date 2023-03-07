@@ -6,9 +6,9 @@ import org.apache.http.HttpMessage;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.HttpClientUtils;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.repositories.auth.RequestAuth;
@@ -23,7 +23,7 @@ public class LowlevelClient {
     private static final int REMOTE_REQUEST_TIMEOUT_SECONDS = 10;
 
     // CloseableHttpClient is annotated thread safe
-    private static HttpClient cachedClient = null;
+    private static CloseableHttpClient cachedClient = null;
 
     private RuntimeException httpError(int status, HttpResponse response, Throwable cause) {
         ErrorDto err;
@@ -153,5 +153,9 @@ public class LowlevelClient {
             long done = System.currentTimeMillis();
             Logging.info("downstream http client successfully created ("+ (done - started) + " ms)");
         }
+    }
+
+    public static synchronized void destroyClient() {
+        HttpClientUtils.closeQuietly(cachedClient);
     }
 }

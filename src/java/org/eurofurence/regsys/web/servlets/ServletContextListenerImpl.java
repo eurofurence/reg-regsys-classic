@@ -31,6 +31,9 @@ public class ServletContextListenerImpl implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        Logging.info("destroying downstream client...");
+        LowlevelClient.destroyClient();
+
         Logging.info("context successfully destroyed");
     }
 }
