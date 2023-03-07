@@ -23,7 +23,7 @@ public class LowlevelClient {
     private static final int REMOTE_REQUEST_TIMEOUT_SECONDS = 10;
 
     // CloseableHttpClient is annotated thread safe
-    private static CloseableHttpClient cachedClient = null;
+    private static volatile CloseableHttpClient cachedClient = null;
 
     private RuntimeException httpError(int status, HttpResponse response, Throwable cause) {
         ErrorDto err;
