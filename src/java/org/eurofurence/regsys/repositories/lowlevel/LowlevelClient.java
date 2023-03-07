@@ -54,6 +54,9 @@ public class LowlevelClient {
 
     public void performGivenRequest(String requestId, String requestName, HttpUriRequest request, IOExceptionThrowingResponseConsumer<InputStream> successResponseReceiver) {
         long started = System.currentTimeMillis();
+
+        Logging.info("[" + requestId + "] downstream " + requestName + " starting... ");
+
         HttpClient httpClient = getClient();
 
         try {

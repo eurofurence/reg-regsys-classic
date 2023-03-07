@@ -121,7 +121,7 @@ public class Util {
             if (!value.matches("^-?[0-9]*[.,][0-9]{2}$")) {
                 errors.accept(String.format(Strings.util.invalidCurrencyAmount, field, "must match -?[0-9]*[.,][0-9]{2}, valid examples: -0.99 or 222,16"));
             } else {
-                String centValueStr = value.replaceAll("[^0-9]", "");
+                String centValueStr = value.replaceAll("[^0-9-]", "");
                 long centValue = Long.parseLong(centValueStr);
                 return centValue;
             }
