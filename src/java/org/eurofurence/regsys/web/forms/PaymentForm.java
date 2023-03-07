@@ -254,6 +254,8 @@ public class PaymentForm extends Form {
         calculator.resetCache();
         calculator.loadTransactionsFor(the_id, getPage().getTokenFromRequest(), getPage().getRequestId());
 
+        transactions = calculator.getTransactions(); // avoid double load
+
         attendee.totalDues = calculator.getTotalDues();
         attendee.currentDues = calculator.getRemainingDues();
         attendee.paymentBalance = calculator.getTotalPayments();

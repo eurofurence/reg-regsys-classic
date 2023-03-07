@@ -100,6 +100,7 @@ public class PaymentPage extends Page {
                 }
             }
 
+            // reload because our request may have changed transactions (safety at small extra request cost)
             paymentlines = getPaymentForm().getPaymentWebListing(the_id);
 
         } catch (DbException e) {
