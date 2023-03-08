@@ -74,6 +74,7 @@ public class PaymentForm extends Form {
         transaction.transactionType = Transaction.TransactionType.PAYMENT.getValue();
         transaction.method = Transaction.Method.TRANSFER.getValue(); // most likely for admin to want to enter
         transaction.status = Transaction.Status.VALID.getValue();
+        transaction.amount.grossCent = 0L;
         transactions = new ArrayList<>();
     }
 
@@ -417,6 +418,7 @@ public class PaymentForm extends Form {
             // reset current transaction data so the form doesn't try to load it
             transaction = new Transaction();
             transaction.transactionType = Transaction.TransactionType.PAYMENT.getValue();
+            transaction.amount.grossCent = 0L; // safety
             transaction.method = Transaction.Method.TRANSFER.getValue(); // most likely for admin to want to enter
             transaction.status = Transaction.Status.VALID.getValue();
         }
@@ -592,7 +594,7 @@ public class PaymentForm extends Form {
 
         result += "<FORM id=\"paymentform\" ACTION=\"payment\" METHOD=\"POST\" accept-charset=\"UTF-8\">\n";
         result += "    " + Form.hiddenField(PaymentPage.ATTENDEE_ID, getAttendeeId()) + "\n";
-        result += "    " + Form.hiddenField(TRANSACTION_ID, "") + "\n";
+        result += "    " + Form.hiddenField(TRANSACTION_ID, transaction.transactionIdentifier) + "\n";
 
         return result;
     }
