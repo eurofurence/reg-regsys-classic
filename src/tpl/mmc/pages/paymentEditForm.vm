@@ -26,7 +26,7 @@
          <TR>
           <TD class="label"></TD>
           <TD class="input" ALIGN="left" VALIGN="middle">
-            $form.getEditFormSubmitButton("Submit payment", "submit")
+            $form.getEditFormSubmitButton("Neue Zahlung Speichern", "&Auml;nderungen Speichern", "submit")
           </TD>
          </TR>
         </TABLE>

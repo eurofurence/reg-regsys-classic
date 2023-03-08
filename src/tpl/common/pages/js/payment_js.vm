@@ -26,6 +26,7 @@
             }
         }
         document.forms["paymentform"].elements["comments"].value = comments;
+        document.forms["paymentform"].elements["editsubmit"].value = "Save Changes"
         document.forms["paymentform"].elements["comments"].focus();
     }
     

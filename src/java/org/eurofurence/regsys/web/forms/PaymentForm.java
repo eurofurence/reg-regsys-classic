@@ -641,8 +641,12 @@ public class PaymentForm extends Form {
         return Form.textField(true, COMMENTS, getComments(), displaySize, 200);
     }
 
-    public String getEditFormSubmitButton(String caption, String style) {
-        return "<INPUT TYPE=\"SUBMIT\" VALUE=\"" + escape(caption) + "\" CLASS=\"" + escape(style) + "\"/>";
+    public String getEditFormSubmitButton(String captionNew, String captionChange, String style) {
+        if (transaction.transactionIdentifier == null || "".equals(transaction.transactionIdentifier)) {
+            return "<INPUT ID=\"editsubmit\" TYPE=\"SUBMIT\" VALUE=\"" + escape(captionNew) + "\" CLASS=\"" + escape(style) + "\"/>";
+        } else {
+            return "<INPUT ID=\"editsubmit\" TYPE=\"SUBMIT\" VALUE=\"" + escape(captionChange) + "\" CLASS=\"" + escape(style) + "\"/>";
+        }
     }
 
     public String getEditFormFooter() {
