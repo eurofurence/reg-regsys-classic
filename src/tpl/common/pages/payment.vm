@@ -21,12 +21,10 @@
 #if( $page.isAdmin() )##
       <TR>
         <TD>
+          $strAmountExplain<br/>
           #parse( "paymentEditForm.vm" )
         </TD>
-        <TD valign=top class="input">
-          $strAmountExplain
-        </TD> 
-      </TR> 
+      </TR>
 #end##
       <tr>
         <td valign="top">
@@ -34,7 +32,8 @@
           <hr class="contentbox"/>
           #parse( "paymentViewForm.vm" )
         </td>
-        <!-- second column starts here -->
+      </tr>
+      <tr>
         <td valign="top">
           <div class="headline">$strHistory</div>
           <hr class="contentbox">
@@ -51,19 +50,21 @@
               <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderMethod</b></TH>
               <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderComment</b></TH>
               <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderLink</b></TH>
+              <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderId</b></TH>
             </TR>
 #foreach( $line in $paymentlines )##
             <TR>
-              <TD class="$line.get(9)" ALIGN="left" VALIGN="top">$line.get(1)</TD>
-              <TD class="$line.get(9)" ALIGN="right" VALIGN="top">$line.get(2)</TD>
-              <TD class="$line.get(9)" ALIGN="right" VALIGN="top">$line.get(3)</TD>
-              <TD class="$line.get(9) nobr" ALIGN="right" VALIGN="top">$line.get(4)</TD>
+              <TD class="$line.get(10)" ALIGN="left" VALIGN="top">$line.get(1)</TD>
+              <TD class="$line.get(10)" ALIGN="right" VALIGN="top">$line.get(2)</TD>
+              <TD class="$line.get(10)" ALIGN="right" VALIGN="top">$line.get(3)</TD>
+              <TD class="$line.get(10) nobr" ALIGN="right" VALIGN="top">$line.get(4)</TD>
 #if( $page.isAdmin() )##
-              <TD class="$line.get(9) nobr" ALIGN="right" VALIGN="top">$line.get(5)</TD>
+              <TD class="$line.get(10) nobr" ALIGN="right" VALIGN="top">$line.get(5)</TD>
 #end##
-              <TD class="$line.get(9) nobr" ALIGN="left" VALIGN="top">$line.get(6)</TD>
-              <TD class="$line.get(9)" ALIGN="left" VALIGN="top">$line.get(7)</TD>
-              <TD class="$line.get(9)" ALIGN="left" VALIGN="top">$line.get(8)</TD>
+              <TD class="$line.get(10) nobr" ALIGN="left" VALIGN="top">$line.get(6)</TD>
+              <TD class="$line.get(10)" ALIGN="left" VALIGN="top">$line.get(7)</TD>
+              <TD class="$line.get(10)" ALIGN="left" VALIGN="top">$line.get(8)</TD>
+              <TD class="$line.get(10)" ALIGN="left" VALIGN="top">$line.get(9)</TD>
             </TR>
 #end##
           </TABLE>

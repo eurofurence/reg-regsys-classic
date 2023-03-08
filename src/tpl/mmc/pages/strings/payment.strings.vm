@@ -8,7 +8,7 @@
 #set($strEnterPayments = "Zahlungen erfassen")##
 #set($strListTransactions = "Transaktionsliste")##
 #set($strAmountExplain = "Positiver Betrag ist eingegangene Zahlung. Hier keine Sollstellungen erfassen, daf&uuml;r das manuelle Sollstellung-Feld am Teilnehmer verwenden.")##
-#set($strOverview = "Zahlungen erfassen")##
+#set($strOverview = "Informationen")##
 #set($strHistory = "Transactionshistorie")##
 #set($strHeaderDate = "Datum")##
 #set($strHeaderDues = "Sollbetrag")##
@@ -17,4 +17,5 @@
 #set($strHeaderMethod = "Methode")##
 #set($strHeaderComment = "Kommentar")##
 #set($strHeaderLink = "Link")##
+#set($strHeaderId = "ReferenceId")##
 #set($strNeedJs = "<b>Note: Javascript ist abgeschaltet.</b> Bitte anmachen, sonst funktioniert's nicht.")##

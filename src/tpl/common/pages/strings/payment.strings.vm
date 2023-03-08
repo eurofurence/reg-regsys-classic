@@ -8,7 +8,7 @@
 #set($strEnterPayments = "Enter Payments")##
 #set($strListTransactions = "List Transactions")##
 #set($strAmountExplain = "Positive amounts are handled as incoming payments. Please use the manual dues field for other things.")##
-#set($strOverview = "Enter Payments")##
+#set($strOverview = "Information")##
 #set($strHistory = "Transaction History")##
 #set($strHeaderDate = "Date")##
 #set($strHeaderDues = "Dues Amount")##
@@ -17,4 +17,5 @@
 #set($strHeaderMethod = "Method")##
 #set($strHeaderComment = "Comment")##
 #set($strHeaderLink = "Link")##
+#set($strHeaderId = "ReferenceId")##
 #set($strNeedJs = "<b>Note: Javascript is disabled.</b> Please enable to use full functionality.")##

@@ -145,9 +145,13 @@ public class PaymentForm extends Form {
     }
 
     public String getPaylink() {
-        if (transaction.status != null && transaction.status.equals(Transaction.Status.TENTATIVE.getValue())) {
-            if (transaction.paymentStartUrl != null && !"".equals(transaction.paymentStartUrl)) {
-                return "<a href='" + transaction.paymentStartUrl + "'>pay</a>";
+        boolean hasPaylink = transaction.paymentStartUrl != null && !"".equals(transaction.paymentStartUrl);
+        if (hasPaylink) {
+            boolean isUsable = transaction.status != null && transaction.status.equals(Transaction.Status.TENTATIVE.getValue());
+            if (isUsable) {
+                return "<a href='" + transaction.paymentStartUrl + "'>paylink</a>";
+            } else {
+                return "(paylink)";
             }
         }
         return "&nbsp;";
@@ -503,9 +507,14 @@ public class PaymentForm extends Form {
 
                 String statusHtml = "";
                 if (canSave(false)) {
+                    Transaction.Status targetStatus = getStatus();
+                    if (targetStatus == Transaction.Status.PENDING) {
+                        // map to valid so click on green checkmark presets to valid
+                        targetStatus = Transaction.Status.VALID;
+                    }
                     statusHtml += "<a href='#' onClick=\"fillInForm('" + getAttendeeId() + "', '" + getTransactionId()
                             + "', '" + getReceived() + "', '" + getAmount() + "', '"
-                            + getStatus().getValue() + "', '" + getTransactionType().getValue() + "', '" + getMethod().getValue() + "', '"
+                            + targetStatus.getValue() + "', '" + getTransactionType().getValue() + "', '" + getMethod().getValue() + "', '"
                             + getComments()
                             + "'); return false;\"><img src='../images/confirm.gif' title='confirm this payment' border=0></a>";
                     statusHtml += "&nbsp";
@@ -534,6 +543,7 @@ public class PaymentForm extends Form {
                             escape(getMethod().getValue()),
                             escape(getComments()),
                             getPaylink(),
+                            escape(getTransactionId()),
                             styleClass
                     });
                 } else {
@@ -546,6 +556,7 @@ public class PaymentForm extends Form {
                             "&nbsp;",
                             escape(getMethod().getValue()),
                             escape(getComments()),
+                            "&nbsp;",
                             "&nbsp;",
                             styleClass
                     });
