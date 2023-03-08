@@ -52,7 +52,6 @@
 ##
 #if( $navbar.showAnnouncementsEditAndSend() )##
       <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.EditAnnouncementsURL">$strNavEditAnnouncements</a><br/>
-      <hr class="navigation"/>
 #end##
 ##
 ##
@@ -68,11 +67,12 @@
 #if( $navbar.showNewRegistration() )##
       <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.NewRegistrationURL">$strNavNewRegistration</a><br/>
 #end##
-      <hr class="navigation"/>
 ##
 #if( $navbar.showLogout() )##
+      <hr class="navigation"/>
       <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.LoginURL">$strNavLogOut</a><br/>
 #elseif( $navbar.showLogin())##
+      <hr class="navigation"/>
       <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.LoginURL">$strNavLogIn</a><br/>
 #end##
 ##

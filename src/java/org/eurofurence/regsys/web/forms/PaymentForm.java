@@ -74,6 +74,7 @@ public class PaymentForm extends Form {
         transaction.transactionType = Transaction.TransactionType.PAYMENT.getValue();
         transaction.method = Transaction.Method.TRANSFER.getValue(); // most likely for admin to want to enter
         transaction.status = Transaction.Status.VALID.getValue();
+        transaction.amount.grossCent = 0L;
         transactions = new ArrayList<>();
     }
 
@@ -145,9 +146,13 @@ public class PaymentForm extends Form {
     }
 
     public String getPaylink() {
-        if (transaction.status != null && transaction.status.equals(Transaction.Status.TENTATIVE.getValue())) {
-            if (transaction.paymentStartUrl != null && !"".equals(transaction.paymentStartUrl)) {
-                return "<a href='" + transaction.paymentStartUrl + "'>pay</a>";
+        boolean hasPaylink = transaction.paymentStartUrl != null && !"".equals(transaction.paymentStartUrl);
+        if (hasPaylink) {
+            boolean isUsable = transaction.status != null && transaction.status.equals(Transaction.Status.TENTATIVE.getValue());
+            if (isUsable) {
+                return "<a href='" + transaction.paymentStartUrl + "'>paylink</a>";
+            } else {
+                return "(paylink)";
             }
         }
         return "&nbsp;";
@@ -413,6 +418,7 @@ public class PaymentForm extends Form {
             // reset current transaction data so the form doesn't try to load it
             transaction = new Transaction();
             transaction.transactionType = Transaction.TransactionType.PAYMENT.getValue();
+            transaction.amount.grossCent = 0L; // safety
             transaction.method = Transaction.Method.TRANSFER.getValue(); // most likely for admin to want to enter
             transaction.status = Transaction.Status.VALID.getValue();
         }
@@ -503,9 +509,14 @@ public class PaymentForm extends Form {
 
                 String statusHtml = "";
                 if (canSave(false)) {
+                    Transaction.Status targetStatus = getStatus();
+                    if (targetStatus == Transaction.Status.PENDING) {
+                        // map to valid so click on green checkmark presets to valid
+                        targetStatus = Transaction.Status.VALID;
+                    }
                     statusHtml += "<a href='#' onClick=\"fillInForm('" + getAttendeeId() + "', '" + getTransactionId()
                             + "', '" + getReceived() + "', '" + getAmount() + "', '"
-                            + getStatus().getValue() + "', '" + getTransactionType().getValue() + "', '" + getMethod().getValue() + "', '"
+                            + targetStatus.getValue() + "', '" + getTransactionType().getValue() + "', '" + getMethod().getValue() + "', '"
                             + getComments()
                             + "'); return false;\"><img src='../images/confirm.gif' title='confirm this payment' border=0></a>";
                     statusHtml += "&nbsp";
@@ -534,6 +545,7 @@ public class PaymentForm extends Form {
                             escape(getMethod().getValue()),
                             escape(getComments()),
                             getPaylink(),
+                            escape(getTransactionId()),
                             styleClass
                     });
                 } else {
@@ -546,6 +558,7 @@ public class PaymentForm extends Form {
                             "&nbsp;",
                             escape(getMethod().getValue()),
                             escape(getComments()),
+                            "&nbsp;",
                             "&nbsp;",
                             styleClass
                     });
@@ -581,7 +594,7 @@ public class PaymentForm extends Form {
 
         result += "<FORM id=\"paymentform\" ACTION=\"payment\" METHOD=\"POST\" accept-charset=\"UTF-8\">\n";
         result += "    " + Form.hiddenField(PaymentPage.ATTENDEE_ID, getAttendeeId()) + "\n";
-        result += "    " + Form.hiddenField(TRANSACTION_ID, "") + "\n";
+        result += "    " + Form.hiddenField(TRANSACTION_ID, transaction.transactionIdentifier) + "\n";
 
         return result;
     }
@@ -628,8 +641,12 @@ public class PaymentForm extends Form {
         return Form.textField(true, COMMENTS, getComments(), displaySize, 200);
     }
 
-    public String getEditFormSubmitButton(String caption, String style) {
-        return "<INPUT TYPE=\"SUBMIT\" VALUE=\"" + escape(caption) + "\" CLASS=\"" + escape(style) + "\"/>";
+    public String getEditFormSubmitButton(String captionNew, String captionChange, String style) {
+        if (transaction.transactionIdentifier == null || "".equals(transaction.transactionIdentifier)) {
+            return "<INPUT ID=\"editsubmit\" TYPE=\"SUBMIT\" VALUE=\"" + escape(captionNew) + "\" CLASS=\"" + escape(style) + "\"/>";
+        } else {
+            return "<INPUT ID=\"editsubmit\" TYPE=\"SUBMIT\" VALUE=\"" + escape(captionChange) + "\" CLASS=\"" + escape(style) + "\"/>";
+        }
     }
 
     public String getEditFormFooter() {
