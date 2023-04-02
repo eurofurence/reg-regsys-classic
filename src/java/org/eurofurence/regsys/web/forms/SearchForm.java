@@ -42,9 +42,8 @@ public class SearchForm extends Form {
     public static final String X_WAITING     = "search_status_Xwait";
     public static final String X_CANCELLED   = "search_status_Xcanc";
     public static final String SPONSOR_ITEMS = "search_sponsor_items";
-    public static final String FLAG_BASE     = "search_flag_";
+    public static final String FLAG_BASE     = "search_flag_"; // includes options
     public static final String PACKAGE_BASE  = "search_package_";
-    public static final String OPTION_BASE   = "search_option_";
 
     // ------------ attributes -----------------------
 
@@ -476,7 +475,7 @@ public class SearchForm extends Form {
         }
 
         private void setSearchOptionsByCode(HttpServletRequest request) {
-            genericOptionSetter(request, optionsList(), attendeeFinder.options, OPTION_BASE, Strings.searchForm.invalidFlagValue);
+            genericOptionSetter(request, optionsList(), attendeeFinder.options, FLAG_BASE, Strings.searchForm.invalidFlagValue);
         }
 
         private void setSearchPackagesByCode(HttpServletRequest request) {
