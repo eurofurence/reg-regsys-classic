@@ -16,6 +16,7 @@
 #set($strshowAdditionalCols = "Show additional columns")##
 #set($strresultHeader = "Search&nbsp;Results")##
 #set($strcolNumber = "Nr.")##
+#set($strcolBadgeNo = "BadgeNo.")##
 #set($strcolNick = "Nick")##
 #set($strcolRealname = "Realname")##
 #set($strcolTotal = "Total")##

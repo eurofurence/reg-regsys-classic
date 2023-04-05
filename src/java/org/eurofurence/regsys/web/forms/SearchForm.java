@@ -36,6 +36,7 @@ public class SearchForm extends Form {
     public static final String STATUS        = "search_status";
     public static final String NAME          = "search_name";
     public static final String ADDRESS       = "search_address";
+    public static final String COUNTRY       = "search_country";
     public static final String COMMENTS      = "search_comments";
     public static final String OVERDUE       = "search_overdue";
     public static final String X_NEW         = "search_status_Xnew";
@@ -159,14 +160,16 @@ public class SearchForm extends Form {
             attendeeFinder = s.matchAny.get(0);
             sortBy = s.sortBy;
             sortOrder = s.sortOrder;
-            // TODO extract extra fields once part of the search criteria
+            minId = s.minId;
+            maxId = s.maxId;
         } else {
             // this should never happen, because SearchForm just saved the attendee to the session
             // rather than fail badly, just use a blank attendee - the "list all" function as a fallback
             attendeeFinder = new AttendeeSearchCriteria.AttendeeSearchSingleCriterion();
             sortBy = "id";
             sortOrder = "ascending";
-            // TODO sensible setup fo extra fields
+            minId = 0L;
+            maxId = 0L;
         }
     }
 
@@ -495,6 +498,7 @@ public class SearchForm extends Form {
             setSearchStatus(request.getParameter(STATUS));
             attendeeFinder.name = request.getParameter(NAME);
             attendeeFinder.address = request.getParameter(ADDRESS);
+            attendeeFinder.country = request.getParameter(COUNTRY);
             attendeeFinder.userComments = request.getParameter(COMMENTS);
             setSearchOverdue(request.getParameter(OVERDUE));
             setSearchStatusXnew(nvl(request.getParameter(X_NEW)));
@@ -576,6 +580,10 @@ public class SearchForm extends Form {
 
         public String fieldAddress(int displaySize) {
             return Form.textField(true, ADDRESS, attendeeFinder.address, displaySize, 80);
+        }
+
+        public String fieldCountry(int displaySize) {
+            return Form.textField(true, COUNTRY, attendeeFinder.country, displaySize, 2);
         }
 
         public String fieldComments(int displaySize) {

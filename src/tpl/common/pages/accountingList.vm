@@ -1,6 +1,7 @@
 <TABLE class="searchlist">
     <TR>
         <TH class="searchlist" ALIGN="right" >$strcolNumber</TH>
+        <TH class="searchlist" ALIGN="right" >$strcolBadgeNo</TH>
         <TH class="searchlist" ALIGN="right" >$strcolAmount</TH>
         <TH class="searchlist" ALIGN="right" >$strcolAmountDue</TH>
         <TH class="searchlist" ALIGN="left" >$strcolDate</TH>
@@ -15,6 +16,7 @@
 
     <TR>
         <TD class="searchlist" ALIGN="right">$form.count</TD>
+        <TD class="searchlist" ALIGN="right"><a href="input?param_id=$form.debitorId">$form.debitorId</a></TD>
         <TD class="searchlist" ALIGN="right">$form.amount</TD>
         <TD class="searchlist" ALIGN="right">$form.amountDue</TD>
         <TD class="searchlist" ALIGN="right">$form.received</TD>
@@ -28,6 +30,7 @@
 #end##
 
     <TR>
+        <TH class="searchlist" ALIGN="right" ></TH>
         <TH class="searchlist" ALIGN="right" ></TH>
         <TH class="searchlist" ALIGN="right" >$form.getPayGrandTotal()</TH>
         <TH class="searchlist" ALIGN="right" >$form.getDueGrandTotal()</TH>

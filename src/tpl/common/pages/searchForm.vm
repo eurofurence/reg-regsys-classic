@@ -35,6 +35,14 @@ ${form.submitSearch("Search","submit_small")}
     </TR>
 
     <TR>
+      <TD class="label" ALIGN="right" VALIGN="middle">&nbsp;</TD>
+      <TD class="input" ALIGN="left" VALIGN="middle">&nbsp;</TD>
+
+      <TD class="label" ALIGN="right" VALIGN="middle">Country&nbsp;Code</TD>
+      <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldCountry(2)</TD>
+    </TR>
+
+    <TR>
       <TD class="label" ALIGN="right" VALIGN="middle">Comments</TD>
       <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldComments(60)</TD>
      
