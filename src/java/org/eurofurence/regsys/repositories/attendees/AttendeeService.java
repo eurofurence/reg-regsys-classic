@@ -103,6 +103,12 @@ public class AttendeeService {
         return result.dto;
     }
 
+    public void performResendStatusEmail(long attendeeId, RequestAuth auth, String requestId) {
+        String url = serviceBaseUrl + "/api/rest/v1/attendees/" + attendeeId + "/status/resend";
+        DownstreamClientNoBodyNoResponse client = new DownstreamClientNoBodyNoResponse();
+        client.performPost(requestId, url,"attendee/resendStatusMail", auth);
+    }
+
     // --- privileged: adminInfo ---
 
     public AdminInfo performGetAdminInfo(long attendeeId, RequestAuth auth, String requestId) {
