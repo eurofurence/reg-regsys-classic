@@ -35,18 +35,13 @@ public class ResendStatusEmailForm extends AttendeeSelectionForm {
     protected int successCount = 0;
 
     public void processAccept() {
+        AttendeeService attendeeService = getPage().getAttendeeService();
+        RequestAuth auth = getPage().getTokenFromRequest();
+        String requestId = getPage().getRequestId();
+
         for (Long id: idSet) {
             try {
-                AttendeeService attendeeService = getPage().getAttendeeService();
-                RequestAuth auth = getPage().getTokenFromRequest();
-                String requestId = getPage().getRequestId();
-
-                Attendee attendee = attendeeService.performGetAttendee(id, auth, requestId);
-                String statusStr = attendeeService.performGetCurrentStatus(id, auth, requestId);
-                Constants.MemberStatus status = Constants.MemberStatus.byNewRegsysValue(statusStr);
-
-                // TODO actually call endpoint on attendee service once it's implemented
-
+                attendeeService.performResendStatusEmail(id, auth, requestId);
                 successCount++;
             } catch (UnauthorizedException | ForbiddenException e) {
                 // huh? we should be admin - maybe token expired during operation

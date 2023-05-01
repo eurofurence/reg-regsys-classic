@@ -82,8 +82,6 @@ public class SecuritySystemApi extends AbstractAttendeeListService {
             info.status = attendee.status;
             info.nick = StringEscapeUtils.unescapeHtml4(attendee.nickname);
             info.checkletter = Character.toString(Checksummer.calculateChecksum((int) attendee.id));
-            // TODO calculate based on guest flag and packages
-            info.attendeeType = "UNKNOWN";
             info.firstname = StringEscapeUtils.unescapeHtml4(attendee.firstName);
             info.lastname = StringEscapeUtils.unescapeHtml4(attendee.lastName);
             info.dateOfBirth = attendee.birthday;
@@ -102,10 +100,26 @@ public class SecuritySystemApi extends AbstractAttendeeListService {
 
             info.packages = mapOptionList(attendee.packages);
             info.flags = mapOptionList(attendee.flags);
+
+            info.attendeeType = calculateType(info.packages, info.flags);
         } else {
             info.status = "DELETED";
         }
         return info;
+    }
+
+    private String calculateType(List<String> packages, List<String> flags) {
+        // first discover guest
+        boolean isGuest = flags.stream().anyMatch("guest"::equals);
+        boolean isDayGuest = packages.stream().anyMatch(v -> (v != null) && v.startsWith("day-"));
+
+        if (isGuest) {
+            return "guest";
+        } else if (isDayGuest) {
+            return "day";
+        } else {
+            return "standard";
+        }
     }
 
     private List<String> mapOptionList(String commaSeparated) {
