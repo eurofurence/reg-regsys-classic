@@ -139,6 +139,11 @@ public class SecuritySystemApi extends AbstractAttendeeListService {
     }
 
     @Override
+    protected void finderAdditionalGlobalSetup(AttendeeSearchCriteria criteria) {
+        criteria.fillFields = Arrays.asList("all");
+    }
+
+    @Override
     protected void authenticate() {
         String token = getRequest().getParameter("token");
 
