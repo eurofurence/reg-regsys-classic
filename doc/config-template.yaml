@@ -138,7 +138,7 @@ choices:
       constraint_msg: 'Cannot mix dealer table packages.'
     boat-trip:
       description: 'Summerboat Boat Trip'
-      price: 2500
+      price: 3500
       vat_percent: 19
       read_only: true
     boat-vip:
