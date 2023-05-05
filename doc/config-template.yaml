@@ -143,7 +143,7 @@ choices:
       read_only: true
     boat-vip:
       description: 'Summerboat VIP'
-      price: 1500
+      price: 2000
       vat_percent: 19
       read_only: true
     artshow-table:
