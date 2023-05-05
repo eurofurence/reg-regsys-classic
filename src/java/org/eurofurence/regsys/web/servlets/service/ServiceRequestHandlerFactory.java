@@ -9,6 +9,7 @@ import org.eurofurence.regsys.web.services.NosecounterApi;
 import org.eurofurence.regsys.web.services.NotFound;
 import org.eurofurence.regsys.web.services.PackageApi;
 import org.eurofurence.regsys.web.services.SecuritySystemApi;
+import org.eurofurence.regsys.web.services.SummerBoatApi;
 import org.eurofurence.regsys.web.servlets.RequestHandler;
 
 public class ServiceRequestHandlerFactory {
@@ -19,6 +20,7 @@ public class ServiceRequestHandlerFactory {
     static {
         suppliersByPathInfo.put("/nosecounter-api", NosecounterApi::new);
         suppliersByPathInfo.put("/dealers-den-api", DealersDenApi::new);
+        suppliersByPathInfo.put("/summerboat-api", SummerBoatApi::new);
         suppliersByPathInfo.put("/security-system-api", SecuritySystemApi::new);
         suppliersByPathInfo.put("/package-api", PackageApi::new);
     }
