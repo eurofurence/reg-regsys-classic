@@ -26,6 +26,9 @@ public abstract class AbstractAttendeeListService extends Service {
     protected void finderAdditionalSetup(AttendeeSearchCriteria.AttendeeSearchSingleCriterion criterion) {
     }
 
+    protected void finderAdditionalGlobalSetup(AttendeeSearchCriteria criteria) {
+    }
+
     /**
      * goes through all attendees. Those that match filter are given to the collector.
      */
@@ -34,6 +37,7 @@ public abstract class AbstractAttendeeListService extends Service {
         AttendeeSearchCriteria.AttendeeSearchSingleCriterion criterion = new AttendeeSearchCriteria.AttendeeSearchSingleCriterion();
         finderAdditionalSetup(criterion);
         criteria.matchAny.add(criterion);
+        finderAdditionalGlobalSetup(criteria);
 
         RequestAuth auth = new RequestAuth();
         auth.apiToken = getConfiguration().downstream.apiToken;
