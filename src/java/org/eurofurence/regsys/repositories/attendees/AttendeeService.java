@@ -60,6 +60,12 @@ public class AttendeeService {
         client.performPut(requestId, url,"attendee/updateAttendee", attendee, auth);
     }
 
+    public void performUpdateAttendeeWithoutEmail(Attendee attendee, RequestAuth auth, String requestId) {
+        String url = serviceBaseUrl + "/api/rest/v1/attendees/" + attendee.id + "?suppressMinorUpdateEmail=yes";
+        DownstreamClientWithBodyNoResponse<Attendee> client = new DownstreamClientWithBodyNoResponse<>(Attendee.class);
+        client.performPut(requestId, url,"attendee/updateAttendeeNoEmail", attendee, auth);
+    }
+
     // --- additional ---
 
     public AddInfo performGetAdditionalInfo(long attendeeId, String area, RequestAuth auth, String requestId) {
@@ -79,6 +85,27 @@ public class AttendeeService {
         String url = serviceBaseUrl + "/api/rest/v1/attendees/" + attendeeId + "/additional-info/" + area;
         DownstreamClientNoBodyNoResponse client = new DownstreamClientNoBodyNoResponse();
         client.performDelete(requestId, url,"attendee/deleteAdditionalInfo", auth);
+    }
+
+    // --- due date ---
+
+    public String performGetDueDate(long id, RequestAuth auth, String requestId) {
+        String url = serviceBaseUrl + "/api/rest/v1/attendees/" + id + "/due-date";
+        DownstreamClientNoBody<DueDate> client = new DownstreamClientNoBody<>(DueDate.class);
+        ResponseWithDto<DueDate> result = client.performGet(requestId, url,"attendee/getDueDate", auth);
+        if (result.dto != null) {
+            return result.dto.dueDate;
+        } else {
+            return "";
+        }
+    }
+
+    public void performOverrideDueDate(long id, String dueDate, RequestAuth auth, String requestId) {
+        DueDate body = new DueDate();
+        body.dueDate = dueDate;
+        String url = serviceBaseUrl + "/api/rest/v1/attendees/" + id + "/due-date";
+        DownstreamClientWithBodyNoResponse<DueDate> client = new DownstreamClientWithBodyNoResponse<>(DueDate.class);
+        client.performPut(requestId, url,"attendee/overrideDueDate", body, auth);
     }
 
     // --- status ---

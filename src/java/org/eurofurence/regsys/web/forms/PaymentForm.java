@@ -264,7 +264,6 @@ public class PaymentForm extends Form {
         attendee.totalDues = calculator.getTotalDues();
         attendee.currentDues = calculator.getRemainingDues();
         attendee.paymentBalance = calculator.getTotalPayments();
-        attendee.dueDate = calculator.getDueDate();
 
         transaction.debitorId = the_id;
 

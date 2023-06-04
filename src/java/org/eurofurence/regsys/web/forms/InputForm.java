@@ -87,8 +87,11 @@ public class InputForm extends Form {
     private AdminInfo adminInfo;
     private Constants.MemberStatus attendeeStatus;
     private Constants.MemberStatus newAttendeeStatus;
+    private String dueDate;
 
     private String cancelReason = "";
+
+    private boolean willDoMailingAdminUpdate = false;
 
     public List<String>     greenText       = new Vector<String>();
 
@@ -102,6 +105,7 @@ public class InputForm extends Form {
         adminInfo = new AdminInfo();
         attendeeStatus = Constants.MemberStatus.NEW;
         newAttendeeStatus = Constants.MemberStatus.NEW;
+        dueDate = "";
     }
 
     public synchronized void initialize() {
@@ -111,6 +115,7 @@ public class InputForm extends Form {
         attendee.options = getDefaultOptions().getDbString();
         attendee.registrationLanguage = "en-US"; // have a default
         attendee.country = "DE"; // have a default
+        dueDate = "";
     }
 
     // ---------- proxy methods for entity access -------
@@ -193,6 +198,7 @@ public class InputForm extends Form {
                 attendeeService.performGetCurrentStatus(dbId, auth, requestId)
         );
         newAttendeeStatus = attendeeStatus;
+        dueDate = attendeeService.performGetDueDate(dbId, auth, requestId);
         if (getPage().hasPermission(Permission.ADMIN)) {
             adminInfo = attendeeService.performGetAdminInfo(dbId, auth, requestId);
         }
@@ -231,7 +237,11 @@ public class InputForm extends Form {
             if (wasNew) {
                 attendee.id = attendeeService.performAddAttendee(attendee, auth, requestId);
             } else {
-                attendeeService.performUpdateAttendee(attendee, auth, requestId);
+                if (willDoMailingAdminUpdate) {
+                    attendeeService.performUpdateAttendeeWithoutEmail(attendee, auth, requestId);
+                } else {
+                    attendeeService.performUpdateAttendee(attendee, auth, requestId);
+                }
 
                 if (getPage().hasPermission(Permission.ADMIN)) {
                     attendeeService.performSetAdminInfo(attendee.id, adminInfo, auth, requestId);
@@ -445,8 +455,12 @@ public class InputForm extends Form {
         }
 
         private void setManualDues(String t) {
+            long oldValue = adminInfo.manualDues;
             if (t == null) t = "0";
             adminInfo.manualDues = FormHelper.parseCurrencyDecimals(getPage(), t, "manual_dues", adminInfo.manualDues);
+            if (adminInfo.manualDues != oldValue) {
+                willDoMailingAdminUpdate = true;
+            }
         }
 
         private void setManualDueDesc(String t) {
@@ -565,15 +579,9 @@ public class InputForm extends Form {
         }
 
         public boolean isOverdue() {
-            try {
-                String dueDate = transactionCalculator.getDueDate();
-                if (!"".equals(dueDate)) {
-                    String today = new IsoDate().getIsoFormat();
-                    return today.compareTo(dueDate) > 0;
-                }
-            } catch (Exception e) {
-                addError(Strings.inputForm.dbError + "payment service error");
-                return false;
+            if (!"".equals(dueDate)) {
+                String today = new IsoDate().getIsoFormat();
+                return today.compareTo(dueDate) > 0;
             }
             return false;
         }
@@ -606,12 +614,7 @@ public class InputForm extends Form {
         }
 
         public String getDueDate() {
-            try {
-                return transactionCalculator.getDueDate();
-            } catch (Exception e) {
-                addError(Strings.inputForm.dbError + "payment service error");
-                return "UNAVAILABLE";
-            }
+            return dueDate;
         }
 
         public boolean getPaymentsPending() {
