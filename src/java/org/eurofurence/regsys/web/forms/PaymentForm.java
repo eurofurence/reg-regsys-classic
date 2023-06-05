@@ -87,7 +87,10 @@ public class PaymentForm extends Form {
     }
 
     public String getAttendeeRegistered() {
-        return attendee.registered;
+        if (attendee.registered != null && !"".equals(attendee.registered)) {
+            return Util.formatDate(new IsoDate().fromIsoFormat(attendee.registered));
+        }
+        return "(unset)";
     }
 
     public String getAttendeeNickname() {
@@ -119,7 +122,10 @@ public class PaymentForm extends Form {
     }
 
     public String getAttendeeDueDate() {
-        return attendee.dueDate;
+        if (attendee.dueDate != null && !"".equals(attendee.dueDate)) {
+            return Util.formatDate(new IsoDate().fromIsoFormat(attendee.dueDate));
+        }
+        return "";
     }
 
     public boolean hasPendingPayments() {
@@ -264,7 +270,6 @@ public class PaymentForm extends Form {
         attendee.totalDues = calculator.getTotalDues();
         attendee.currentDues = calculator.getRemainingDues();
         attendee.paymentBalance = calculator.getTotalPayments();
-        attendee.dueDate = calculator.getDueDate();
 
         transaction.debitorId = the_id;
 

@@ -48,23 +48,21 @@ public class TransactionCalculator {
     private boolean is(Transaction.TransactionType typ, Transaction tx) {
         return typ.getValue().equals(tx.transactionType);
     }
-    public String getDueDate() {
-        String newestDueDate = "";
-        for (Transaction tx: cachedTransactions) {
-            if (is(Transaction.Status.VALID, tx) && is(Transaction.TransactionType.DUE, tx) && !"".equals(tx.dueDateISO)) {
-                newestDueDate = tx.dueDateISO;
-            }
+    private long amount(Transaction tx) {
+        if (tx.amount != null && tx.amount.grossCent != null) {
+            return tx.amount.grossCent;
+        } else {
+            return 0L;
         }
-        return newestDueDate;
     }
     private long sumTx(Predicate<Transaction> condition) {
-        long amount = 0L;
+        long sum = 0L;
         for (Transaction tx: cachedTransactions) {
-            if (condition.test(tx) && tx.amount != null) {
-                amount += tx.amount.grossCent;
+            if (condition.test(tx)) {
+                sum += amount(tx);
             }
         }
-        return amount;
+        return sum;
     }
     public long getOpenPayments() {
         return sumTx(tx ->

@@ -95,6 +95,8 @@
 #set( $strAdminRoomAssignment = "Zimmerzuordnung")##
 #set( $strAdminTotalDues = "Gesamtbetrag")##
 #set( $strAdminRemainingDues = "Restbetrag")##
+#set( $strAdminDueDate = "F&auml;lligkeit")##
+#set( $strAdminOverrideDueDateExplanation = "Datum editieren, um zu verl&auml;ngern")##
 #set( $strAdminClickForPayments = "(Hier klicken, um Zahlungen anzuzeigen oder zu bearbeiten)")##
 #set( $strAdminAdminComments = "Admin-Kommentare")##
 #set( $strAdminFlags = "Admin Flags")##
