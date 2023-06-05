@@ -95,6 +95,8 @@
 #set( $strAdminRoomAssignment = "Room&nbsp;Assmt.")##
 #set( $strAdminTotalDues = "Total&nbsp;Dues")##
 #set( $strAdminRemainingDues = "Remaining&nbsp;Dues")##
+#set( $strAdminDueDate = "Due&nbsp;Date")##
+#set( $strAdminOverrideDueDateExplanation = "Edit the due date to postpone")##
 #set( $strAdminClickForPayments = "(Click to view/edit payments)")##
 #set( $strAdminAdminComments = "Admin&nbsp;Comments")##
 #set( $strAdminFlags = "Admin Flags")##

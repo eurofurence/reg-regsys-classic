@@ -4,6 +4,8 @@ import org.eurofurence.regsys.backend.HardcodedConfig;
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Constants.Permission;
 import org.eurofurence.regsys.backend.Strings;
+import org.eurofurence.regsys.backend.persistence.DbDataException;
+import org.eurofurence.regsys.backend.persistence.TypeChecks;
 import org.eurofurence.regsys.backend.types.IsoDate;
 import org.eurofurence.regsys.repositories.attendees.AdminInfo;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
@@ -88,6 +90,7 @@ public class InputForm extends Form {
     private Constants.MemberStatus attendeeStatus;
     private Constants.MemberStatus newAttendeeStatus;
     private String dueDate;
+    private boolean dueDateChanged = false;
 
     private String cancelReason = "";
 
@@ -116,6 +119,7 @@ public class InputForm extends Form {
         attendee.registrationLanguage = "en-US"; // have a default
         attendee.country = "DE"; // have a default
         dueDate = "";
+        dueDateChanged = false;
     }
 
     // ---------- proxy methods for entity access -------
@@ -221,6 +225,10 @@ public class InputForm extends Form {
         );
     }
 
+    private void reloadAttendeeDueDateThrows() {
+        dueDate = attendeeService.performGetDueDate(attendee.id, getPage().getTokenFromRequest(), getPage().getRequestId());
+    }
+
     /**
      * Processes a registration step form submission and decides whether to advance the current registration step and
      * the MaxStep. This depends on whether the current step is error-free and actually the next available step in the
@@ -237,6 +245,10 @@ public class InputForm extends Form {
             if (wasNew) {
                 attendee.id = attendeeService.performAddAttendee(attendee, auth, requestId);
             } else {
+                if (dueDateChanged) {
+                    attendeeService.performOverrideDueDate(attendee.id, dueDate, auth, requestId);
+                }
+
                 if (willDoMailingAdminUpdate) {
                     attendeeService.performUpdateAttendeeWithoutEmail(attendee, auth, requestId);
                 } else {
@@ -249,6 +261,7 @@ public class InputForm extends Form {
 
                 // reload current status after the changes
                 reloadAttendeeStatusThrows();
+                reloadAttendeeDueDateThrows();
 
                 if (hasFundamentalDifference(newAttendeeStatus, attendeeStatus)) {
                     StatusChange change = new StatusChange();
@@ -261,6 +274,7 @@ public class InputForm extends Form {
                     attendeeService.performStatusChange(attendee.id, change, auth, requestId);
 
                     reloadAttendeeStatusThrows();
+                    reloadAttendeeDueDateThrows();
                 }
             }
         } catch (DownstreamWebErrorException e) {
@@ -499,6 +513,22 @@ public class InputForm extends Form {
             adminInfo.permissions = nvl(t);
         }
 
+        private void setDueDate(String t) {
+            if (t == null || "".equals(t)) {
+                return;
+            }
+            try {
+                IsoDate tdate = new IsoDate().fromDate(TypeChecks.parseDate(t, DUE_DATE, Strings.conf.paymentStart, Strings.util.payDateMessage,
+                        Strings.conf.paymentEnd, Strings.util.payDateMessage));
+
+                String newValue = tdate.getIsoFormat();
+                dueDateChanged = !newValue.equals(dueDate);
+                dueDate = newValue;
+            } catch (DbDataException e) {
+                getPage().addError(e.getMessage());
+            }
+        }
+
         public void parseAdminParams(HttpServletRequest request) {
             setManualDues(request.getParameter(MANUAL_DUES));
             setManualDueDesc(request.getParameter(MANUAL_DUE_DESC));
@@ -507,6 +537,7 @@ public class InputForm extends Form {
             setCancelReason(request.getParameter(CANCEL_REASON));
             setAdminComments(request.getParameter(ADMIN_COMMENTS));
             setPermissions(request.getParameter(PERMISSIONS));
+            setDueDate(request.getParameter(DUE_DATE));
         }
     }
 
@@ -579,9 +610,11 @@ public class InputForm extends Form {
         }
 
         public boolean isOverdue() {
-            if (!"".equals(dueDate)) {
-                String today = new IsoDate().getIsoFormat();
-                return today.compareTo(dueDate) > 0;
+            if (attendeeStatus == Constants.MemberStatus.APPROVED || attendeeStatus == Constants.MemberStatus.PARTIALLY_PAID) {
+                if (!"".equals(dueDate)) {
+                    String today = new IsoDate().getIsoFormat();
+                    return today.compareTo(dueDate) > 0;
+                }
             }
             return false;
         }
@@ -614,7 +647,15 @@ public class InputForm extends Form {
         }
 
         public String getDueDate() {
-            return dueDate;
+            if (dueDate != null && !"".equals(dueDate)) {
+                try {
+                    return Util.formatDate(new IsoDate().fromIsoFormat(dueDate));
+                } catch (Exception e) {
+                    return "";
+                }
+            } else {
+                return "";
+            }
         }
 
         public boolean getPaymentsPending() {
@@ -927,6 +968,10 @@ public class InputForm extends Form {
 
         public String fieldPermissions(int displaySize) {
             return textField(mayEditAdmin(), PERMISSIONS, adminInfo.permissions, displaySize, 40);
+        }
+
+        public String fieldDueDate(int displaySize) {
+            return textField(mayEditAdmin(), DUE_DATE, getDueDate(), displaySize, 10);
         }
 
         /*
