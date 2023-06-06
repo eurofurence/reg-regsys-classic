@@ -54,6 +54,7 @@ public class PackageApi extends Service {
             if (downstream.boatToken != null && !"".equals(downstream.boatToken)) {
                 allowed.put("boat-trip", downstream.boatToken);
                 allowed.put("boat-vip", downstream.boatToken);
+                allowed.put("boat-benefactor", downstream.boatToken);
             }
             if (downstream.artshowToken != null && !"".equals(downstream.artshowToken)) {
                 allowed.put("artshow-table", downstream.artshowToken);

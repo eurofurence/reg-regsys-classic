@@ -52,6 +52,12 @@ choices:
     skip_ban_check:
       description: 'Bypass ban check for this attendee'
       admin_only: true
+    staff:
+      description: 'Staff'
+      admin_only: true
+    director:
+      description: 'Director'
+      admin_only: true
   packages:
     room-none:
       description: 'No Room'
@@ -144,6 +150,11 @@ choices:
     boat-vip:
       description: 'Summerboat VIP'
       price: 2000
+      vat_percent: 19
+      read_only: true
+    boat-benefactor:
+      description: 'Summerboat Benefactor'
+      price: 10000
       vat_percent: 19
       read_only: true
     artshow-table:
