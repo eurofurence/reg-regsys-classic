@@ -125,7 +125,7 @@ public class StatsPage extends Page {
     }
 
     public long overdueCount() {
-        return overdue;
+        return getByStatus("overdue_count");
     }
 
     // ---- formatting helpers ----
@@ -151,8 +151,6 @@ public class StatsPage extends Page {
     }
     public Finances finances = new Finances();
 
-    // TODO calculate
-    public long overdue = 0L;
     public long minors = 0L;
     public long overpaid_count = 0L;
 
@@ -322,6 +320,7 @@ public class StatsPage extends Page {
                 finances.remain_dues += nvl(a.currentDues);
                 if (nvl(a.currentDues) < 0) {
                     finances.overpaid_amount -= a.currentDues;
+                    overpaid_count++;
                 }
             }
         }
