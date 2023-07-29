@@ -12,7 +12,7 @@
         <TABLE>
           <TR><TD colspan=2 ALIGN="LEFT"><div class="headline">By Status</div><hr class="contentbox"></TD></TR>
 
-          <TR><TD class="tbl_value" ALIGN="RIGHT">+ ${page.getByStatus("approved")}</TD><TD class="tbl_label">approved ($page.overdueCount() overdue)</TD></TR>
+          <TR><TD class="tbl_value" ALIGN="RIGHT">+ ${page.getByStatus("approved")}</TD><TD class="tbl_label">approved</TD></TR>
           <TR><TD class="tbl_value" ALIGN="RIGHT">+ ${page.getByStatus("partially paid")}</TD><TD class="tbl_label">partially paid</TD></TR>
           <TR><TD class="tbl_value" ALIGN="RIGHT">+ ${page.getByStatus("paid")}</TD><TD class="tbl_label">paid</TD></TR>
           <TR><TD class="tbl_value" ALIGN="RIGHT">+ ${page.getByStatus("checked in")}</TD><TD class="tbl_label">checked in</TD></TR>
@@ -73,6 +73,7 @@
 
               <TR><TD class="tbl_value" ALIGN="RIGHT">$page.minorsCount()</TD><TD class="tbl_label">Minors</TD></TR>
               <TR><TD class="tbl_value" ALIGN="RIGHT">$page.overpaidCount()</TD><TD class="tbl_label">Overpaid</TD></TR>
+              <TR><TD class="tbl_value" ALIGN="RIGHT">$page.overdueCount()</TD><TD class="tbl_label">Overdue</TD></TR>
             </TABLE>
              <p><br/></p>
 
