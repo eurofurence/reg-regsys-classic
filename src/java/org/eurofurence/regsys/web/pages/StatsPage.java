@@ -2,6 +2,7 @@ package org.eurofurence.regsys.web.pages;
 
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Strings;
+import org.eurofurence.regsys.backend.types.IsoDate;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 import org.eurofurence.regsys.repositories.config.Configuration;
@@ -289,6 +290,8 @@ public class StatsPage extends Page {
             return;
         }
 
+        String today = new IsoDate().getIsoFormat();
+
         for(AttendeeSearchResultList.AttendeeSearchResult a: attendees.attendees) {
             boolean isAttending = false;
             if ("approved".equals(a.status) || "partially paid".equals(a.status) || "paid".equals(a.status) || "checked in".equals(a.status)) {
@@ -299,7 +302,9 @@ public class StatsPage extends Page {
             inc(by_status, a.status);
             if (isAttending) {
                 inc(by_status, "attending_count");
-                // TODO overdue_count
+                if (a.currentDues > 0 && a.dueDate != null && !"".equals(a.dueDate) && today.compareTo(a.dueDate) > 0) {
+                    inc(by_status, "overdue_count");
+                }
 
                 incAfterSplit(by_package, a.packages);
                 incAfterSplit(by_flag, a.flags);
