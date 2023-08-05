@@ -11,8 +11,8 @@ import org.eurofurence.regsys.web.exports.*;
 import org.eurofurence.regsys.web.forms.ListForm;
 import org.eurofurence.regsys.web.forms.SearchForm;
 
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;

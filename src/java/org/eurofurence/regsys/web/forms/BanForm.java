@@ -6,7 +6,7 @@ import org.eurofurence.regsys.repositories.attendees.BanRule;
 import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class BanForm extends Form {
 

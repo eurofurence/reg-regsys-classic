@@ -1,16 +1,15 @@
 package org.eurofurence.regsys.web.servlets.page;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.web.pages.Page;
 import org.eurofurence.regsys.web.servlets.HttpMethod;
 import org.eurofurence.regsys.web.servlets.error.ErrorServlet;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 public class PageServlet extends HttpServlet {
 

@@ -2,8 +2,8 @@ package org.eurofurence.regsys.web.pages;
 
 import org.eurofurence.regsys.backend.Strings;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
 /**

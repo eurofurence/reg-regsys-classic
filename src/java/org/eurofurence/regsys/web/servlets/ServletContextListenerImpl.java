@@ -7,8 +7,8 @@ import org.eurofurence.regsys.repositories.config.Configuration;
 import org.eurofurence.regsys.repositories.lowlevel.LowlevelClient;
 import org.eurofurence.regsys.web.pages.Page;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 public class ServletContextListenerImpl implements ServletContextListener {
 

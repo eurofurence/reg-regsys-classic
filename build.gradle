@@ -17,7 +17,6 @@ repositories {
 }
 
 apply plugin: 'java'
-apply plugin: 'war'
 
 description = "The Eurofurence Registration System"
 
@@ -31,15 +30,13 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-jar {
-}
-
 sourceSets {
     main { java { srcDirs = ['src/java'] } }
 }
 
 dependencies {
-    providedCompile 'org.apache.tomcat:tomcat-servlet-api:8.5.91'
+    // providedCompile 'org.apache.tomcat:tomcat-servlet-api:8.5.91'
+    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.11'
     implementation 'org.apache.commons:commons-lang3:3.13.0'
     implementation 'org.apache.velocity:velocity-engine-core:2.3'
     implementation 'org.apache.commons:commons-text:1.10.0'
@@ -53,17 +50,36 @@ dependencies {
     implementation 'commons-validator:commons-validator:1.7'
     // security updates
     implementation 'commons-codec:commons-codec:1.16.0'
+
+    // embed tomcat 10
+    // see https://stackoverflow.com/questions/71383171/simple-embedded-tomcat-10-example
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.11'
+
+    // see https://stackoverflow.com/questions/54882350/how-to-configure-tomcat-catalina-logs-in-json-using-default-jartomact-juli-jar
+    implementation 'co.elastic.logging:jul-ecs-formatter:1.5.0'
+    implementation 'co.elastic.logging:ecs-logging-core:1.5.0'
 }
 
-war {
-    dependsOn check
-    // file sets at the root of the archive
-    from 'src/jsp'
-    from ('src/html/' + convention)
-    from ('src/html/common') { duplicatesStrategy = 'exclude' }
+jar {
+    manifest {
+        attributes(
+                'Main-Class' : 'launch.Main'
+        )
+    }
+
+    // Keep jar clean:
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
+
     // file sets to go into WEB-INF
-    from ('src/tpl/' + convention) { into 'WEB-INF/templates' }
-    from ('src/tpl/common') { into 'WEB-INF/templates'; duplicatesStrategy = 'exclude' }
+    from ('src/html/' + convention) { into 'WEB-INF/html' }
+    from ('src/html/common') { into 'WEB-INF/html'; duplicatesStrategy = 'exclude' }
+    from ('src/tpl/' + convention + '/pages') // { into 'WEB-INF/templates' }
+    from ('src/tpl/common/pages') { duplicatesStrategy = 'exclude' } // { into 'WEB-INF/templates'; duplicatesStrategy = 'exclude' }
     // the web.xml location
-    webXml = file('src/web.xml')
+    // webXml = file('src/web.xml')
+    from (
+        // configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        // configurations.runtimeClasspath.collect { it.isDirectory() ? println ('Folder ' + it.name) : println ('File ' + it.name)}
+    ) { duplicatesStrategy = 'exclude' }
 }

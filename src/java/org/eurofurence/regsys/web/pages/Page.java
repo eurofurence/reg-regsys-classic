@@ -1,7 +1,17 @@
 package org.eurofurence.regsys.web.pages;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.backend.Strings;
@@ -19,10 +29,6 @@ import org.eurofurence.regsys.web.forms.Form;
 import org.eurofurence.regsys.web.forms.NavbarForm;
 import org.eurofurence.regsys.web.servlets.RequestHandler;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.*;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.*;
@@ -40,8 +46,11 @@ public abstract class Page extends RequestHandler {
     public static void initializeVelocity(ServletContext servletContext) {
         if (!velocityinitialized) {
             Velocity.setProperty("runtime.log", "/tmp/velocity.log");
-            Velocity.setProperty("resource.loader.file.path", servletContext.getRealPath("WEB-INF/templates/pages"));
             Velocity.setProperty("parser.pool.size", "1000");
+
+            Velocity.setProperty(RuntimeConstants.RESOURCE_LOADERS, "classpath");
+            Velocity.setProperty("resource.loader.classpath.class", ClasspathResourceLoader.class.getName());
+            // Velocity.setProperty("resource.loader.file.path", servletContext.getRealPath("WEB-INF/templates/pages"));
 
             Velocity.init();
 

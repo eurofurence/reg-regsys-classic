@@ -1,5 +1,9 @@
 package org.eurofurence.regsys.web.servlets.service;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.eurofurence.regsys.backend.HardcodedConfig;
 import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.repositories.config.ConfigService;
@@ -7,10 +11,6 @@ import org.eurofurence.regsys.web.servlets.HttpMethod;
 import org.eurofurence.regsys.web.servlets.RequestHandler;
 import org.eurofurence.regsys.web.servlets.error.ErrorServlet;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ServiceServlet extends HttpServlet {

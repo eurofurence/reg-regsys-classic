@@ -1,0 +1,3 @@
+This directory needs to exist for embedded tomcat to have a workdir.
+
+It is not actually used, but tomcat can't live without one.

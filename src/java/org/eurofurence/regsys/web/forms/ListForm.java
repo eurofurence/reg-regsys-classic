@@ -3,7 +3,7 @@ package org.eurofurence.regsys.web.forms;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Constants.Permission;
