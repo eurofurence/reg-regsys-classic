@@ -6,15 +6,16 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.eurofurence.regsys.backend.Logging;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @JsonIgnoreProperties(value = {"cause", "stackTrace", "localizedMessage", "suppressed"}, ignoreUnknown = true)
 public class ServiceException extends RuntimeException {
-    private static final long serialVersionUID = 4950034475261838535L;
+    // static logger so doesn't try to json render it
+    private static final Logger LOGGER = LoggerFactory.getLogger("org.eurofurence.regsys.web.services.ServiceException");
 
     private static final int DEFAULT_HTTP_STATUS = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 
@@ -82,9 +83,9 @@ public class ServiceException extends RuntimeException {
 
     private void log() {
         try {
-            Logging.error("[" + requestId + "] service call failed: " + getMessage());
+            LOGGER.error("service call failed: " + getMessage());
             if (getCause() != null) {
-                Logging.exception(getCause());
+                LOGGER.error("caused by: ", getCause());
             }
         } catch (Exception ignored) {
         }

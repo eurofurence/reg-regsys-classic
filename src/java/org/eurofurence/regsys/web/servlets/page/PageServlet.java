@@ -4,14 +4,17 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.web.pages.Page;
 import org.eurofurence.regsys.web.servlets.HttpMethod;
 import org.eurofurence.regsys.web.servlets.error.ErrorServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.io.IOException;
 
 public class PageServlet extends HttpServlet {
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected Page buildHandler(HttpServletRequest request, HttpServletResponse response, HttpMethod method) {
         String pathInfo = request.getPathInfo();
@@ -27,25 +30,27 @@ public class PageServlet extends HttpServlet {
     protected void doAnyMethod(HttpServletRequest request, HttpServletResponse response, HttpMethod method) {
         String requestId = Page.createRequestId();
         try {
+            MDC.put("requestid", requestId);
             long started = System.currentTimeMillis();
             String logInfo = method.toString() + " " + request.getRequestURI() + " " + Thread.currentThread().getId();
-            Logging.info("[" + requestId + "] request starting " + logInfo);
+            logger.info("request starting " + logInfo);
             try {
                 Page page = buildHandler(request, response, method);
                 page.setRequestId(requestId);
                 page.handle();
                 long done = System.currentTimeMillis();
-                Logging.info("[" + requestId + "] request finished " + logInfo + " -> " + response.getStatus() + " (" + (done - started) + " ms)");
+                logger.info("request finished " + logInfo + " -> " + response.getStatus() + " (" + (done - started) + " ms)");
             } catch (Exception unexpectedException) {
                 try {
                     long done = System.currentTimeMillis();
-                    Logging.error("[" + requestId + "] request unexpected exception " + logInfo + " (" + (done - started) + " ms), stacktrace follows");
-                    Logging.exception(unexpectedException);
+                    logger.error("request unexpected exception " + logInfo + " (" + (done - started) + " ms)", unexpectedException);
                 } catch (Exception ignored) { }
                 ErrorServlet.handleUnexpectedException(unexpectedException, response);
             }
         } catch (Exception ignored) {
             // cannot do anything here, have already tried logging
+        } finally {
+            MDC.clear();
         }
     }
 

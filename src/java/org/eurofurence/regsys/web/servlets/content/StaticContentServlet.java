@@ -18,10 +18,13 @@ public class StaticContentServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) {
         String requestedPath = StringUtils.removeStart(req.getPathInfo(), "/");
+        if ("".equals(requestedPath)) {
+            requestedPath = "index.html";
+        }
         String resourcePath = String.format("/WEB-INF/html/%s", requestedPath);
 
         URL resource = getClass().getResource(resourcePath);
-        logger.info("requesting static resource "+requestedPath);
+        logger.info("serving "+requestedPath);
 
         String contentType = getContentType(requestedPath);
 

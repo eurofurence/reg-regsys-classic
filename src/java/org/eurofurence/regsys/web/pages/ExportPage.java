@@ -163,7 +163,7 @@ public class ExportPage extends Page {
         try {
             printStream = new PrintStream(responseOutputStream, false, encoding.getStreamEncoding());
         } catch (UnsupportedEncodingException err) {
-            Logging.warn("[" + getRequestId() + "] got UnsupportedEncodingException when instantiating Csv Printstream, response encoding will be wrong!");
+            logger.warn("got UnsupportedEncodingException when instantiating Csv Printstream, response encoding will be wrong!");
             printStream = new PrintStream(responseOutputStream, false);
         }
         String mimetype = getServletContext().getMimeType(downloadFilename);
@@ -190,8 +190,7 @@ public class ExportPage extends Page {
                     printStream.println(exporter.getRecord(attendee));
             }
         } catch (Exception e) {
-            Logging.warn("[" + getRequestId() + "] exception while doing csv/spreadsheet export");
-            Logging.exception(e);
+            logger.warn("exception while doing csv/spreadsheet export: " + e.getMessage(), e);
         }
     }
 

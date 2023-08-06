@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpSession;
 import org.eurofurence.regsys.backend.HardcodedConfig;
 import org.eurofurence.regsys.repositories.config.ConfigService;
 import org.eurofurence.regsys.repositories.config.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
@@ -14,6 +16,8 @@ import java.util.Random;
  *  Abstract base class that represents anything that can service a web request.
  */
 public abstract class RequestHandler {
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private ServletContext servletContext;
     private HttpServletRequest request;
     private HttpServletResponse response;

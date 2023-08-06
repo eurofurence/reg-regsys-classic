@@ -4,8 +4,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.web.servlets.HttpMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,19 +15,23 @@ import java.io.PrintWriter;
  * Fallback error servlet. Since we catch all exceptions, this should never actually get used.
  */
 public class ErrorServlet extends HttpServlet {
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     protected void doAnyMethod(HttpServletRequest request, HttpServletResponse response, HttpMethod method) {
         try {
             Throwable throwable = (Throwable) request.getAttribute("javax.servlet.error.exception");
             String logInfo = "error servlet " + method.toString() + " " + request.getRequestURI() + " " + Thread.currentThread().getId() + " "
                     + (throwable != null ? throwable.getMessage() : "(null)");
-            Logging.error("[00000000] " + logInfo);
-            if (throwable != null)
-                Logging.exception(throwable);
+            if (throwable != null) {
+                logger.error(logInfo, throwable);
+            } else {
+                logger.error(logInfo);
+            }
 
             handleUnexpectedException(throwable, response);
         } catch (Exception unhandled) {
             try {
-                Logging.exception(unhandled);
+                logger.error("encountered another exception during top level exception logging", unhandled);
             } catch (Throwable ignored) {
                 // cannot do anything here, have already tried logging
             }

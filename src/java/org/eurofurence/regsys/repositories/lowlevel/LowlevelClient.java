@@ -10,15 +10,19 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.config.Configuration;
 import org.eurofurence.regsys.repositories.errors.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 public class LowlevelClient {
+    // here, we need the logger in static methods
+    private static final Logger LOGGER = LoggerFactory.getLogger("org.eurofurence.regsys.repositories.lowlevel.LowlevelClient");
+
     // TODO read from config
     private static final int REMOTE_REQUEST_TIMEOUT_SECONDS = 10;
 
@@ -70,9 +74,9 @@ public class LowlevelClient {
                 RuntimeException e = httpError(status, response, null);
                 long done = System.currentTimeMillis();
                 if (status == 400 || status == 401 || status == 403) {
-                    Logging.info("[" + requestId + "] downstream " + requestName + " -> " + status + " failed (" + (done - started) + " ms)");
+                    LOGGER.info("downstream " + requestName + " -> " + status + " failed (" + (done - started) + " ms)");
                 } else {
-                    Logging.warn("[" + requestId + "] downstream " + requestName + " -> " + status + " failed (" + (done - started) + " ms)");
+                    LOGGER.warn("downstream " + requestName + " -> " + status + " failed (" + (done - started) + " ms)");
                 }
                 throw e;
             } else {
@@ -91,22 +95,14 @@ public class LowlevelClient {
                 }
                 successResponseReceiver.accept(content, status, location);
                 long done = System.currentTimeMillis();
-                Logging.info("[" + requestId + "] downstream " + requestName + " -> " + status + " (" + (done - started) + " ms)");
+                LOGGER.info("downstream " + requestName + " -> " + status + " (" + (done - started) + " ms)");
             }
         } catch (IOException e) {
-            Logging.error("[" + requestId + "] downstream " + requestName + " failed: " + e.getMessage());
+            LOGGER.error("downstream " + requestName + " failed: " + e.getMessage());
             DownstreamException wrap = new DownstreamException("http.request.failure", e);
             throw wrap;
         } finally {
             HttpClientUtils.closeQuietly(response);
-//            if (response instanceof CloseableHttpResponse) {
-//                try {
-//                    ((CloseableHttpResponse) response).close();
-//                    Logging.info("[" + requestId + "] closing " + requestName);
-//                } catch (IOException e) {
-//                    Logging.warn("[" + requestId + "] closing " + requestName + " failed: " + e.getMessage());
-//                }
-//            }
         }
     }
 
@@ -151,7 +147,7 @@ public class LowlevelClient {
             cachedClient = HttpClientBuilder.create().disableCookieManagement().setDefaultRequestConfig(requestConfig).build();
 
             long done = System.currentTimeMillis();
-            Logging.info("downstream http client successfully created ("+ (done - started) + " ms)");
+            LOGGER.info("downstream http client successfully created ("+ (done - started) + " ms)");
         }
     }
 

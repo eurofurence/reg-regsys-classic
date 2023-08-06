@@ -1,17 +1,20 @@
 package org.eurofurence.regsys.service;
 
-import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.errors.NotFoundException;
 import org.eurofurence.regsys.repositories.payments.PaymentService;
 import org.eurofurence.regsys.repositories.payments.Transaction;
 import org.eurofurence.regsys.repositories.payments.TransactionResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class TransactionCalculator {
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private final PaymentService paymentService = new PaymentService();
 
     protected List<Transaction> cachedTransactions;
@@ -29,7 +32,7 @@ public class TransactionCalculator {
                 if (response != null && response.payload != null) {
                     cachedTransactions = response.payload;
                 } else {
-                    Logging.warn("[" + requestId + "] received unexpected null as transaction response");
+                    logger.warn("received unexpected null as transaction response");
                     cachedTransactions = new ArrayList<>();
                 }
             } catch (NotFoundException ignore) {

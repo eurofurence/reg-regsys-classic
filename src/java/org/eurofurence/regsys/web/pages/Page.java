@@ -13,7 +13,6 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.eurofurence.regsys.backend.Constants;
-import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
@@ -417,7 +416,7 @@ public abstract class Page extends RequestHandler {
 
     public void handleException(Exception e) {
         try {
-            Logging.exception(e);
+            logger.error("exception in top level Page.handle: " + e.getMessage(), e);
 
             getSession().invalidate();
 

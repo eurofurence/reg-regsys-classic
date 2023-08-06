@@ -5,16 +5,18 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.eurofurence.regsys.backend.HardcodedConfig;
-import org.eurofurence.regsys.backend.Logging;
 import org.eurofurence.regsys.repositories.config.ConfigService;
 import org.eurofurence.regsys.web.servlets.HttpMethod;
 import org.eurofurence.regsys.web.servlets.RequestHandler;
 import org.eurofurence.regsys.web.servlets.error.ErrorServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.io.IOException;
 
 public class ServiceServlet extends HttpServlet {
-    private static final long serialVersionUID = 2358875836630902347L;
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected RequestHandler buildHandler(HttpServletRequest request, HttpServletResponse response, HttpMethod method) {
         String pathInfo = request.getPathInfo();
@@ -34,22 +36,24 @@ public class ServiceServlet extends HttpServlet {
     protected void doAnyMethod(HttpServletRequest request, HttpServletResponse response, HttpMethod method) {
         String requestId = RequestHandler.createRequestId();
         try {
+            MDC.put("requestid", requestId);
             String logInfo = method.toString() + " " + request.getRequestURI() + " " + Thread.currentThread().getId();
-            Logging.info("[" + requestId + "] service starting " + logInfo);
+            logger.info("service starting " + logInfo);
             try {
                 RequestHandler handler = buildHandler(request, response, method);
                 handler.setRequestId(requestId);
                 handler.handle();
             } catch (Exception unexpectedException) {
                 try {
-                    Logging.error("[" + requestId + "] service unexpected exception " + logInfo);
-                    Logging.exception(unexpectedException);
+                    logger.error("service unexpected exception " + logInfo, unexpectedException);
                 } catch (Exception ignored) { }
                 ErrorServlet.handleUnexpectedException(unexpectedException, response);
             }
-            Logging.info("[" + requestId + "] service finished " + logInfo);
+            logger.info("service finished " + logInfo);
         } catch (Exception ignored) {
             // cannot do anything here, have already tried logging
+        } finally {
+            MDC.clear();
         }
     }
 
@@ -84,7 +88,7 @@ public class ServiceServlet extends HttpServlet {
 
     protected void addCorsHeadersForDevelopment(HttpServletResponse response) {
         if ("true".equals(configService.getConfig().web.enableDevCorsHeader)) {
-            Logging.warn("Sending CORS headers to allow all origins. This setting is not suitable for production!");
+            logger.warn("Sending CORS headers to allow all origins. This setting is not suitable for production!");
             response.addHeader("Access-Control-Allow-Origin", "*");
             response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
             response.addHeader("Access-Control-Allow-Headers", "content-type");
