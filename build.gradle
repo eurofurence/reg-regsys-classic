@@ -24,8 +24,8 @@ apply plugin: 'java'
 
 description = "The Eurofurence Registration System"
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 group = 'org.eurofurence.regsys'
 version = '0.1.0-SNAPSHOT'
