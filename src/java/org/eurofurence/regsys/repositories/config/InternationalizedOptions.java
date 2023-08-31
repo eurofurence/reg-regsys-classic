@@ -45,4 +45,17 @@ public class InternationalizedOptions extends ArrayList<InternationalizedOptions
     public List<String> valueListWithKey(String language) {
         return stream().map(e -> e.byLanguage(language) + " (" + e.key() + ")").collect(Collectors.toList());
     }
+
+    public String lookup(String key, String language) {
+        try {
+            InternationalizedOptions.KeyWithNameByLanguage entry = stream()
+                    .filter(e -> e.key().equals(key))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("not found"));
+            return entry.byLanguage(language);
+        } catch (Exception e) {
+            // better than blowing up
+            return key;
+        }
+    }
 }

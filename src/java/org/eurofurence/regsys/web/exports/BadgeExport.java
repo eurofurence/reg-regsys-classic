@@ -1,12 +1,17 @@
 package org.eurofurence.regsys.web.exports;
 
 import org.eurofurence.regsys.backend.Constants;
+import org.eurofurence.regsys.backend.HardcodedConfig;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
+import org.eurofurence.regsys.repositories.config.ConfigService;
+import org.eurofurence.regsys.repositories.config.Configuration;
 import org.eurofurence.regsys.web.forms.FormHelper;
 
 import java.util.Set;
 
 public class BadgeExport extends AbstractCsvExport {
+    private final Configuration config = new ConfigService(HardcodedConfig.CONFIG_URL).getConfig();
+
     @Override
     public String getHeader() {
         return csv("Id")
@@ -43,10 +48,10 @@ public class BadgeExport extends AbstractCsvExport {
 
         boolean isNotParticipating = attendee.status != null && Constants.MemberStatus.byNewRegsysValue(attendee.status).isNotParticipating();
         boolean isStaff = flags.contains("staff");
-        boolean isDirector = flags.contains("teamlead");
+        boolean isDirector = flags.contains("director");
 
         boolean isGuest = flags.contains("guest");
-        boolean isDay = packages.contains("day-thu") || packages.contains("day-fri") || packages.contains("day-sat");
+        boolean isDay = packages.stream().anyMatch(e -> e != null && e.startsWith("day-"));
         boolean isRegular = !isGuest && !isDay && !isNotParticipating;
 
         boolean isSupersponsor = isRegular && packages.contains("sponsor2");
@@ -69,7 +74,7 @@ public class BadgeExport extends AbstractCsvExport {
                 + csv(attendee.zip)
                 + csv(attendee.city)
                 + csv(attendee.email)
-                + csv(nvl(attendee.country))
+                + csv(lookupCountryName(nvl(attendee.country)))
                 + csv(nvl(attendee.spokenLanguages))
                 + csv(attendee.status)
                 + csv(attendee.registered)
@@ -85,6 +90,13 @@ public class BadgeExport extends AbstractCsvExport {
                 + csv(isStaff ? "x" : "")
                 + csv(isDirector ? "x" : "")
                 + csv(isDay ? getBadgeDayGuestCode(attendee) : "");
+    }
+
+    private String lookupCountryName(String code) {
+        if (code == null || code.equals("")) {
+            return "";
+        }
+        return config.countries.lookup(code, "en-US");
     }
 
     private String getBadgeSponsorDesc(AttendeeSearchResultList.AttendeeSearchResult attendee) {
@@ -113,6 +125,26 @@ public class BadgeExport extends AbstractCsvExport {
             if (result.length() > 0)
                 result += ",";
             result += "SA";
+        }
+        if (packages.contains("day-sun")) {
+            if (result.length() > 0)
+                result += ",";
+            result += "SU";
+        }
+        if (packages.contains("day-mon")) {
+            if (result.length() > 0)
+                result += ",";
+            result += "MO";
+        }
+        if (packages.contains("day-tue")) {
+            if (result.length() > 0)
+                result += ",";
+            result += "TU";
+        }
+        if (packages.contains("day-wed")) {
+            if (result.length() > 0)
+                result += ",";
+            result += "WE";
         }
         return result;
     }
