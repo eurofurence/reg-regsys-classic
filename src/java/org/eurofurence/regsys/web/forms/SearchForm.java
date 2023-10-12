@@ -116,7 +116,7 @@ public class SearchForm extends Form {
     }
 
     protected String getSearchSponsorItems() {
-        String key = "sponsor_items";
+        String key = "sponsordesk";
         if (attendeeFinder.addInfo != null && attendeeFinder.addInfo.containsKey(key)) {
             return Integer.toString(attendeeFinder.addInfo.get(key));
         } else {
@@ -443,7 +443,7 @@ public class SearchForm extends Form {
             if (t == null || t.equals("")) t = "-1";
             if (attendeeFinder.addInfo == null)
                 attendeeFinder.addInfo = new HashMap<>();
-            String key = "sponsor_items";
+            String key = "sponsordesk";
             int current = -1;
             if (attendeeFinder.addInfo.containsKey(key)) {
                 current = attendeeFinder.addInfo.get(key);
