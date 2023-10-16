@@ -7,7 +7,7 @@ def convention = "ef" // "ef", "mmc"
 
 // configure the logging mode to build
 // (used to select a pair of config files, either ecs or plain)
-def logmode = "plain" // "plain", "ecs"
+def logmode = "ecs" // "plain", "ecs"
 
 // ======================= end configuration section ========================================
 buildscript {
@@ -40,17 +40,17 @@ sourceSets {
 
 dependencies {
     // providedCompile 'org.apache.tomcat:tomcat-servlet-api:8.5.91'
-    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.11'
+    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.15'
     implementation 'org.apache.commons:commons-lang3:3.13.0'
     implementation 'org.apache.velocity:velocity-engine-core:2.3'
     implementation 'org.apache.commons:commons-text:1.10.0'
-    implementation 'org.slf4j:slf4j-api:2.0.7'
+    implementation 'org.slf4j:slf4j-api:2.0.9'
     implementation 'co.elastic.logging:logback-ecs-encoder:1.5.0'
     implementation 'ch.qos.logback:logback-classic:1.4.9'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.3'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.3'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
     implementation 'commons-validator:commons-validator:1.7'
     // security updates
