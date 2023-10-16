@@ -13,7 +13,7 @@ import org.eurofurence.regsys.repositories.mails.MailService;
 import org.eurofurence.regsys.repositories.mails.Template;
 import org.eurofurence.regsys.repositories.mails.TemplateList;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;

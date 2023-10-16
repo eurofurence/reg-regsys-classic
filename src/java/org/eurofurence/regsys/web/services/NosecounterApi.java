@@ -9,7 +9,7 @@ import org.eurofurence.regsys.backend.types.IsoDate;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;

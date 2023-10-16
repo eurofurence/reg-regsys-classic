@@ -6,7 +6,7 @@ import org.eurofurence.regsys.repositories.payments.PaymentService;
 import org.eurofurence.regsys.repositories.payments.Transaction;
 import org.eurofurence.regsys.repositories.payments.TransactionResponse;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -1,7 +1,11 @@
-FROM tomcat:8.5-jdk11-openjdk
-LABEL maintainer="jsquirrel_github_9a6d@packetloss.de"
+FROM alpine:3
 
-ADD build/libs/regsys-0.1.0-SNAPSHOT.war /usr/local/tomcat/webapps/regsys.war
+RUN apk add --no-cache openjdk17-jre-headless
+
+COPY ./build/libs/app-0.1.0-SNAPSHOT.jar /app/regsys-classic.jar
 
 EXPOSE 8080
-CMD ["catalina.sh", "run"]
+
+USER 8877
+
+CMD ["/usr/bin/java", "-jar", "/app/regsys-classic.jar"]

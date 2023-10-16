@@ -12,6 +12,8 @@ import org.eurofurence.regsys.repositories.config.Option;
 import org.eurofurence.regsys.repositories.config.OptionList;
 import org.eurofurence.regsys.repositories.errors.ErrorDto;
 import org.eurofurence.regsys.web.pages.Page;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *  Semi-abstract base class that represents a general purpose form in a web application.
@@ -27,6 +29,8 @@ import org.eurofurence.regsys.web.pages.Page;
  *  2.  use its static methods as a helper when generating html forms
  */
 public abstract class Form {
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
+
     // setup ---------------------------------------------------------
     private Page page;
 

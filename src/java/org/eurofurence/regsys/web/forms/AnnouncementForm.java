@@ -7,7 +7,7 @@ import org.eurofurence.regsys.repositories.mails.MailService;
 import org.eurofurence.regsys.repositories.mails.Template;
 import org.eurofurence.regsys.web.pages.AnnouncementsPage;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class AnnouncementForm extends Form {
 

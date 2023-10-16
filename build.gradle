@@ -3,7 +3,11 @@
 // configure the convention to build for
 // (used as a path component in several places)
 
-def convention = "ef"
+def convention = "ef" // "ef", "mmc"
+
+// configure the logging mode to build
+// (used to select a pair of config files, either ecs or plain)
+def logmode = "ecs" // "plain", "ecs"
 
 // ======================= end configuration section ========================================
 buildscript {
@@ -17,12 +21,11 @@ repositories {
 }
 
 apply plugin: 'java'
-apply plugin: 'war'
 
 description = "The Eurofurence Registration System"
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 group = 'org.eurofurence.regsys'
 version = '0.1.0-SNAPSHOT'
@@ -31,39 +34,64 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-jar {
-}
-
 sourceSets {
     main { java { srcDirs = ['src/java'] } }
 }
 
 dependencies {
-    providedCompile 'org.apache.tomcat:tomcat-servlet-api:8.5.91'
+    // providedCompile 'org.apache.tomcat:tomcat-servlet-api:8.5.91'
+    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.15'
     implementation 'org.apache.commons:commons-lang3:3.13.0'
     implementation 'org.apache.velocity:velocity-engine-core:2.3'
     implementation 'org.apache.commons:commons-text:1.10.0'
-    implementation 'org.slf4j:slf4j-api:2.0.7'
-    implementation 'org.slf4j:slf4j-simple:2.0.7'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2'
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+    implementation 'co.elastic.logging:logback-ecs-encoder:1.5.0'
+    implementation 'ch.qos.logback:logback-classic:1.4.9'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.15.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.3'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.3'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
     implementation 'commons-validator:commons-validator:1.7'
     // security updates
     implementation 'commons-codec:commons-codec:1.16.0'
+
+    // embed tomcat 10
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.11'
+
+    implementation 'co.elastic.logging:jul-ecs-formatter:1.5.0'
+    implementation 'co.elastic.logging:ecs-logging-core:1.5.0'
 }
 
-war {
-    dependsOn check
-    // file sets at the root of the archive
-    from 'src/jsp'
-    from ('src/html/' + convention)
-    from ('src/html/common') { duplicatesStrategy = 'exclude' }
-    // file sets to go into WEB-INF
-    from ('src/tpl/' + convention) { into 'WEB-INF/templates' }
-    from ('src/tpl/common') { into 'WEB-INF/templates'; duplicatesStrategy = 'exclude' }
-    // the web.xml location
-    webXml = file('src/web.xml')
+jar {
+    // make jar runnable
+    manifest {
+        attributes(
+                'Main-Class' : 'launch.Main'
+        )
+    }
+
+    // keep jar clean:
+    exclude 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA', 'META-INF/*.MF'
+
+    from ('src/html/' + convention) { into 'WEB-INF/html' }
+    from ('src/html/common') { into 'WEB-INF/html'; duplicatesStrategy = 'exclude' }
+
+    from ('src/tpl/' + convention + '/pages') // { into 'WEB-INF/templates' }
+    from ('src/tpl/common/pages') { duplicatesStrategy = 'exclude' } // { into 'WEB-INF/templates'; duplicatesStrategy = 'exclude' }
+
+    from ('src/logging-juli-'+logmode+'.properties') { into 'WEB-INF/config' }
+    from ('src/logback-'+logmode+'.xml') { into '' }
+
+    from (
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        // configurations.runtimeClasspath.collect { it.isDirectory() ? println ('Folder ' + it.name) : println ('File ' + it.name)}
+    ) { duplicatesStrategy = 'exclude' }
+
+    rename 'logback-[a-z]+.xml', 'logback.xml'
+    rename 'logging-juli-[a-z]+.properties', 'logging-juli.properties'
+}
+
+task runExecutableJar(type: JavaExec) {
+    classpath = files(tasks.jar)
 }
