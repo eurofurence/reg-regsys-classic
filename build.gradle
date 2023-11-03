@@ -43,7 +43,7 @@ dependencies {
     implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.15'
     implementation 'org.apache.commons:commons-lang3:3.13.0'
     implementation 'org.apache.velocity:velocity-engine-core:2.3'
-    implementation 'org.apache.commons:commons-text:1.10.0'
+    implementation 'org.apache.commons:commons-text:1.11.0'
     implementation 'org.slf4j:slf4j-api:2.0.9'
     implementation 'co.elastic.logging:logback-ecs-encoder:1.5.0'
     implementation 'ch.qos.logback:logback-classic:1.4.9'
