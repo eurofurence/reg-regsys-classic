@@ -225,6 +225,7 @@ public class NosecounterApi extends AbstractAttendeeListService {
             case 2020: return "19.08.2020";
             case 2022: return "24.08.2022";
             case 2023: return "03.09.2023";
+            case 2024: return "18.09.2024";
             default: return Strings.conf.conStart;
         }
     }

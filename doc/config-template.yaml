@@ -69,6 +69,16 @@ choices:
       price: 12000
       vat_percent: 19
       default: true
+    late:
+      description: 'Late Fee'
+      price: 1000
+      vat_percent: 19
+      default: false
+    door:
+      description: 'At The Door Fee'
+      price: 1000
+      vat_percent: 19
+      default: false
     stage:
       description: 'Entrance Fee (Stage Ticket)'
       price: 500
@@ -90,26 +100,26 @@ choices:
       vat_percent: 19
       constraint: '!sponsor,!sponsor2'
       constraint_msg: 'Sponsors and supersponsors get their T-Shirt for free.'
-    day-sun:
-      description: 'Day Guest (Sunday)'
-      price: 7000
-      vat_percent: 19
-      constraint: '!attendance,!stage'
-      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
-    day-mon:
-      description: 'Day Guest (Monday)'
-      price: 7000
-      vat_percent: 19
-      constraint: '!attendance,!stage'
-      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
-    day-tue:
-      description: 'Day Guest (Tuesday)'
-      price: 7000
-      vat_percent: 19
-      constraint: '!attendance,!stage'
-      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
     day-wed:
       description: 'Day Guest (Wednesday)'
+      price: 7000
+      vat_percent: 19
+      constraint: '!attendance,!stage'
+      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
+    day-thu:
+      description: 'Day Guest (Thursday)'
+      price: 7000
+      vat_percent: 19
+      constraint: '!attendance,!stage'
+      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
+    day-fri:
+      description: 'Day Guest (Friday)'
+      price: 7000
+      vat_percent: 19
+      constraint: '!attendance,!stage'
+      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
+    day-sat:
+      description: 'Day Guest (Saturday)'
       price: 7000
       vat_percent: 19
       constraint: '!attendance,!stage'
