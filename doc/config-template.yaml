@@ -31,6 +31,15 @@ testing: {}
   # admin_token: 'eyJhbG...'
   # staff_token: 'eyJhbG...'
   # user_token: 'eyJhbG...'
+sepa:
+  account_owner: 'Awesome Convention, Inc.'
+  bank_name: 'Greedy Bank'
+  bank_address: '1 Money Drive, 6AC 1EU Fairyland'
+  iban: 'UK00100020003000400050'
+  bic: 'AABBCCDDUK'
+  subject_prefix: 'AWECON'
+  success_redirect: 'http://localhost:10000/app/register'
+  failure_redirect: 'http://localhost:10000/app/register'
 choices:
   flags:
     hc:

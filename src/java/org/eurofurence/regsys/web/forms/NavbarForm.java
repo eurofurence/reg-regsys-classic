@@ -264,6 +264,18 @@ public class NavbarForm extends Form {
         return "login";
     }
 
+    // global visibility switch for info pages
+
+    private boolean showMenu = true;
+
+    public boolean showMenu() {
+        return showMenu;
+    }
+
+    public void disableMenu() {
+        showMenu = false;
+    }
+
     // imprint and privacy statement
 
     public String getPrivacyStatementURL() {

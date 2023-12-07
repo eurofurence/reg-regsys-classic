@@ -283,6 +283,17 @@ public class StringsMMC {
         public String pageTitle = "Suchformular";
     }
 
+    public static class SepaPageMsgs {
+        public String pageTitle = "&Uuml;berweisungsdaten";
+        public String nothingToPay = "Keine ausstehenden Zahlungen";
+        public String wrongStatus = "Falscher Status f&uuml;r Zahlungen";
+        public String backendError = "Backend Request Fehler";
+        public String transactionNotFound = "Transaktion nicht gefunden";
+        public String transactionWrongStatus = "Falscher Transaktionsstatus (schon gezahlt?)";
+        public String transactionNotEligible = "Falscher Transaktionstyp (keine sepa Zahlung?)";
+        public String wrongAttendee = "Falscher Teilnehmer";
+    }
+
     public static class StartPageMsgs {
         public String notFoundTitle = "Registrierung - Unbekannt";
         public String pageTitle = "Registrierung - Startseite";

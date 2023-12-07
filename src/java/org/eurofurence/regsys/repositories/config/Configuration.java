@@ -126,6 +126,32 @@ public class Configuration {
         public String systemLanguage = "en-US";
     }
 
+    public static class SepaConfig {
+        @JsonProperty("account_owner")
+        public String accountOwner;
+
+        @JsonProperty("bank_name")
+        public String bankName;
+
+        @JsonProperty("bank_address")
+        public String bankAddress;
+
+        @JsonProperty("iban")
+        public String iban;
+
+        @JsonProperty("bic")
+        public String bic;
+
+        @JsonProperty("subject_prefix")
+        public String subjectPrefix;
+
+        @JsonProperty("success_redirect")
+        public String successRedirect;
+
+        @JsonProperty("failure_redirect")
+        public String failureRedirect;
+    }
+
     @JsonProperty("choices")
     public Choices choices;
 
@@ -149,4 +175,7 @@ public class Configuration {
 
     @JsonProperty("web")
     public WebConfig web;
+
+    @JsonProperty("sepa")
+    public SepaConfig sepa;
 }

@@ -272,6 +272,17 @@ public class StringsEF {
         public String pageTitle = "Search Form";
     }
 
+    public static class SepaPageMsgs {
+        public String pageTitle = "Sepa Payment Information";
+        public String nothingToPay = "You have no open payments";
+        public String wrongStatus = "Your status does not permit payments";
+        public String backendError = "Backend Request Failure";
+        public String transactionNotFound = "Transaction Not Found";
+        public String transactionWrongStatus = "Wrong Transaction Status (maybe already paid?)";
+        public String transactionNotEligible = "Wrong Transaction Type (maybe not a sepa payment or a dues booking?)";
+        public String wrongAttendee = "Transaction does not belong to logged in attendee";
+    }
+
     public static class StartPageMsgs {
         public String notFoundTitle = "Registration System - Not Found";
         public String pageTitle = "Registration System - Start Page";
