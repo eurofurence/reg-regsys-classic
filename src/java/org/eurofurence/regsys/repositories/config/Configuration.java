@@ -1,7 +1,10 @@
 package org.eurofurence.regsys.repositories.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Configuration {
@@ -24,11 +27,17 @@ public class Configuration {
         @JsonProperty("read_only")
         public boolean readOnly;
 
+        @JsonProperty("at-least-one-mandatory")
+        public boolean atLeastOneMandatory; // unused but helm chart creates it
+
         @JsonProperty("constraint")
         public String constraint;
 
         @JsonProperty("constraint_msg")
         public String constraintMsg;
+
+        @JsonProperty("visible_for")
+        public List<String> visibleFor = new ArrayList<>(); // unused but helm chart creates it
     }
 
     public static class Choices {
