@@ -45,6 +45,7 @@ public class SepaPage extends Page {
 
     private String refId = "";
     private String subject = "";
+    private String language = "en-US";
     private boolean showInfo = false;
     private Transaction transaction = new Transaction();
     private final PaymentService paymentService = new PaymentService();
@@ -119,6 +120,11 @@ public class SepaPage extends Page {
         return showInfo;
     }
 
+    @SuppressWarnings("unused")
+    public String getLanguage() {
+        return language;
+    }
+
     // form
     @SuppressWarnings("unused")
     public String getFormHeader() {
@@ -171,6 +177,10 @@ public class SepaPage extends Page {
             if (status == Constants.MemberStatus.APPROVED || status == Constants.MemberStatus.PARTIALLY_PAID) {
                 Attendee me = getLoggedInAttendee();
 
+                if ("de-DE".equals(me.registrationLanguage)) {
+                    language = "de-DE";
+                }
+
                 refId = getRequest().getParameter(TRANSACTION);
                 if (refId == null || "".equals(refId)) {
                     throw new DbDataException(Strings.sepaPage.transactionNotFound);
@@ -178,7 +188,7 @@ public class SepaPage extends Page {
 
                 logger.info("reading transaction " + refId);
 
-                TransactionResponse response = paymentService.performFindTransactions(null, refId, null, null, getTokenFromRequest(), getRequestId());
+                TransactionResponse response = paymentService.performFindTransactions(me.id, refId, null, null, getTokenFromRequest(), getRequestId());
                 if (response == null || response.payload == null || response.payload.size() != 1) {
                     throw new DbDataException(Strings.sepaPage.transactionNotFound);
                 }
