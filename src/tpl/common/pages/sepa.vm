@@ -1,0 +1,110 @@
+#if($page.Language == "de-DE")
+<td class="contentbox">
+    <div class="pageheader">&Uuml;berweisungsinformationen</div>
+    <hr class="contentbox">
+
+    #parse( "errorlisting.vm" )
+
+    #if($page.mayView())##
+        <div class="headline">Zahlung per SEPA Bank&uuml;berweisung</div>
+        <hr class="contentbox">
+        $page.FormHeader
+        <TABLE>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">Kontoinhaber</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.AccountOwner</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">Bank</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.BankName</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">Addresse</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.BankAddress</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">IBAN</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.Iban</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">BIC</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.Bic</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">Betrag</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.Amount</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">Betreff</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.Subject</TD>
+            </TR>
+            <TR>
+                <TD>${page.submitBack("Zur&uuml;ck", "submit_small")}</TD>
+                <TD>${page.submitSent("Ich habe gezahlt!", "submit")}</TD>
+            </TR>
+        </TABLE>
+        $page.FormFooter
+    #else##
+        <div class="contentbox">Ein Fehler ist aufgetreten.</div><br/>
+        $page.FormHeader
+        ${page.submitBack("Zur&uuml;ck", "submit_small")}
+        $page.FormFooter
+    #end##
+
+</td>
+#else
+<td class="contentbox">
+    <div class="pageheader">SEPA Payment Information</div>
+    <hr class="contentbox">
+
+    #parse( "errorlisting.vm" )
+
+    #if($page.mayView())##
+        <div class="headline">Paying by SEPA money transfer</div>
+        <hr class="contentbox">
+        $page.FormHeader
+        <TABLE>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">Account owner</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.AccountOwner</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">Bank</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.BankName</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">Address</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.BankAddress</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">IBAN</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.Iban</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">BIC</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.Bic</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">Amount</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.Amount</TD>
+            </TR>
+            <TR>
+                <TD class="label" ALIGN="right" VALIGN="middle">Subject</TD>
+                <TD class="input" ALIGN="left" VALIGN="middle">$page.Subject</TD>
+            </TR>
+            <TR>
+                <TD>${page.submitBack("Cancel", "submit_small")}</TD>
+                <TD>${page.submitSent("I have sent this payment!", "submit")}</TD>
+            </TR>
+        </TABLE>
+        $page.FormFooter
+    #else##
+        <div class="contentbox">An error has occurred.</div><br/>
+        $page.FormHeader
+        ${page.submitBack("Go Back", "submit_small")}
+        $page.FormFooter
+    #end##
+
+</td>
+##
+#end

@@ -24,6 +24,7 @@ public class PageRequestHandlerFactory {
         suppliersByPathInfo.put("/mass-approve", MassApprovePage::new);
         suppliersByPathInfo.put("/payment", PaymentPage::new);
         suppliersByPathInfo.put("/search", SearchPage::new);
+        suppliersByPathInfo.put("/sepa", SepaPage::new);
         suppliersByPathInfo.put("/start", StartPage::new);
         suppliersByPathInfo.put("/stats", StatsPage::new);
 

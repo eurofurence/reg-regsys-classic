@@ -31,6 +31,15 @@ testing: {}
   # admin_token: 'eyJhbG...'
   # staff_token: 'eyJhbG...'
   # user_token: 'eyJhbG...'
+sepa:
+  account_owner: 'Awesome Convention, Inc.'
+  bank_name: 'Greedy Bank'
+  bank_address: '1 Money Drive, 6AC 1EU Fairyland'
+  iban: 'UK00100020003000400050'
+  bic: 'AABBCCDDUK'
+  subject_prefix: 'AWECON'
+  success_redirect: 'http://localhost:10000/app/register'
+  failure_redirect: 'http://localhost:10000/app/register'
 choices:
   flags:
     hc:
@@ -69,6 +78,16 @@ choices:
       price: 12000
       vat_percent: 19
       default: true
+    early:
+      description: 'Early Bird Discount'
+      price: -500
+      vat_percent: 19
+      default: false
+    door:
+      description: 'At The Door Fee'
+      price: 1000
+      vat_percent: 19
+      default: false
     stage:
       description: 'Entrance Fee (Stage Ticket)'
       price: 500
@@ -90,26 +109,26 @@ choices:
       vat_percent: 19
       constraint: '!sponsor,!sponsor2'
       constraint_msg: 'Sponsors and supersponsors get their T-Shirt for free.'
-    day-sun:
-      description: 'Day Guest (Sunday)'
-      price: 7000
-      vat_percent: 19
-      constraint: '!attendance,!stage'
-      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
-    day-mon:
-      description: 'Day Guest (Monday)'
-      price: 7000
-      vat_percent: 19
-      constraint: '!attendance,!stage'
-      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
-    day-tue:
-      description: 'Day Guest (Tuesday)'
-      price: 7000
-      vat_percent: 19
-      constraint: '!attendance,!stage'
-      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
     day-wed:
       description: 'Day Guest (Wednesday)'
+      price: 7000
+      vat_percent: 19
+      constraint: '!attendance,!stage'
+      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
+    day-thu:
+      description: 'Day Guest (Thursday)'
+      price: 7000
+      vat_percent: 19
+      constraint: '!attendance,!stage'
+      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
+    day-fri:
+      description: 'Day Guest (Friday)'
+      price: 7000
+      vat_percent: 19
+      constraint: '!attendance,!stage'
+      constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
+    day-sat:
+      description: 'Day Guest (Saturday)'
       price: 7000
       vat_percent: 19
       constraint: '!attendance,!stage'
@@ -157,14 +176,84 @@ choices:
       price: 10000
       vat_percent: 19
       read_only: true
-    artshow-table:
-      description: 'Artshow Tablespace'
+    artshow-table-half:
+      description: 'Artshow (Half Table)'
       price: 500
       vat_percent: 19
       read_only: true
-    artshow-panel:
-      description: 'Artshow Panelspace'
+    artshow-table-one:
+      description: 'Artshow (1 Table)'
       price: 1000
+      vat_percent: 19
+      read_only: true
+    artshow-table-oneandhalf:
+      description: 'Artshow (1.5 Tables)'
+      price: 1500
+      vat_percent: 19
+      read_only: true
+    artshow-table-two:
+      description: 'Artshow (2 Tables)'
+      price: 2000
+      vat_percent: 19
+      read_only: true
+    artshow-table-twoandhalf:
+      description: 'Artshow (2.5 Tables)'
+      price: 2500
+      vat_percent: 19
+      read_only: true
+    artshow-table-three:
+      description: 'Artshow (3 Tables)'
+      price: 3000
+      vat_percent: 19
+      read_only: true
+    artshow-table-threeandhalf:
+      description: 'Artshow (3.5 Tables)'
+      price: 3500
+      vat_percent: 19
+      read_only: true
+    artshow-table-four:
+      description: 'Artshow (4 Tables)'
+      price: 4000
+      vat_percent: 19
+      read_only: true
+    artshow-panel-half:
+      description: 'Artshow (Half Panel)'
+      price: 1000
+      vat_percent: 19
+      read_only: true
+    artshow-panel-one:
+      description: 'Artshow (1 Panel)'
+      price: 2000
+      vat_percent: 19
+      read_only: true
+    artshow-panel-oneandhalf:
+      description: 'Artshow (1.5 Panels)'
+      price: 3000
+      vat_percent: 19
+      read_only: true
+    artshow-panel-two:
+      description: 'Artshow (2 Panels)'
+      price: 4000
+      vat_percent: 19
+      read_only: true
+    artshow-panel-twoandhalf:
+      description: 'Artshow (2.5 Panels)'
+      price: 5000
+      vat_percent: 19
+      read_only: true
+    artshow-panel-three:
+      description: 'Artshow (3 Panels)'
+      price: 6000
+      vat_percent: 19
+      read_only: true
+    artshow-panel-threeandhalf:
+      description: 'Artshow (3.5 Panels)'
+      price: 7000
+      vat_percent: 19
+      read_only: true
+    artshow-panel-four:
+      description: 'Artshow Panel (4 Panels)'
+      price: 8000
       vat_percent: 19
       read_only: true
   options:

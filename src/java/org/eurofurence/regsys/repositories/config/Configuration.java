@@ -1,7 +1,10 @@
 package org.eurofurence.regsys.repositories.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Configuration {
@@ -24,11 +27,17 @@ public class Configuration {
         @JsonProperty("read_only")
         public boolean readOnly;
 
+        @JsonProperty("at-least-one-mandatory")
+        public boolean atLeastOneMandatory; // unused but helm chart creates it
+
         @JsonProperty("constraint")
         public String constraint;
 
         @JsonProperty("constraint_msg")
         public String constraintMsg;
+
+        @JsonProperty("visible_for")
+        public List<String> visibleFor = new ArrayList<>(); // unused but helm chart creates it
     }
 
     public static class Choices {
@@ -126,6 +135,32 @@ public class Configuration {
         public String systemLanguage = "en-US";
     }
 
+    public static class SepaConfig {
+        @JsonProperty("account_owner")
+        public String accountOwner;
+
+        @JsonProperty("bank_name")
+        public String bankName;
+
+        @JsonProperty("bank_address")
+        public String bankAddress;
+
+        @JsonProperty("iban")
+        public String iban;
+
+        @JsonProperty("bic")
+        public String bic;
+
+        @JsonProperty("subject_prefix")
+        public String subjectPrefix;
+
+        @JsonProperty("success_redirect")
+        public String successRedirect;
+
+        @JsonProperty("failure_redirect")
+        public String failureRedirect;
+    }
+
     @JsonProperty("choices")
     public Choices choices;
 
@@ -149,4 +184,7 @@ public class Configuration {
 
     @JsonProperty("web")
     public WebConfig web;
+
+    @JsonProperty("sepa")
+    public SepaConfig sepa;
 }

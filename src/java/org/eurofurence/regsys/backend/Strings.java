@@ -44,6 +44,7 @@ public class Strings extends StringsEF {
     public static PaymentPageMsgs paymentPage = new PaymentPageMsgs();
     public static SearchFormMsgs searchForm = new SearchFormMsgs();
     public static SearchPageMsgs searchPage = new SearchPageMsgs();
+    public static SepaPageMsgs sepaPage = new SepaPageMsgs();
     public static StartPageMsgs startPage = new StartPageMsgs();
     public static StatsPageMsgs statsPage = new StatsPageMsgs();
 }

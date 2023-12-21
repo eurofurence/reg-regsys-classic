@@ -11,21 +11,15 @@ import org.eurofurence.regsys.backend.enums.RoomManagementOption;
  */
 public class StringsEF {
     public static class ConfigStrings {
-        public String conventionId = "ef";
-        public String conventionLongname = "Eurofurence 27";
-        public String conventionShortname = "EF";
-        public String convention = "EF27";
-        public String conventionHumanReadableDate = "September 3-7, 2023"; // used in the navbar
-        public String conventionYear = "2023"; // used in lots of places on the web page and for credit card payment subject
+        public String conventionLongname = "Eurofurence 28";
+        public String conventionHumanReadableDate = "September 18-21, 2024"; // used in the navbar
+        public String conventionYear = "2024"; // used in lots of places on the web page and for credit card payment subject
 
         public String termsURL = "https://help.eurofurence.org/legal/terms";
         public String rulesURL = "https://help.eurofurence.org/legal/roc";
 
         public String regMgmtEmailNontechnical = "nobody@eurofurence.org"; // otrs ticket queue
         public String regMgmtEmailTechnical = "nobody@eurofurence.org";
-
-        public String goLiveDateFormat = "dd MMMM yyyy, HH:mm:ss";
-        public String goLiveDatePrefix = "Saturday, ";
 
         public String imprintURL = "https://help.eurofurence.org/legal/imprint";
         public String imprintText = "Imprint";
@@ -43,11 +37,11 @@ public class StringsEF {
 
         public String defaultBirthday = "31.12.1900";
 
-        public String paymentStart = "01.01.2023";
+        public String paymentStart = "01.12.2023";
         public String paymentEnd = "31.12.2024";
 
-        public String conStart = "03.09.2023";
-        public String conEnd = "07.09.2023";
+        public String conStart = "18.09.2024";
+        public String conEnd = "21.09.2024";
 
         /* okay, so these are not strings, but it is useful to separate out all configuration */
 
@@ -71,7 +65,7 @@ public class StringsEF {
         public String tooOldMessage = "Over 115 years of age? Come on!";
         public String tooYoungMessage = "Sorry, people under 18 years cannot attend Eurofurence.";
         public String regDateMessage = "Registration starts Jan 2018 and ends on the last day of the con!";
-        public String payDateMessage = "Payments must be received within 2023.";
+        public String payDateMessage = "Payments must be received within 2024.";
     }
 
     public static class AccountingPageMsgs {
@@ -276,6 +270,17 @@ public class StringsEF {
 
     public static class SearchPageMsgs {
         public String pageTitle = "Search Form";
+    }
+
+    public static class SepaPageMsgs {
+        public String pageTitle = "Sepa Payment Information";
+        public String nothingToPay = "You have no open payments";
+        public String wrongStatus = "Your status does not permit payments";
+        public String backendError = "Backend Request Failure";
+        public String transactionNotFound = "Transaction Not Found";
+        public String transactionWrongStatus = "Wrong Transaction Status (maybe already paid?)";
+        public String transactionNotEligible = "Wrong Transaction Type (maybe not a sepa payment or a dues booking?)";
+        public String wrongAttendee = "Transaction does not belong to logged in attendee";
     }
 
     public static class StartPageMsgs {

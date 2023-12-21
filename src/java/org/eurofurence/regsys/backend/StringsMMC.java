@@ -11,10 +11,7 @@ import org.eurofurence.regsys.backend.enums.RoomManagementOption;
  */
 public class StringsMMC {
     public static class ConfigStrings {
-        public String conventionId = "mmc";
         public String conventionLongname = "Mephit Minicon 23";
-        public String conventionShortname = "MMC";
-        public String convention = "MMC 23";
         public String conventionHumanReadableDate = "26.-29.&nbsp;Mai&nbsp;2022"; // used in the navbar
         public String conventionYear = "2022"; // used in lots of places on the web page and for credit card payment subject
 
@@ -26,9 +23,6 @@ public class StringsMMC {
 
         public String regMgmtEmailNontechnical = "nobody@mephitminicon.de";
         public String regMgmtEmailTechnical = "nobody@mephitminicon.de";
-
-        public String goLiveDateFormat = "dd. MMMM yyyy, HH:mm:ss";
-        public String goLiveDatePrefix = "Dienstag, ";
 
         public String imprintURL = "https://www.mephitminicon.de/impressum.html";
         public String imprintText = "Impressum";
@@ -287,6 +281,17 @@ public class StringsMMC {
 
     public static class SearchPageMsgs {
         public String pageTitle = "Suchformular";
+    }
+
+    public static class SepaPageMsgs {
+        public String pageTitle = "&Uuml;berweisungsdaten";
+        public String nothingToPay = "Keine ausstehenden Zahlungen";
+        public String wrongStatus = "Falscher Status f&uuml;r Zahlungen";
+        public String backendError = "Backend Request Fehler";
+        public String transactionNotFound = "Transaktion nicht gefunden";
+        public String transactionWrongStatus = "Falscher Transaktionsstatus (schon gezahlt?)";
+        public String transactionNotEligible = "Falscher Transaktionstyp (keine sepa Zahlung?)";
+        public String wrongAttendee = "Falscher Teilnehmer";
     }
 
     public static class StartPageMsgs {

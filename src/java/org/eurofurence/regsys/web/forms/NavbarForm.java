@@ -6,8 +6,6 @@ import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.backend.enums.RoomManagementOption;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.errors.UnauthorizedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.function.Predicate;
 
@@ -262,6 +260,18 @@ public class NavbarForm extends Form {
 
     public String getLoginURL() {
         return "login";
+    }
+
+    // global visibility switch for info pages
+
+    private boolean showMenu = true;
+
+    public boolean showMenu() {
+        return showMenu;
+    }
+
+    public void disableMenu() {
+        showMenu = false;
     }
 
     // imprint and privacy statement
