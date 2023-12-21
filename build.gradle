@@ -40,7 +40,7 @@ sourceSets {
 
 dependencies {
     // providedCompile 'org.apache.tomcat:tomcat-servlet-api:8.5.91'
-    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.15'
+    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.17'
     implementation 'org.apache.commons:commons-lang3:3.14.0'
     implementation 'org.apache.velocity:velocity-engine-core:2.3'
     implementation 'org.apache.commons:commons-text:1.11.0'
@@ -52,12 +52,12 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.16.0'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.0'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
-    implementation 'commons-validator:commons-validator:1.7'
+    implementation 'commons-validator:commons-validator:1.8.0'
     // security updates
     implementation 'commons-codec:commons-codec:1.16.0'
 
     // embed tomcat 10
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.16'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.17'
 
     implementation 'co.elastic.logging:jul-ecs-formatter:1.5.0'
     implementation 'co.elastic.logging:ecs-logging-core:1.5.0'

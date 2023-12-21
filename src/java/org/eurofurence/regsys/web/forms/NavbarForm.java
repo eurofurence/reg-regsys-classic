@@ -6,8 +6,6 @@ import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.backend.enums.RoomManagementOption;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.errors.UnauthorizedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.function.Predicate;
 
