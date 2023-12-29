@@ -1,6 +1,7 @@
 package launch;
 
 import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
 import org.apache.catalina.core.ApplicationContext;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
@@ -41,7 +42,8 @@ public class Main {
         String webappDirLocation = "webapps";
 
         tomcat.setPort(8080);
-        tomcat.getConnector();
+        Connector connector = tomcat.getConnector();
+        connector.setURIEncoding("UTF-8");
 
         // provide static file server under ./webapps
         StandardContext context = (StandardContext) tomcat.addContext("", new File(webappDirLocation).getAbsolutePath());

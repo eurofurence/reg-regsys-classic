@@ -1,10 +1,9 @@
 package org.eurofurence.regsys.web.servlets.error;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.eurofurence.regsys.web.servlets.HttpMethod;
+import org.eurofurence.regsys.web.servlets.base.BaseServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +13,7 @@ import java.io.PrintWriter;
 /**
  * Fallback error servlet. Since we catch all exceptions, this should never actually get used.
  */
-public class ErrorServlet extends HttpServlet {
+public class ErrorServlet extends BaseServlet {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected void doAnyMethod(HttpServletRequest request, HttpServletResponse response, HttpMethod method) {
@@ -36,31 +35,6 @@ public class ErrorServlet extends HttpServlet {
                 // cannot do anything here, have already tried logging
             }
         }
-    }
-
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        doAnyMethod(request, response, HttpMethod.GET);
-    }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        doAnyMethod(request, response, HttpMethod.POST);
-    }
-
-    @Override
-    public void doPut(HttpServletRequest request, HttpServletResponse response) {
-        doAnyMethod(request, response, HttpMethod.PUT);
-    }
-
-    @Override
-    public void doDelete(HttpServletRequest request, HttpServletResponse response) {
-        doAnyMethod(request, response, HttpMethod.DELETE);
-    }
-
-    @Override
-    public void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        super.doOptions(request, response);
     }
 
     public static void handleUnexpectedException(Throwable e, HttpServletResponse response) throws IOException {
