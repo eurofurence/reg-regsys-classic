@@ -50,7 +50,8 @@ choices:
       description: 'Digital only convention booklet'
     ev:
       description: 'Eurofurence e.V. Member'
-      admin_only: true
+      read_only: true
+      group: ev
     terms-accepted:
       description: 'Accepted the terms'
       default: true
@@ -75,17 +76,17 @@ choices:
       read_only: true
     attendance:
       description: 'Entrance Fee (Convention Ticket)'
-      price: 12000
+      price: 16000
       vat_percent: 19
       default: true
     early:
       description: 'Early Bird Discount'
-      price: -500
+      price: -1500
       vat_percent: 19
       default: false
-    door:
-      description: 'At The Door Fee'
-      price: 1000
+    late:
+      description: 'Late Fee'
+      price: 1500
       vat_percent: 19
       default: false
     stage:
@@ -95,11 +96,11 @@ choices:
       default: true
     sponsor:
       description: 'Sponsor Upgrade'
-      price: 8000
+      price: 10000
       vat_percent: 19
     sponsor2:
       description: 'Supersponsor Upgrade'
-      price: 19000
+      price: 20000
       vat_percent: 19
       constraint: '!sponsor'
       constraint_msg: 'Please choose only one of Sponsor or Supersponsor.'
@@ -111,25 +112,25 @@ choices:
       constraint_msg: 'Sponsors and supersponsors get their T-Shirt for free.'
     day-wed:
       description: 'Day Guest (Wednesday)'
-      price: 7000
+      price: 10000
       vat_percent: 19
       constraint: '!attendance,!stage'
       constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
     day-thu:
       description: 'Day Guest (Thursday)'
-      price: 7000
+      price: 10000
       vat_percent: 19
       constraint: '!attendance,!stage'
       constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
     day-fri:
       description: 'Day Guest (Friday)'
-      price: 7000
+      price: 10000
       vat_percent: 19
       constraint: '!attendance,!stage'
       constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'
     day-sat:
       description: 'Day Guest (Saturday)'
-      price: 7000
+      price: 10000
       vat_percent: 19
       constraint: '!attendance,!stage'
       constraint_msg: 'Must disable Convention Ticket and Stage Ticket for Day Guests.'

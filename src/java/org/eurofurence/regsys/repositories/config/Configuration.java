@@ -38,6 +38,9 @@ public class Configuration {
 
         @JsonProperty("visible_for")
         public List<String> visibleFor = new ArrayList<>(); // unused but helm chart creates it
+
+        @JsonProperty("group")
+        public String group; // unused but helm chart creates it
     }
 
     public static class Choices {

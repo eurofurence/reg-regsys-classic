@@ -1,13 +1,13 @@
 package org.eurofurence.regsys.web.servlets.service;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.eurofurence.regsys.backend.HardcodedConfig;
 import org.eurofurence.regsys.repositories.config.ConfigService;
 import org.eurofurence.regsys.web.servlets.HttpMethod;
 import org.eurofurence.regsys.web.servlets.RequestHandler;
+import org.eurofurence.regsys.web.servlets.base.BaseServlet;
 import org.eurofurence.regsys.web.servlets.error.ErrorServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ import org.slf4j.MDC;
 
 import java.io.IOException;
 
-public class ServiceServlet extends HttpServlet {
+public class ServiceServlet extends BaseServlet {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected RequestHandler buildHandler(HttpServletRequest request, HttpServletResponse response, HttpMethod method) {
@@ -33,6 +33,7 @@ public class ServiceServlet extends HttpServlet {
         return rh;
     }
 
+    @Override
     protected void doAnyMethod(HttpServletRequest request, HttpServletResponse response, HttpMethod method) {
         String requestId = RequestHandler.createRequestId();
         try {
@@ -61,21 +62,6 @@ public class ServiceServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         addCorsHeadersForDevelopment(response);
         doAnyMethod(request, response, HttpMethod.GET);
-    }
-
-    @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
-        doAnyMethod(request, response, HttpMethod.POST);
-    }
-
-    @Override
-    public void doPut(HttpServletRequest request, HttpServletResponse response) {
-        doAnyMethod(request, response, HttpMethod.PUT);
-    }
-
-    @Override
-    public void doDelete(HttpServletRequest request, HttpServletResponse response) {
-        doAnyMethod(request, response, HttpMethod.DELETE);
     }
 
     @Override
