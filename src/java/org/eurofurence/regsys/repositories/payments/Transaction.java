@@ -43,8 +43,9 @@ public class Transaction {
 
     public enum Method {
         CREDIT("credit"),
-        PAYPAL("paypal"),
         TRANSFER("transfer"),
+        CASH("cash"),
+        PAYPAL("paypal"),
         INTERNAL("internal"),
         GIFT("gift");
 
