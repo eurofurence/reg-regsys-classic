@@ -48,6 +48,7 @@ public class PackageApi extends Service {
             if (downstream.ddToken != null && !"".equals(downstream.ddToken)) {
                 allowed.put("dealer-half", downstream.ddToken);
                 allowed.put("dealer-full", downstream.ddToken);
+                allowed.put("dealer-fullplus", downstream.ddToken);
                 allowed.put("dealer-double", downstream.ddToken);
                 allowed.put("dealer-quad", downstream.ddToken);
             }
@@ -57,8 +58,22 @@ public class PackageApi extends Service {
                 allowed.put("boat-benefactor", downstream.boatToken);
             }
             if (downstream.artshowToken != null && !"".equals(downstream.artshowToken)) {
-                allowed.put("artshow-table", downstream.artshowToken);
-                allowed.put("artshow-panel", downstream.artshowToken);
+                allowed.put("artshow-table-half", downstream.artshowToken);
+                allowed.put("artshow-table-one", downstream.artshowToken);
+                allowed.put("artshow-table-oneandhalf", downstream.artshowToken);
+                allowed.put("artshow-table-two", downstream.artshowToken);
+                allowed.put("artshow-table-twoandhalf", downstream.artshowToken);
+                allowed.put("artshow-table-three", downstream.artshowToken);
+                allowed.put("artshow-table-threeandhalf", downstream.artshowToken);
+                allowed.put("artshow-table-four", downstream.artshowToken);
+                allowed.put("artshow-panel-half", downstream.artshowToken);
+                allowed.put("artshow-panel-one", downstream.artshowToken);
+                allowed.put("artshow-panel-oneandhalf", downstream.artshowToken);
+                allowed.put("artshow-panel-two", downstream.artshowToken);
+                allowed.put("artshow-panel-twoandhalf", downstream.artshowToken);
+                allowed.put("artshow-panel-three", downstream.artshowToken);
+                allowed.put("artshow-panel-threeandhalf", downstream.artshowToken);
+                allowed.put("artshow-panel-four", downstream.artshowToken);
             }
         }
         return allowed;

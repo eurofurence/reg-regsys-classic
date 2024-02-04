@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import org.eurofurence.regsys.web.services.AddInfoApi;
 import org.eurofurence.regsys.web.services.DealersDenApi;
 import org.eurofurence.regsys.web.services.NosecounterApi;
 import org.eurofurence.regsys.web.services.NotFound;
@@ -23,6 +24,7 @@ public class ServiceRequestHandlerFactory {
         suppliersByPathInfo.put("/summerboat-api", SummerBoatApi::new);
         suppliersByPathInfo.put("/security-system-api", SecuritySystemApi::new);
         suppliersByPathInfo.put("/package-api", PackageApi::new);
+        suppliersByPathInfo.put("/addinfo-api", AddInfoApi::new);
     }
 
     public static RequestHandler createByPathInfo(String pathInfo) {
