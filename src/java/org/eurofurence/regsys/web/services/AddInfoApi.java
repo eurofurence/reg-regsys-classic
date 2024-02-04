@@ -73,19 +73,15 @@ public class AddInfoApi extends Service {
             throw new ServiceException("addinfoapi.validation.failure.id", getRequestId());
         attendeeId = Long.parseLong(idStr);
 
-        if (getMethod() == HttpMethod.GET) {
-            area = "";
-        } else {
-            String areaName = getRequest().getParameter(PARAM_AREA);
-            if (areaName == null || "".equals(areaName))
-                throw new ServiceException("addinfoapi.validation.failure.area", getRequestId());
+        String areaName = getRequest().getParameter(PARAM_AREA);
+        if (areaName == null || "".equals(areaName))
+            throw new ServiceException("addinfoapi.validation.failure.area", getRequestId());
 
-            // check that the package is allowed to be manipulated by this api and token
-            if (!allowedAreas.contains(areaName))
-                throw new ServiceException("security.access.denied", getRequestId());
+        // check that the package is allowed to be manipulated by this api and token
+        if (!allowedAreas.contains(areaName))
+            throw new ServiceException("security.access.denied", getRequestId());
 
-            area = areaName;
-        }
+        area = areaName;
     }
 
     protected static class ResponseDTO {
