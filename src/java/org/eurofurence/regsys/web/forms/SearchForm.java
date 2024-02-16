@@ -43,6 +43,7 @@ public class SearchForm extends Form {
     public static final String X_WAITING     = "search_status_Xwait";
     public static final String X_CANCELLED   = "search_status_Xcanc";
     public static final String SPONSOR_ITEMS = "search_sponsor_items";
+    public static final String DEALER        = "search_dealer";
     public static final String FLAG_BASE     = "search_flag_"; // includes options
     public static final String PACKAGE_BASE  = "search_package_";
 
@@ -117,6 +118,15 @@ public class SearchForm extends Form {
 
     protected String getSearchSponsorItems() {
         String key = "sponsordesk";
+        if (attendeeFinder.addInfo != null && attendeeFinder.addInfo.containsKey(key)) {
+            return Integer.toString(attendeeFinder.addInfo.get(key));
+        } else {
+            return "-1";
+        }
+    }
+
+    protected String getSearchDealer() {
+        String key = "dealerreg";
         if (attendeeFinder.addInfo != null && attendeeFinder.addInfo.containsKey(key)) {
             return Integer.toString(attendeeFinder.addInfo.get(key));
         } else {
@@ -456,6 +466,23 @@ public class SearchForm extends Form {
             }
         }
 
+        private void setSearchDealer(String t) {
+            if (t == null || t.equals("")) t = "-1";
+            if (attendeeFinder.addInfo == null)
+                attendeeFinder.addInfo = new HashMap<>();
+            String key = "dealerreg";
+            int current = -1;
+            if (attendeeFinder.addInfo.containsKey(key)) {
+                current = attendeeFinder.addInfo.get(key);
+            }
+            int searchDealer = FormHelper.parseInt(getPage(), t, DEALER, current);
+            if (searchDealer == -1) {
+                attendeeFinder.addInfo.remove(key);
+            } else {
+                attendeeFinder.addInfo.put(key, searchDealer);
+            }
+        }
+
         private void genericOptionSetter(HttpServletRequest request, OptionList list, Map<String, Integer> paramMap, String paramBaseName, String errorMessageFormat) {
             for (Option o: list) {
                 String parname = paramBaseName + o.code;
@@ -505,6 +532,7 @@ public class SearchForm extends Form {
             setSearchStatusXwait(nvl(request.getParameter(X_WAITING)));
             setSearchStatusXcanc(nvl(request.getParameter(X_CANCELLED)));
             setSearchSponsorItems(request.getParameter(SPONSOR_ITEMS));
+            setSearchDealer(request.getParameter(DEALER));
             setSearchFlagsByCode(request);
             setSearchOptionsByCode(request);
             setSearchPackagesByCode(request);
@@ -629,6 +657,10 @@ public class SearchForm extends Form {
 
         public String fieldSponsorItems(String style) {
             return anyNoYesSelector(SPONSOR_ITEMS, getSearchSponsorItems(), style);
+        }
+
+        public String fieldDealer(String style) {
+            return anyNoYesSelector(DEALER, getSearchDealer(), style);
         }
 
         public String getResetFormUrl() {
