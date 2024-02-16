@@ -62,8 +62,8 @@ ${form.fieldXcancelled("check")}&nbsp;cancelled</TD>
     </TR>
 
     <TR>
-      <TD></TD>
-      <TD></TD>
+      <TD>Dealer</TD>
+      <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldDealer("small")</TD>
 
       <TD></TD>
       <TD class="input" ALIGN="left" VALIGN="middle"><A HREF="$form.resetFormUrl">Reset Search Form</A></TD>
