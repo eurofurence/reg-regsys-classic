@@ -1,5 +1,8 @@
 package org.eurofurence.regsys.web.forms;
 
+import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
+import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
+import org.eurofurence.regsys.repositories.attendees.AttendeeService;
 import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
 import org.eurofurence.regsys.repositories.payments.PaymentService;
@@ -17,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,8 +35,6 @@ public class AccountingSearchForm extends Form {
     public static final String PARAM_SEARCH_TYPE     = "searchPaymentType";
     public static final String PARAM_SEARCH_METHOD   = "searchPaymentMethod";
 
-    public static final String PARAM_LONG_VERSION     = "long";
-
     // ------------ attributes -----------------------
 
     private String searchFrom; // kept as iso - from
@@ -49,11 +49,26 @@ public class AccountingSearchForm extends Form {
     private Map<String,Map<Long,Long>> breakdownCountByAmount;
     private Map<String,Long> totalAmounts;
 
+    public static class AttendeeInfos {
+        public String nickname;
+        public String flags;
+        public String options;
+        public String packages;
+        public String status;
+        public long totalDues;
+        public long paymentBalance;
+        public long currentDues;
+        public String dueDate;
+    }
+
+    private Map<Long, AttendeeInfos> attendeeInfos = new HashMap<>();
+
     private List<Transaction> found = new ArrayList<>();
 
     // ------------ constructors and initialization -----------------------
 
     private final PaymentService paymentService = new PaymentService();
+    private final AttendeeService attendeeService = new AttendeeService();
 
     public AccountingSearchForm() {
         breakdownCountByAmount = new TreeMap<>();
@@ -130,18 +145,8 @@ public class AccountingSearchForm extends Form {
         boolean result = false;
         found = new ArrayList<>();
         try {
-            TransactionResponse response = paymentService.performFindTransactions(null, null, searchFrom, searchTo, getPage().getTokenFromRequest(), getPage().getRequestId());
-            if (response.payload != null) {
-                for (Transaction t : response.payload) {
-                    if (searchStatus.contains(t.status) &&
-                            searchTypes.contains(t.transactionType) &&
-                            searchMethods.contains(t.method)) {
-                        if (searchComments.equals("") || t.comment != null && t.comment.contains(searchComments)) {
-                            found.add(t);
-                        }
-                    }
-                }
-            }
+            populateAttendeeInfos();
+            loadTransactions();
             result = true;
             count = -1; // first loadNextTransaction() advances to first
         } catch (DownstreamWebErrorException e) {
@@ -151,6 +156,52 @@ public class AccountingSearchForm extends Form {
             resetErrors(e.getMessage());
         }
         return result;
+    }
+
+    private void populateAttendeeInfos() {
+        AttendeeSearchCriteria.AttendeeSearchSingleCriterion criterion = new AttendeeSearchCriteria.AttendeeSearchSingleCriterion();
+        AttendeeSearchCriteria criteria = new AttendeeSearchCriteria();
+        criteria.fillFields = Arrays.asList("nickname", "configuration", "balances", "status");
+        criteria.matchAny.add(criterion); // note: will filter deleted attendees
+
+        AttendeeSearchResultList resultList = attendeeService.performFindAttendees(criteria, getPage().getTokenFromRequest(), getPage().getRequestId());
+        if (resultList != null && resultList.attendees != null) {
+            resultList.attendees.forEach(sr -> {
+                AttendeeInfos inf = new AttendeeInfos();
+                inf.nickname = sr.nickname;
+                inf.flags = sr.flags;
+                inf.options = sr.options;
+                inf.packages = sr.packages;
+                inf.status = sr.status;
+                inf.totalDues = valueOrZero(sr.totalDues);
+                inf.paymentBalance = valueOrZero(sr.paymentBalance);
+                inf.currentDues = valueOrZero(sr.currentDues);
+                inf.dueDate = sr.dueDate;
+                attendeeInfos.put(sr.id, inf);
+            });
+        }
+    }
+
+    private void loadTransactions() {
+        TransactionResponse response = paymentService.performFindTransactions(null, null, searchFrom, searchTo, getPage().getTokenFromRequest(), getPage().getRequestId());
+        if (response.payload != null) {
+            for (Transaction t : response.payload) {
+                if (searchStatus.contains(t.status) &&
+                        searchTypes.contains(t.transactionType) &&
+                        searchMethods.contains(t.method)) {
+                    if (searchComments.equals("") || t.comment != null && t.comment.contains(searchComments)) {
+                        found.add(t);
+                    }
+                }
+            }
+        }
+    }
+
+    private long valueOrZero(Long value) {
+        if (value == null) {
+            return 0L;
+        }
+        return value.longValue();
     }
 
     public boolean loadNextTransaction() {
@@ -337,6 +388,34 @@ public class AccountingSearchForm extends Form {
 
         public String getComment() {
             return escape(found.get(count).comment);
+        }
+
+        // lookups from attendeeInfos
+
+        private AttendeeInfos attInf() {
+            Long debitorId = found.get(count).debitorId;
+            if (debitorId != null) {
+                AttendeeInfos inf = attendeeInfos.get(debitorId);
+                if (inf == null) {
+                    inf = new AttendeeInfos();
+                    inf.nickname = "(unknown)";
+                }
+                return inf;
+            } else {
+                AttendeeInfos inf = new AttendeeInfos();
+                inf.nickname = "(no id)";
+                return inf;
+            }
+        }
+
+        public String getAttendeeNickname() {
+            return escape(attInf().nickname);
+        }
+
+        public boolean attendeeHasFlag(String flag) {
+            AttendeeInfos inf = attInf();
+            String flags = "," + inf.flags + ","; // may result in ,null,
+            return flags.contains("," + flag + ",");
         }
 
         // attributes for the amount breakdown (available after all loadNexts only)

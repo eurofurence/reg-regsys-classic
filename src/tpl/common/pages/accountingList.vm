@@ -9,6 +9,8 @@
         <TH class="searchlist" ALIGN="left" >$strcolType</TH>
         <TH class="searchlist" ALIGN="left" >$strcolMethod</TH>
         <TH class="searchlist" ALIGN="left" >$strcolComment</TH>
+        <TH class="searchlist" ALIGN="left" >$strcolNick</TH>
+        <TH class="searchlist" ALIGN="left" >$strcolMembership</TH>
     </TR>
 
 #foreach($i in [0..10000])## if there are more than this many results, the page will load forever anyway
@@ -24,6 +26,8 @@
         <TD class="searchlist" ALIGN="left">$form.type</TD>
         <TD class="searchlist" ALIGN="left">$form.method</TD>
         <TD class="searchlist" ALIGN="left">$form.comment</TD>
+        <TD class="searchlist" ALIGN="left">$form.attendeeNickname</TD>
+        <TD class="searchlist" ALIGN="left">#if($form.attendeeHasFlag("ev"))X#{end}</TD>
     </TR>
 
   #end##
@@ -34,6 +38,8 @@
         <TH class="searchlist" ALIGN="right" ></TH>
         <TH class="searchlist" ALIGN="right" >$form.getPayGrandTotal()</TH>
         <TH class="searchlist" ALIGN="right" >$form.getDueGrandTotal()</TH>
+        <TH class="searchlist" ALIGN="left" ></TH>
+        <TH class="searchlist" ALIGN="left" ></TH>
         <TH class="searchlist" ALIGN="left" ></TH>
         <TH class="searchlist" ALIGN="left" ></TH>
         <TH class="searchlist" ALIGN="left" ></TH>

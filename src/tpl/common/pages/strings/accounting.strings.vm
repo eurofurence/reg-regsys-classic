@@ -21,7 +21,7 @@
 #set($strcolRealname = "Realname")##
 #set($strcolTotal = "Total")##
 #set($strcolAttendance = "Attendance")##
-#set($strcolMembership = "Membership")##
+#set($strcolMembership = "e.V.")##
 #set($strcolAmount = "Paid&nbsp;&euro;")##
 #set($strcolAmountDue = "Due&nbsp;&euro;")##
 #set($strcolDate = "Date")##
