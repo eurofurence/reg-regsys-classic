@@ -21,7 +21,7 @@
 #set($strcolRealname = "Realer&nbsp;Name")##
 #set($strcolTotal = "Total")##
 #set($strcolAttendance = "Teilnahme")##
-#set($strcolMembership = "Vereinsbeitrag")##
+#set($strcolMembership = "e.V.")##
 #set($strcolAmount = "Betrag")##
 #set($strcolAmountDue = "Ford.")##
 #set($strcolDate = "Datum")##
