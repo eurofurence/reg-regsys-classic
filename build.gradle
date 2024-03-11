@@ -48,7 +48,7 @@ dependencies {
     implementation 'co.elastic.logging:logback-ecs-encoder:1.6.0'
     implementation 'ch.qos.logback:logback-classic:1.5.3'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.2'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.16.1'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.1'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
