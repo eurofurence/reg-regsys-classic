@@ -266,11 +266,11 @@ public class Util {
 
     // Other data conversion helpers
 
-    public static String toDecimals(float f) {
+    public static String toDecimals(double d) {
         DecimalFormat format = new DecimalFormat("0.00");
-        String res = format.format(f);
+        String res = format.format(d);
         if (res != null) {
-          res = res.replace(',', '.'); // damn i8n
+            res = res.replace(',', '.'); // damn i8n
         }
         return res;
     }
@@ -278,7 +278,7 @@ public class Util {
     public static String toCurrencyDecimals(Long cents) {
         if (cents == null)
             return "UNKNOWN";
-        return toDecimals(cents/100f);
+        return toDecimals(cents/100d);
     }
 
     public static float toFloat(String s) {
