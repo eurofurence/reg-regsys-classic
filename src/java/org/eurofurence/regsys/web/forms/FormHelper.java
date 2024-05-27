@@ -73,8 +73,8 @@ public class FormHelper {
         return Util.testEmail(page::addError, input, field);
     }
 
-    public static String toDecimals(float f) {
-        return Util.toDecimals(f);
+    public static String toDecimals(double d) {
+        return Util.toDecimals(d);
     }
 
     public static String toCurrencyDecimals(Long cents) {

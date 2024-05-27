@@ -585,16 +585,8 @@ public class InputForm extends Form {
 
         // attribute forwarders
 
-        private String str(int i) {
-            return Integer.toString(i);
-        }
-
         private String str(long i) {
             return Long.toString(i);
-        }
-
-        private String str(float f) {
-            return FormHelper.toDecimals(f);
         }
 
         public String getId() {

@@ -339,7 +339,7 @@ public class AccountingSearchForm extends Form {
             if (Transaction.TransactionType.PAYMENT.getValue().equals(found.get(count).transactionType)) {
                 Transaction.Amount amount = found.get(count).amount;
                 if (amount != null) {
-                    return Util.toDecimals(amount.grossCent / 100.0f);
+                    return Util.toCurrencyDecimals(amount.grossCent);
                 } else {
                     return "???";
                 }
@@ -352,7 +352,7 @@ public class AccountingSearchForm extends Form {
             if (Transaction.TransactionType.DUE.getValue().equals(found.get(count).transactionType)) {
                 Transaction.Amount amount = found.get(count).amount;
                 if (amount != null) {
-                    return Util.toDecimals(amount.grossCent / 100.0f);
+                    return Util.toCurrencyDecimals(amount.grossCent);
                 } else {
                     return "???";
                 }
