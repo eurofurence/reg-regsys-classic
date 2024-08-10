@@ -39,12 +39,12 @@ sourceSets {
 }
 
 dependencies {
-    // providedCompile 'org.apache.tomcat:tomcat-servlet-api:10.1.26'
-    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.26'
-    implementation 'org.apache.commons:commons-lang3:3.14.0'
+    // providedCompile 'org.apache.tomcat:tomcat-servlet-api:10.1.28'
+    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.28'
+    implementation 'org.apache.commons:commons-lang3:3.16.0'
     implementation 'org.apache.velocity:velocity-engine-core:2.3'
     implementation 'org.apache.commons:commons-text:1.12.0'
-    implementation 'org.slf4j:slf4j-api:2.0.13'
+    implementation 'org.slf4j:slf4j-api:2.0.15'
     implementation 'co.elastic.logging:logback-ecs-encoder:1.6.0'
     implementation 'ch.qos.logback:logback-classic:1.5.6'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.17.2'
@@ -54,10 +54,10 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
     implementation 'commons-validator:commons-validator:1.9.0'
     // security updates
-    implementation 'commons-codec:commons-codec:1.17.0'
+    implementation 'commons-codec:commons-codec:1.17.1'
 
-    // embed tomcat 10
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.26'
+    // embed tomcat 10.1
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.28'
 
     implementation 'co.elastic.logging:jul-ecs-formatter:1.6.0'
     implementation 'co.elastic.logging:ecs-logging-core:1.6.0'
