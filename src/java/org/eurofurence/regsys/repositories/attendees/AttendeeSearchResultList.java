@@ -7,6 +7,14 @@ import java.util.List;
 
 public class AttendeeSearchResultList {
     public static class AttendeeSearchResult {
+        public static class PackageInfo {
+            @JsonProperty("name")
+            public String name;
+
+            @JsonProperty("count")
+            public long count;
+        }
+
         @JsonProperty("id")
         public long id;
 
@@ -64,17 +72,29 @@ public class AttendeeSearchResultList {
         @JsonProperty("spoken_languages")
         public String spokenLanguages;
 
+        @JsonProperty("spoken_languages_list")
+        public List<String> spokenLanguagesList;
+
         @JsonProperty("registration_language")
         public String registrationLanguage;
 
         @JsonProperty("flags")
         public String flags;
 
+        @JsonProperty("flags_list")
+        public List<String> flagsList;
+
         @JsonProperty("options")
         public String options;
 
+        @JsonProperty("options_list")
+        public List<String> optionsList;
+
         @JsonProperty("packages")
         public String packages;
+
+        @JsonProperty("packages_list")
+        public List<PackageInfo> packagesList;
 
         @JsonProperty("user_comments")
         public String userComments;
