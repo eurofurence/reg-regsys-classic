@@ -38,14 +38,25 @@ public class SearchForm extends Form {
     public static final String ADDRESS       = "search_address";
     public static final String COUNTRY       = "search_country";
     public static final String COMMENTS      = "search_comments";
-    public static final String OVERDUE       = "search_overdue";
     public static final String X_NEW         = "search_status_Xnew";
     public static final String X_WAITING     = "search_status_Xwait";
     public static final String X_CANCELLED   = "search_status_Xcanc";
-    public static final String SPONSOR_ITEMS = "search_sponsor_items";
-    public static final String DEALER        = "search_dealer";
     public static final String FLAG_BASE     = "search_flag_"; // includes options
     public static final String PACKAGE_BASE  = "search_package_";
+
+    public static final String OVERDUE       = "search_addinfo_overdue";
+    public static final String SPONSOR_ITEMS = "search_addinfo_sponsordesk";
+    public static final String SHIPPING      = "search_addinfo_shipping";
+    public static final String DEALER        = "search_addinfo_dealerreg";
+    public static final String FURSUITBADGE  = "search_addinfo_fursuitbadge";
+
+    // ------------ add info areas -------------------
+
+    public static final String ADD_INFO_AREA_OVERDUE      = "overdue";
+    public static final String ADD_INFO_AREA_SPONSORDESK  = "sponsordesk";
+    public static final String ADD_INFO_AREA_SHIPPING     = "shipping";
+    public static final String ADD_INFO_AREA_DEALERREG    = "dealerreg";
+    public static final String ADD_INFO_AREA_FURSUITBADGE = "fursuitbadge";
 
     // ------------ attributes -----------------------
 
@@ -107,31 +118,32 @@ public class SearchForm extends Form {
         }
     }
 
-    protected String getSearchOverdue() {
-        String key = "overdue";
-        if (attendeeFinder.addInfo != null && attendeeFinder.addInfo.containsKey(key)) {
-            return Integer.toString(attendeeFinder.addInfo.get(key));
+    protected String getSearchAddInfo(String area) {
+        if (attendeeFinder.addInfo != null && attendeeFinder.addInfo.containsKey(area)) {
+            return Integer.toString(attendeeFinder.addInfo.get(area));
         } else {
             return "-1";
         }
+    }
+
+    protected String getSearchOverdue() {
+        return getSearchAddInfo(ADD_INFO_AREA_OVERDUE);
     }
 
     protected String getSearchSponsorItems() {
-        String key = "sponsordesk";
-        if (attendeeFinder.addInfo != null && attendeeFinder.addInfo.containsKey(key)) {
-            return Integer.toString(attendeeFinder.addInfo.get(key));
-        } else {
-            return "-1";
-        }
+        return getSearchAddInfo(ADD_INFO_AREA_SPONSORDESK);
+    }
+
+    protected String getSearchShipping() {
+        return getSearchAddInfo(ADD_INFO_AREA_SHIPPING);
     }
 
     protected String getSearchDealer() {
-        String key = "dealerreg";
-        if (attendeeFinder.addInfo != null && attendeeFinder.addInfo.containsKey(key)) {
-            return Integer.toString(attendeeFinder.addInfo.get(key));
-        } else {
-            return "-1";
-        }
+        return getSearchAddInfo(ADD_INFO_AREA_DEALERREG);
+    }
+
+    protected String getSearchFursuitbadge() {
+        return getSearchAddInfo(ADD_INFO_AREA_FURSUITBADGE);
     }
 
     // --------- Business methods ----------------------
@@ -378,23 +390,6 @@ public class SearchForm extends Form {
             }
         }
 
-        private void setSearchOverdue(String t) {
-            if (t == null || t.equals("")) t = "-1";
-            if (attendeeFinder.addInfo == null)
-                attendeeFinder.addInfo = new HashMap<>();
-            String key = "overdue";
-            int current = -1;
-            if (attendeeFinder.addInfo.containsKey(key)) {
-                current = attendeeFinder.addInfo.get(key);
-            }
-            int searchOverdue = FormHelper.parseInt(getPage(), t, OVERDUE, current);
-            if (searchOverdue == -1) {
-                attendeeFinder.addInfo.remove(key);
-            } else {
-                attendeeFinder.addInfo.put(key, searchOverdue);
-            }
-        }
-
         private void setSearchStatusXsomeValue(String t, Constants.MemberStatus someValue, String param, String desc) {
             try {
                 int current = 1;
@@ -449,38 +444,40 @@ public class SearchForm extends Form {
             setSearchStatusXsomeValue(t, Constants.MemberStatus.CANCELLED, X_CANCELLED,"searchStatusXcanc");
         }
 
-        private void setSearchSponsorItems(String t) {
+        private void setSearchAddInfo(String t, String param, String area) {
             if (t == null || t.equals("")) t = "-1";
             if (attendeeFinder.addInfo == null)
                 attendeeFinder.addInfo = new HashMap<>();
-            String key = "sponsordesk";
             int current = -1;
-            if (attendeeFinder.addInfo.containsKey(key)) {
-                current = attendeeFinder.addInfo.get(key);
+            if (attendeeFinder.addInfo.containsKey(area)) {
+                current = attendeeFinder.addInfo.get(area);
             }
-            int searchSponsorItems = FormHelper.parseInt(getPage(), t, SPONSOR_ITEMS, current);
-            if (searchSponsorItems == -1) {
-                attendeeFinder.addInfo.remove(key);
+            int specified = FormHelper.parseInt(getPage(), t, param, current);
+            if (specified == -1) {
+                attendeeFinder.addInfo.remove(area);
             } else {
-                attendeeFinder.addInfo.put(key, searchSponsorItems);
+                attendeeFinder.addInfo.put(area, specified);
             }
         }
 
+        private void setSearchOverdue(String t) {
+            setSearchAddInfo(t, OVERDUE, ADD_INFO_AREA_OVERDUE);
+        }
+
+        private void setSearchSponsorItems(String t) {
+            setSearchAddInfo(t, SPONSOR_ITEMS, ADD_INFO_AREA_SPONSORDESK);
+        }
+
+        private void setSearchShipping(String t) {
+            setSearchAddInfo(t, SHIPPING, ADD_INFO_AREA_SHIPPING);
+        }
+
         private void setSearchDealer(String t) {
-            if (t == null || t.equals("")) t = "-1";
-            if (attendeeFinder.addInfo == null)
-                attendeeFinder.addInfo = new HashMap<>();
-            String key = "dealerreg";
-            int current = -1;
-            if (attendeeFinder.addInfo.containsKey(key)) {
-                current = attendeeFinder.addInfo.get(key);
-            }
-            int searchDealer = FormHelper.parseInt(getPage(), t, DEALER, current);
-            if (searchDealer == -1) {
-                attendeeFinder.addInfo.remove(key);
-            } else {
-                attendeeFinder.addInfo.put(key, searchDealer);
-            }
+            setSearchAddInfo(t, DEALER, ADD_INFO_AREA_DEALERREG);
+        }
+
+        private void setSearchFursuitbadge(String t) {
+            setSearchAddInfo(t, FURSUITBADGE, ADD_INFO_AREA_FURSUITBADGE);
         }
 
         private void genericOptionSetter(HttpServletRequest request, OptionList list, Map<String, Integer> paramMap, String paramBaseName, String errorMessageFormat) {
@@ -527,12 +524,14 @@ public class SearchForm extends Form {
             attendeeFinder.address = request.getParameter(ADDRESS);
             attendeeFinder.country = request.getParameter(COUNTRY);
             attendeeFinder.userComments = request.getParameter(COMMENTS);
-            setSearchOverdue(request.getParameter(OVERDUE));
             setSearchStatusXnew(nvl(request.getParameter(X_NEW)));
             setSearchStatusXwait(nvl(request.getParameter(X_WAITING)));
             setSearchStatusXcanc(nvl(request.getParameter(X_CANCELLED)));
+            setSearchOverdue(request.getParameter(OVERDUE));
             setSearchSponsorItems(request.getParameter(SPONSOR_ITEMS));
+            setSearchShipping(request.getParameter(SHIPPING));
             setSearchDealer(request.getParameter(DEALER));
+            setSearchFursuitbadge(request.getParameter(FURSUITBADGE));
             setSearchFlagsByCode(request);
             setSearchOptionsByCode(request);
             setSearchPackagesByCode(request);
@@ -618,17 +617,6 @@ public class SearchForm extends Form {
             return Form.textField(true, COMMENTS, attendeeFinder.userComments, displaySize, 80);
         }
 
-        private String anyNoYesSelector(String param, String currentValue, String style) {
-            return Form.selector(true, param,
-                    Arrays.asList(new String[] {"-1", "0", "1"}),
-                    Arrays.asList(new String[] {"Any", "No", "Yes"}),
-                    currentValue, 1, style, null);
-        }
-
-        public String fieldOverdue(String style) {
-            return anyNoYesSelector(OVERDUE, getSearchOverdue(), style);
-        }
-
         private String getSearchStatusXsomeValue(Constants.MemberStatus someValue) {
             if (attendeeFinder.status != null) {
                 if (attendeeFinder.status.size() == 1) {
@@ -655,12 +643,31 @@ public class SearchForm extends Form {
             return Form.checkbox(true, X_CANCELLED, "1", getSearchStatusXsomeValue(Constants.MemberStatus.CANCELLED), style);
         }
 
+        private String anyNoYesSelector(String param, String currentValue, String style) {
+            return Form.selector(true, param,
+                    Arrays.asList(new String[] {"-1", "0", "1"}),
+                    Arrays.asList(new String[] {"Any", "No", "Yes"}),
+                    currentValue, 1, style, null);
+        }
+
+        public String fieldOverdue(String style) {
+            return anyNoYesSelector(OVERDUE, getSearchOverdue(), style);
+        }
+
         public String fieldSponsorItems(String style) {
             return anyNoYesSelector(SPONSOR_ITEMS, getSearchSponsorItems(), style);
         }
 
+        public String fieldShipping(String style) {
+            return anyNoYesSelector(SHIPPING, getSearchShipping(), style);
+        }
+
         public String fieldDealer(String style) {
             return anyNoYesSelector(DEALER, getSearchDealer(), style);
+        }
+
+        public String fieldFursuitbadge(String style) {
+            return anyNoYesSelector(FURSUITBADGE, getSearchFursuitbadge(), style);
         }
 
         public String getResetFormUrl() {

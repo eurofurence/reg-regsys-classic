@@ -57,16 +57,32 @@ ${form.fieldXnew("check")}&nbsp;new&nbsp;&nbsp;&nbsp;##
 ${form.fieldXwaiting("check")}&nbsp;waiting&nbsp;&nbsp;&nbsp;##
 ${form.fieldXcancelled("check")}&nbsp;cancelled</TD>
 
-        <TD class="label" ALIGN="right" VALIGN="middle">Sponsor Items</TD>
-        <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldSponsorItems("small")</TD>
+      <TD class="label" ALIGN="right" VALIGN="middle">Sponsor Items</TD>
+      <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldSponsorItems("small")</TD>
     </TR>
 
     <TR>
+      <TD></TD>
+      <TD></TD>
+
+      <TD class="label" align="right">Shipping</TD>
+      <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldShipping("small")</TD>
+    </TR>
+
+    <TR>
+      <TD></TD>
+      <TD></TD>
+
       <TD class="label" align="right">Dealer</TD>
       <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldDealer("small")</TD>
+    </TR>
 
+    <TR>
       <TD></TD>
       <TD class="input" ALIGN="left" VALIGN="middle"><A HREF="$form.resetFormUrl">Reset Search Form</A></TD>
+
+      <TD class="label" align="right">Fursuitbadge</TD>
+      <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldFursuitbadge("small")</TD>
     </TR>
 
     <TR>
