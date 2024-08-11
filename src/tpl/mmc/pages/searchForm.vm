@@ -58,8 +58,8 @@ ${form.fieldXnew("check")}&nbsp;new&nbsp;&nbsp;&nbsp;##
 ${form.fieldXwaiting("check")}&nbsp;waiting&nbsp;&nbsp;&nbsp;##
 ${form.fieldXcancelled("check")}&nbsp;cancelled</TD>
 
-      <TD class="label" ALIGN="right" VALIGN="middle">Als bezahlt markiert</TD>
-      <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldReportedPaid("small")</TD>
+      <TD class="label" ALIGN="right" VALIGN="middle">Sponsor Items</TD>
+      <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldSponsorItems("small")</TD>
     </TR>
 
     <TR>
