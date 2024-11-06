@@ -10,5 +10,5 @@ build
 out/**
 /bin/
 httpRequests/**
-
+doc/local
 config*.yaml
