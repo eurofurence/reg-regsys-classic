@@ -443,7 +443,7 @@ spoken_languages:
       en-US: Maltese
   - my:
       en-US: Burmese
-  - no:
+  - 'no':
       en-US: Norwegian
   - nb:
       en-US: Norwegian (bokmal)
