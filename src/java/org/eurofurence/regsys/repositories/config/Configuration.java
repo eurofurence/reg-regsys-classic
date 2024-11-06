@@ -67,6 +67,9 @@ public class Configuration {
         @JsonProperty("payment_service")
         public String paymentService;
 
+        @JsonProperty("room_service")
+        public String roomService;
+
         @JsonProperty("id_token_cookie_name")
         public String idTokenCookieName;
 
