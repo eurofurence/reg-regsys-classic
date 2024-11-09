@@ -5,6 +5,7 @@ import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.backend.enums.RoomManagementOption;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
+import org.eurofurence.regsys.repositories.config.Configuration;
 import org.eurofurence.regsys.repositories.errors.UnauthorizedException;
 
 import java.util.function.Predicate;
@@ -165,6 +166,17 @@ public class NavbarForm extends Form {
 
     public String getSendAnnouncementsURL() {
         return "bulkmail";
+    }
+
+    // rooms
+
+    public boolean showManageRooms() {
+        Configuration conf = getPage().getConfiguration();
+        return conf.rooms != null && conf.rooms.manage;
+    }
+
+    public String getManageRoomsURL() {
+        return "rooms";
     }
 
     // edit own registration

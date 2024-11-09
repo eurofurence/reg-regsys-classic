@@ -8,13 +8,13 @@ export const App = {
         RoomList,
         RoomCreateForm,
     },
-    template: `<td class="contentbox">
-   <div class="headline"><br/>{{ $t('rooms.app.title') }}</div>
-   <hr class="contentbox"/>
+    template: `
         <ErrorList />
+   <div class="headline"><br/>{{ $t('rooms.list.title') }}</div>
+   <hr class="contentbox"/>
         <RoomList />
    <div class="headline"><br/>{{ $t('rooms.create.title') }}</div>
    <hr class="contentbox"/>
         <RoomCreateForm />
-    </td>`
+   `
 }

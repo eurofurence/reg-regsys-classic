@@ -55,6 +55,9 @@
 #if( $navbar.showAnnouncementsEditAndSend() )##
       <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.EditAnnouncementsURL">$strNavEditAnnouncements</a><br/>
 #end##
+#if( $navbar.showManageRooms() )##
+    <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.ManageRoomsURL">$strNavManageRooms</a><br/>
+#end##
 ##
 ##
 #if( $navbar.showEditOwnRegistration() )##

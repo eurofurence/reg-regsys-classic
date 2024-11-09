@@ -1,9 +1,7 @@
 export const en_US = {
     rooms: {
-        app: {
-            title: 'Manage Rooms',
-        },
         list: {
+            title: 'Current Rooms',
             empty: 'There are currently no rooms. You should create one.',
             header: {
                 no: "No.",

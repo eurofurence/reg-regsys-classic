@@ -24,6 +24,7 @@
 #set($strNavExport = "Exportieren")##
 #set($strNavManageBans = "Sperrungen&nbsp;verwalten")##
 #set($strNavEditAnnouncements = "Bearbeite&nbsp;Ank&uuml;ndigungen")##
+#set($strNavManageRooms = "Zimmer")##
 #set($strNavMarkOverdue = "Markiere&nbsp;offene&nbsp;Zahlungen")##
 #set($strNavSendNotifications = "Sende&nbsp;Benachrichtigungen")##
 #set($strNavEditOwnRegistration = "Bearbeite&nbsp;meine&nbsp;Registrierung")##

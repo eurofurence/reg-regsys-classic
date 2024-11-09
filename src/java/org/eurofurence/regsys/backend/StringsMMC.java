@@ -309,4 +309,8 @@ public class StringsMMC {
     public static class StatsPageMsgs {
         public String pageTitle = "Statistiken";
     }
+
+    public static class RoomsPageMsgs {
+        public String pageTitle = "Zimmer";
+    }
 }

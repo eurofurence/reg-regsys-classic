@@ -1,9 +1,7 @@
 export const de_DE = {
     rooms: {
-        app: {
-            title: 'Zimmerverwaltung',
-        },
         list: {
+            title: 'Zimmerliste',
             empty: 'Aktuell sind keine Zimmer definiert. Du solltest welche anlegen.',
             header: {
                 no: "Nr.",

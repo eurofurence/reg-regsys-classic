@@ -1,3 +1,7 @@
+// main entry point of the room application, for use in a script tag of type module
+//
+// see templates rooms_js.vm and rooms.vm
+
 import { de_DE } from '../localizations/de-DE.js'
 import { en_US } from '../localizations/en-US.js'
 import { App } from './app.js'

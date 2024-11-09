@@ -41,6 +41,8 @@ sepa:
   subject_prefix: 'AWECON'
   success_redirect: 'http://localhost:10000/app/register'
   failure_redirect: 'http://localhost:10000/app/register'
+rooms:
+  manage: false
 choices:
   flags:
     hc:

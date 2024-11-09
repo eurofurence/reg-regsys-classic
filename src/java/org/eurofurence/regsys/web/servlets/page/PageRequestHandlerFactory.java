@@ -23,6 +23,7 @@ public class PageRequestHandlerFactory {
         suppliersByPathInfo.put("/list", ListPage::new);
         suppliersByPathInfo.put("/mass-approve", MassApprovePage::new);
         suppliersByPathInfo.put("/payment", PaymentPage::new);
+        suppliersByPathInfo.put("/rooms", RoomsPage::new);
         suppliersByPathInfo.put("/search", SearchPage::new);
         suppliersByPathInfo.put("/sepa", SepaPage::new);
         suppliersByPathInfo.put("/start", StartPage::new);

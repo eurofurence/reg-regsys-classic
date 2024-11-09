@@ -167,6 +167,11 @@ public class Configuration {
         public String failureRedirect;
     }
 
+    public static class RoomsConfig {
+        @JsonProperty("manage")
+        public boolean manage;
+    }
+
     @JsonProperty("choices")
     public Choices choices;
 
@@ -193,4 +198,7 @@ public class Configuration {
 
     @JsonProperty("sepa")
     public SepaConfig sepa;
+
+    @JsonProperty("rooms")
+    public RoomsConfig rooms;
 }

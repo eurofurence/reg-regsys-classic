@@ -298,4 +298,8 @@ public class StringsEF {
     public static class StatsPageMsgs {
         public String pageTitle = "Statistics";
     }
+
+    public static class RoomsPageMsgs {
+        public String pageTitle = "Rooms";
+    }
 }
