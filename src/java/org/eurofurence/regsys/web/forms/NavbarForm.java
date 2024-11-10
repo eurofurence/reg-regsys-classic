@@ -171,8 +171,12 @@ public class NavbarForm extends Form {
     // rooms
 
     public boolean showManageRooms() {
-        Configuration conf = getPage().getConfiguration();
-        return conf.rooms != null && conf.rooms.manage;
+        if (getPage().hasPermission(Constants.Permission.ADMIN)) {
+            Configuration conf = getPage().getConfiguration();
+            return conf.rooms != null && conf.rooms.manage;
+        } else {
+            return false;
+        }
     }
 
     public String getManageRoomsURL() {

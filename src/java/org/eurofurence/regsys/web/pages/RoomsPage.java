@@ -5,15 +5,24 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Strings;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RoomsPage extends Page {
+    public boolean mayView() {
+        return     hasPermission(Constants.Permission.ADMIN)
+                || hasPermission(Constants.Permission.VIEW);
+    }
+
     @Override
     public String handleRequest() throws ServletException {
         refreshSessionTimeout();
+
+        if (!mayView())
+            return redirect("page/start");
 
         HashMap<String, Object> veloContext = new HashMap<>();
 
