@@ -1,29 +1,39 @@
 import { ErrorList } from '../shared/errorlist.js'
 import { RoomList } from './roomlist.js'
-import { RoomCreateForm } from './roomcreate.js'
+import { RoomForm } from './roomform.js'
 
-const { useI18n } = VueI18n
+const { ref } = Vue
 
 export const App = {
     setup() {
-        const { t } = useI18n()
+        const roomId = ref('')
+        const updateCount = ref(0)
+
+        const setRoomId = (id) => {
+            console.log('received '+id)
+            roomId.value = id
+        }
+        const reloadRooms = () => {
+            console.log('reload rooms')
+            roomId.value = ''
+            updateCount.value++
+        }
 
         return {
-            t
+            roomId,
+            updateCount,
+            setRoomId,
+            reloadRooms,
         }
     },
     components: {
         ErrorList,
+        RoomForm,
         RoomList,
-        RoomCreateForm,
     },
     template: `
         <ErrorList />
-   <div class="headline"><br/>{{ t('rooms.list.title') }}</div>
-   <hr class="contentbox"/>
-        <RoomList />
-   <div class="headline"><br/>{{ t('rooms.create.title') }}</div>
-   <hr class="contentbox"/>
-        <RoomCreateForm />
+        <RoomForm :id="roomId" @rooms-possibly-updated="reloadRooms"/>
+        <RoomList :reload="updateCount" @room-clicked="(id) => setRoomId(id)"/>
    `
 }

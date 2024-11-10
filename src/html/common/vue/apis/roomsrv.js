@@ -1,4 +1,4 @@
-const apiCall = ( method, path, params, body, successParser, apiErrorHandler ) => {
+const apiCall = ( method, path, params, body, success2xxHandler, apiErrorHandler ) => {
     axios({
         url: path,
         method: method,
@@ -10,7 +10,7 @@ const apiCall = ( method, path, params, body, successParser, apiErrorHandler ) =
     }).then(function (response) {
         // console.log(response);
         // only called if 2xx response status
-        successParser(response.data)
+        success2xxHandler(response)
     }).catch(function (error) {
         // console.log(error);
         if (error.response) {
@@ -35,15 +35,32 @@ const apiCall = ( method, path, params, body, successParser, apiErrorHandler ) =
     })
 }
 
-export const ListAllRooms = ( addRooms, apiErrorHandler ) => {
+export const ListAllRooms = ( setRooms, apiErrorHandler ) => {
     // console.log('ListAllRooms')
-    apiCall('get', '/rooms', null, null, (data) => {
-        if (data.rooms) {
-            addRooms(data.rooms)
+    apiCall('get', '/rooms', null, null, (response) => {
+        // TODO move to a full success handler that gets the response
+        if (response?.data?.rooms) {
+            setRooms(response.data.rooms)
         }
     }, apiErrorHandler )
 }
 
-export const CreateRoom = ( room, apiErrorHandler ) => {
-    apiCall('post', '/rooms', null, room, (data) => {}, apiErrorHandler )
+export const CreateRoom = ( room, successHandler, apiErrorHandler ) => {
+    apiCall('post', '/rooms', null, room, (response) => {
+        // TODO get id of new room from location and place into room, so handler knows which room to update
+        room.id = ''
+        successHandler(room)
+    }, apiErrorHandler )
+}
+
+export const UpdateRoom = ( room, successHandler, apiErrorHandler ) => {
+    apiCall('put', '/rooms/' + room.id, null, room, (response) => {
+        successHandler(room)
+    }, apiErrorHandler )
+}
+
+export const GetRoomByID = ( id, successHandler, apiErrorHandler ) => {
+    apiCall('get', '/rooms/' + id, null, null,(response) => {
+        successHandler(response.data)
+    }, apiErrorHandler )
 }
