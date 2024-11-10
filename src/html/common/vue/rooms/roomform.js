@@ -1,5 +1,6 @@
 import { CreateRoom, UpdateRoom, GetRoomByID } from '../apis/roomsrv.js'
 import { StoredErrorList } from '../stores/errorlist.js'
+import { debug } from '../shared/debug.js'
 
 const { ref, computed, watch } = Vue
 const { useI18n } = VueI18n
@@ -8,6 +9,7 @@ export const RoomForm = {
     props: ['id'],
     emits: ['rooms-possibly-updated'],
     setup(props, { emit }) {
+        debug('RoomForm.setup')
         const { t } = useI18n()
 
         const id = ref(props.id)
@@ -27,6 +29,7 @@ export const RoomForm = {
 
         const errorList = StoredErrorList // get a local reference to the store ref
         const resetHandler = () => {
+            debug('RoomForm.resetHandler')
             // even a reset will at least de-select the currently edited room
             emit('rooms-possibly-updated')
             errorList.resetErrors()
@@ -36,49 +39,61 @@ export const RoomForm = {
             comments.value = ''
         }
         const submitHandler = () => {
+            debug('RoomForm.submitHandler')
             errorList.resetErrors()
             if (id.value.length === 0) {
-                CreateRoom({
+                const room = {
                     name: name.value,
                     flags: [],
                     size: Number(roomsize.value),
                     comments: comments.value,
-                },  (room) => {
+                }
+                debug('RoomForm.submitHandler creating', room)
+                CreateRoom(room,  (rm) => {
+                    debug('RoomForm.submitHandler.success', rm)
                     resetHandler()
                 },(status, apiError) => {
+                    debug('RoomForm.submitHandler.error', status, apiError)
                     errorList.addError(apiError)
                 })
             } else {
-                UpdateRoom({
+                const room = {
                     id: id.value,
                     name: name.value,
                     flags: [], // TODO
                     size: Number(roomsize.value),
                     comments: comments.value,
-                }, (room) => {
+                }
+                debug('RoomForm.submitHandler updating', room)
+                UpdateRoom(room, (rm) => {
+                    debug('RoomForm.submitHandler.success', rm)
                     resetHandler()
                 }, (status, apiError) => {
+                    debug('RoomForm.submitHandler.error', status, apiError)
                     errorList.addError(apiError)
                 })
             }
         }
 
         watch(() => props.id, (newIdValue, oldIdValue) => {
-            console.log('RoomForm received props.id change: ' + oldIdValue + ' -> ' + newIdValue)
+            debug('RoomForm.watch props.id changed', oldIdValue, newIdValue)
             id.value = newIdValue
         })
 
         watch(id, (newIdValue, oldIdValue) => {
+            debug('RoomForm.watch id changed', oldIdValue, newIdValue)
             if (newIdValue !== oldIdValue) {
                 if (newIdValue.length === 0) {
                     resetHandler()
                 } else {
                     GetRoomByID(newIdValue, (room) => {
+                        debug('RoomForm.get.success', newIdValue, room)
                         id.value = newIdValue
                         name.value = room.name
                         roomsize.value = '' + room.size
                         comments.value = room.comments ?? ""
                     }, (status, apiError) => {
+                        debug('RoomForm.get.error', status, apiError)
                         errorList.addError(apiError)
                     })
                 }

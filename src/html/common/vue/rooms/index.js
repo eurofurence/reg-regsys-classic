@@ -6,12 +6,14 @@ import { de_DE } from '../localizations/de-DE.js'
 import { en_US } from '../localizations/en-US.js'
 import { App } from './app.js'
 import { StoredErrorList } from '../stores/errorlist.js';
+import { debug } from '../shared/debug.js'
 
 const { createApp } = Vue
 const { createI18n } = VueI18n
 
 const params = new URL(document.location.toString()).searchParams;
 const locale = params.get('lang') ?? 'en-US'
+debug('index.js locale=', locale)
 
 const i18n = createI18n({
     legacy: false,
@@ -24,6 +26,7 @@ const i18n = createI18n({
 })
 
 const app = createApp(App).use(i18n)
+debug('index.js app created')
 
 app.config.errorHandler = (err) => {
     StoredErrorList.addError({
@@ -33,5 +36,7 @@ app.config.errorHandler = (err) => {
         },
     })
 }
+debug('index.js error handler added')
 
 app.mount('#app')
+debug('index.js app mounted')

@@ -1,20 +1,22 @@
 import { ErrorList } from '../shared/errorlist.js'
 import { RoomList } from './roomlist.js'
 import { RoomForm } from './roomform.js'
+import { debug } from '../shared/debug.js'
 
 const { ref } = Vue
 
 export const App = {
     setup() {
+        debug('App.setup')
         const roomId = ref('')
         const updateCount = ref(0)
 
         const setRoomId = (id) => {
-            console.log('received '+id)
+            debug('App.setRoomId',id)
             roomId.value = id
         }
         const reloadRooms = () => {
-            console.log('reload rooms')
+            debug('App.reloadRooms')
             roomId.value = ''
             updateCount.value++
         }

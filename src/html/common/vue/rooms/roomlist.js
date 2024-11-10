@@ -1,5 +1,6 @@
 import { ListAllRooms } from '../apis/roomsrv.js'
 import { StoredErrorList } from '../stores/errorlist.js'
+import { debug } from '../shared/debug.js'
 
 const { ref, watch } = Vue
 const { useI18n } = VueI18n
@@ -8,31 +9,35 @@ export const RoomList = {
     props: ['reload'], // increment to trigger list reload
     emits: ['room-clicked'],
     setup(props, { emit }) {
+        debug('RoomList.setup', props)
         const { t } = useI18n()
 
-        // console.log('RoomList setup')
         const roomList = ref([])
+
         const setRoomList = (rooms) => {
+            debug('RoomList.setRoomList', rooms)
             roomList.value = rooms
         }
 
         const emitRoomClicked = (id) => {
-            console.log('emitting room-clicked ' + id)
+            debug('RoomList.emitRoomClicked', id)
             emit('room-clicked', id)
         }
 
-        ListAllRooms((rooms) => {
-            // console.log("got " + rooms.length + " rooms to store")
-            setRoomList(rooms)
-        }, StoredErrorList.errors.addError)
+        const fetchRoomList = () => {
+            debug('RoomList.fetchRoomList')
+            ListAllRooms((rooms) => {
+                debug('RoomList.fetchRoomList.success', rooms)
+                setRoomList(rooms)
+            }, (status, apiError) => {
+                debug('RoomList.fetchRoomList.error', status, apiError)
+                StoredErrorList.errors.addError(apiError)
+            })
+        }
 
         watch(() => props.reload, (newValue, oldValue) => {
-            console.log('RoomList received props.reload change: ' + oldValue + ' -> ' + newValue)
-
-            ListAllRooms((rooms) => {
-                // console.log("got " + rooms.length + " rooms to store")
-                setRoomList(rooms)
-            }, StoredErrorList.errors.addError)
+            debug('RoomList.watch props.reload', oldValue, newValue)
+            fetchRoomList()
         })
 
         return {
@@ -44,7 +49,6 @@ export const RoomList = {
     },
     // TODO parse final flag
     // TODO highlight selected room for update
-    // $emit('room-clicked', r.id)
     template: `
 <div class="headline"><br/>{{ t('rooms.list.title') }}</div>
 <hr class="contentbox"/>

@@ -1,4 +1,7 @@
+import { debug } from '../shared/debug.js'
+
 const apiCall = ( method, path, params, body, success2xxHandler, apiErrorHandler ) => {
+    debug('apiCall', method, path, params, body)
     axios({
         url: path,
         method: method,
@@ -8,11 +11,10 @@ const apiCall = ( method, path, params, body, success2xxHandler, apiErrorHandler
         timeout: 30000,
         withCredentials: true,
     }).then(function (response) {
-        // console.log(response);
-        // only called if 2xx response status
+        debug('apiCall success (2xx)', response)
         success2xxHandler(response)
     }).catch(function (error) {
-        // console.log(error);
+        debug('apiCall error', error)
         if (error.response) {
             // request was made with response status non-2xx
             apiErrorHandler(error.response.status, error.response.data)
@@ -36,9 +38,8 @@ const apiCall = ( method, path, params, body, success2xxHandler, apiErrorHandler
 }
 
 export const ListAllRooms = ( setRooms, apiErrorHandler ) => {
-    // console.log('ListAllRooms')
+    debug('ListAllRooms')
     apiCall('get', '/rooms', null, null, (response) => {
-        // TODO move to a full success handler that gets the response
         if (response?.data?.rooms) {
             setRooms(response.data.rooms)
         }
@@ -46,6 +47,7 @@ export const ListAllRooms = ( setRooms, apiErrorHandler ) => {
 }
 
 export const CreateRoom = ( room, successHandler, apiErrorHandler ) => {
+    debug('CreateRoom', room)
     apiCall('post', '/rooms', null, room, (response) => {
         // TODO get id of new room from location and place into room, so handler knows which room to update
         room.id = ''
@@ -54,12 +56,14 @@ export const CreateRoom = ( room, successHandler, apiErrorHandler ) => {
 }
 
 export const UpdateRoom = ( room, successHandler, apiErrorHandler ) => {
+    debug('UpdateRoom', room)
     apiCall('put', '/rooms/' + room.id, null, room, (response) => {
         successHandler(room)
     }, apiErrorHandler )
 }
 
 export const GetRoomByID = ( id, successHandler, apiErrorHandler ) => {
+    debug('GetRoomByID', id)
     apiCall('get', '/rooms/' + id, null, null,(response) => {
         successHandler(response.data)
     }, apiErrorHandler )
