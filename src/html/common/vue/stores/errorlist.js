@@ -1,13 +1,7 @@
 const { reactive } = Vue
 
 export const StoredErrorList = reactive({
-    errors: [{
-        requestid: '12345678',
-        message: 'something',
-        details: {
-            details: ['something has happened'],
-        },
-    }],
+    errors: [],
     resetErrors() {
         this.errors = []
     },

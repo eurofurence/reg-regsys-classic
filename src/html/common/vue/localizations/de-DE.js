@@ -34,11 +34,12 @@ export const de_DE = {
             },
             room: {
                 data: {
+                    duplicate: 'Doppelter Zimmername',
                     invalid: 'Ungültige Zimmerdaten',
                 },
             },
             unknown: 'unbekannter Fehler',
-            something: 'standardfehler',
+            script: 'unerwarteter Javascript-Fehler',
         }
     },
     count: {

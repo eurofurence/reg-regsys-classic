@@ -34,11 +34,12 @@ export const en_US = {
             },
             room: {
                 data: {
+                    duplicate: 'duplicate room name',
                     invalid: 'room data invalid',
                 },
             },
             unknown: 'unknown error',
-            something: 'default error',
+            script: 'unexpected javascript error',
         }
     },
     count: {

@@ -2,9 +2,12 @@ import { ListAllRooms } from '../apis/roomsrv.js'
 import { StoredErrorList } from '../stores/errorlist.js'
 
 const { ref } = Vue
+const { useI18n } = VueI18n
 
 export const RoomList = {
     setup() {
+        const { t } = useI18n()
+
         // console.log('RoomList setup')
         const roomList = ref([])
         const setRoomList = (rooms) => {
@@ -18,6 +21,7 @@ export const RoomList = {
         }, StoredErrorList.errors.addError)
 
         return {
+            t,
             roomList,
             setRoomList,
         }
@@ -26,11 +30,11 @@ export const RoomList = {
     template: `
 <table v-if="roomList" class="searchlist">
         <tr>
-            <th class="searchlist" align="right">{{ $t('rooms.list.header.no') }}</th>
-            <th class="searchlist">{{ $t('rooms.list.header.name') }}</th>
-            <th class="searchlist" align="right">{{ $t('rooms.list.header.size') }}</th>
-            <th class="searchlist">{{ $t('rooms.list.header.final') }}</th>
-            <th class="searchlist">{{ $t('rooms.list.header.comments') }}</th>
+            <th class="searchlist" align="right">{{ t('rooms.list.header.no') }}</th>
+            <th class="searchlist">{{ t('rooms.list.header.name') }}</th>
+            <th class="searchlist" align="right">{{ t('rooms.list.header.size') }}</th>
+            <th class="searchlist">{{ t('rooms.list.header.final') }}</th>
+            <th class="searchlist">{{ t('rooms.list.header.comments') }}</th>
         </tr>
         <tr v-for="(r, i) in roomList" class="searchlist_sep">
             <td class="searchlist" align="right">{{ i+1 }}</td>
@@ -40,6 +44,6 @@ export const RoomList = {
             <td class="searchlist">{{ r.comments }}</td>
         </tr>
 </table>
-<p v-else>{{ $t('rooms.list.empty') }}</p>
+<p v-else>{{ t('rooms.list.empty') }}</p>
 `
 }
