@@ -304,6 +304,25 @@
       </TR>
   #end##
         <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strAdminStatusHistory</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">
+              <TABLE class="searchlist" BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+                  <TR>
+                     <TH class="searchlist" align="left">$strAdminStatusHeadingDate</TH>
+                     <TH class="searchlist" align="left">$strAdminStatusHeadingStatus</TH>
+                     <TH class="searchlist" align="left">$strAdminStatusHeadingComment</TH>
+                  </TR>
+                  #foreach ($statusEntry in $form.getStatusHistoryHumanReadable())##
+                      <TR>
+                          <TD class="searchlist" width="20%">$statusEntry.timestamp</TD>
+                          <TD class="searchlist" width="20%">$statusEntry.status</TD>
+                          <TD class="searchlist" width="60%">$statusEntry.comment</TD>
+                      </TR>
+                  #end##
+              </TABLE>
+          </TD>
+        </TR>
+        <TR>
           <TD class="label" ALIGN="right" VALIGN="middle">$strAdminStatus</TD>
           <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldStatus("big")</TD>
         </TR>

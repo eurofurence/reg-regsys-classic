@@ -11,6 +11,7 @@ import org.eurofurence.regsys.repositories.attendees.AdminInfo;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
 import org.eurofurence.regsys.repositories.attendees.StatusChange;
+import org.eurofurence.regsys.repositories.attendees.StatusHistory;
 import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.config.ConfigService;
 import org.eurofurence.regsys.repositories.config.Configuration;
@@ -18,14 +19,21 @@ import org.eurofurence.regsys.repositories.config.Option;
 import org.eurofurence.regsys.repositories.config.OptionList;
 import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
+import org.eurofurence.regsys.repositories.errors.NotFoundException;
+import org.eurofurence.regsys.repositories.rooms.Group;
+import org.eurofurence.regsys.repositories.rooms.Room;
+import org.eurofurence.regsys.repositories.rooms.RoomService;
 import org.eurofurence.regsys.service.TransactionCalculator;
 import org.eurofurence.regsys.web.pages.InputPage;
 
 import jakarta.servlet.http.HttpServletRequest;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -90,6 +98,9 @@ public class InputForm extends Form {
     private AdminInfo adminInfo;
     private Constants.MemberStatus attendeeStatus;
     private Constants.MemberStatus newAttendeeStatus;
+    private List<StatusChange> statusHistory;
+    private Group group;
+    private Room room;
     private String dueDate;
     private boolean dueDateChanged = false;
 
@@ -102,6 +113,7 @@ public class InputForm extends Form {
     // ------------ constructors and initialization -----------------------
 
     private final AttendeeService attendeeService = new AttendeeService();
+    private final RoomService roomService = new RoomService();
     private final ConfigService configService = new ConfigService(HardcodedConfig.CONFIG_URL);
 
     public InputForm() {
@@ -109,6 +121,9 @@ public class InputForm extends Form {
         adminInfo = new AdminInfo();
         attendeeStatus = Constants.MemberStatus.NEW;
         newAttendeeStatus = Constants.MemberStatus.NEW;
+        statusHistory = new ArrayList<>();
+        group = new Group();
+        room = new Room();
         dueDate = "";
     }
 
@@ -119,6 +134,9 @@ public class InputForm extends Form {
         attendee.options = getDefaultOptions().getDbString();
         attendee.registrationLanguage = "en-US"; // have a default
         attendee.country = "DE"; // have a default
+        statusHistory = new ArrayList<>();
+        group = new Group();
+        room = new Room();
         dueDate = "";
         dueDateChanged = false;
     }
@@ -194,6 +212,39 @@ public class InputForm extends Form {
 
     // --------- Business methods ----------------------
 
+    private void loadStatusHistoryThrows(long dbId, RequestAuth auth, String requestId) {
+        StatusHistory rawStatusHistory = attendeeService.performGetStatusHistory(dbId, auth, requestId);
+        if (rawStatusHistory != null && rawStatusHistory.statusHistory != null) {
+            statusHistory = rawStatusHistory.statusHistory;
+        } else {
+            statusHistory = new ArrayList<>();
+        }
+    }
+
+    private void loadGroupThrows(long dbId, RequestAuth auth, String requestId) {
+        group = new Group();
+        try {
+            List<Group> groupList = roomService.performListGroups(dbId, false, auth, requestId);
+            if (groupList != null && !groupList.isEmpty()) {
+                group = groupList.get(0);
+            }
+        } catch (NotFoundException ignore) {
+            // perfectly valid
+        }
+    }
+
+    private void loadRoomThrows(long dbId, RequestAuth auth, String requestId) {
+        room = new Room();
+        try {
+            List<Room> roomList = roomService.performListRooms(dbId, auth, requestId);
+            if (roomList != null && !roomList.isEmpty()) {
+                room = roomList.get(0);
+            }
+        } catch (NotFoundException ignore) {
+            // perfectly valid
+        }
+    }
+
     public void getFromDBThrows(long dbId) {
         RequestAuth auth = getPage().getTokenFromRequest();
         String requestId = getPage().getRequestId();
@@ -206,6 +257,9 @@ public class InputForm extends Form {
         dueDate = attendeeService.performGetDueDate(dbId, auth, requestId);
         if (getPage().hasPermission(Permission.ADMIN)) {
             adminInfo = attendeeService.performGetAdminInfo(dbId, auth, requestId);
+            loadStatusHistoryThrows(dbId, auth, requestId);
+            loadGroupThrows(dbId, auth, requestId);
+            loadRoomThrows(dbId, auth, requestId);
         }
     }
 
@@ -221,9 +275,13 @@ public class InputForm extends Form {
     }
 
     private void reloadAttendeeStatusThrows() {
+        RequestAuth auth = getPage().getTokenFromRequest();
+        String requestId = getPage().getRequestId();
+
         attendeeStatus = Constants.MemberStatus.byNewRegsysValue(
-                attendeeService.performGetCurrentStatus(attendee.id, getPage().getTokenFromRequest(), getPage().getRequestId())
+                attendeeService.performGetCurrentStatus(attendee.id, auth, requestId)
         );
+        loadStatusHistoryThrows(attendee.id, auth, requestId);
     }
 
     private void reloadAttendeeDueDateThrows() {
@@ -296,34 +354,6 @@ public class InputForm extends Form {
         } catch (DownstreamException e) {
             getPage().addException(e);
         }
-    }
-
-    private Attendee fetchRoommate(int roommateId) {
-        // TODO
-        return new Attendee();
-    }
-
-    private class RoomRepr {
-        public String id;
-        public String name;
-
-        RoomRepr(String id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-    }
-
-    private List<RoomRepr> roomInfo = null;
-
-    private List<RoomRepr> loadRooms() {
-        // TODO
-        return new ArrayList<>();
-    }
-
-    private List<RoomRepr> getRoomInfo() {
-        if (roomInfo == null)
-            roomInfo = loadRooms();
-        return roomInfo;
     }
 
     // --------------------- parameter parsers --------------------------------------------------
@@ -931,6 +961,41 @@ public class InputForm extends Form {
             return oList;
         }
 
+        public List<Map<String,String>> getStatusHistoryHumanReadable() {
+            List<Map<String,String>> result = new ArrayList<>();
+            if (statusHistory != null) {
+                statusHistory.forEach(c -> {
+                    Map<String,String> entry = new HashMap<>();
+                    entry.put("timestamp", formatStatusTimestamp(c));
+                    entry.put("status", formatStatusValue(c));
+                    entry.put("comment", formatStatusComment(c));
+                    result.add(entry);
+                });
+            }
+            return result;
+        }
+
+        private String formatStatusTimestamp(StatusChange entry) {
+            try {
+                IsoDate parsed = new IsoDate().fromIsoFormat(entry.timestamp.substring(0,10));
+                return parsed.getPublicFormat() + "&nbsp;" + entry.timestamp.substring(11,16);
+            } catch (Exception e) {
+                return "parse error";
+            }
+        }
+
+        private String formatStatusValue(StatusChange entry) {
+            try {
+                return Constants.MemberStatus.byNewRegsysValue(entry.status).toString();
+            } catch (DownstreamException e) {
+                return "error: unknown";
+            }
+        }
+
+        private String formatStatusComment(StatusChange entry) {
+            return escape(entry.comment);
+        }
+
         public String fieldStatus(String style) {
             List<Constants.MemberStatus> available = Constants.MemberStatus.getDropDownList_Admin_AvailableOnly(attendeeStatus);
             return selector(mayEditAdmin(), STATUS,
@@ -940,7 +1005,14 @@ public class InputForm extends Form {
         }
 
         public String fieldCancelReason(int displaySize) {
-            return textField(mayEditAdmin(), CANCEL_REASON, "", displaySize, 80);
+            String value = "";
+            if (statusHistory != null && !statusHistory.isEmpty()) {
+                StatusChange lastEntry = statusHistory.get(statusHistory.size()-1);
+                if (Constants.MemberStatus.CANCELLED.newRegsysValue().equals(lastEntry.status)) {
+                    value = lastEntry.comment;
+                }
+            }
+            return textField(mayEditAdmin(), CANCEL_REASON, value, displaySize, 80);
         }
 
         public boolean showGroup() {

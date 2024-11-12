@@ -90,6 +90,10 @@
 #set( $strAdminTypeDay = "Day Guest - Only day guest packages will be invoiced")##
 #set( $strAdminDisableBanCheck = "Disable Ban Check")##
 #set( $strAdminStatus = "Status")##
+#set( $strAdminStatusHistory = "Status&nbsp;History")##
+#set( $strAdminStatusHeadingDate = "Timestamp")##
+#set( $strAdminStatusHeadingStatus = "Status")##
+#set( $strAdminStatusHeadingComment = "Comment")##
 #set( $strAdminRoomQuota = "Room quota")##
 #set( $strAdminCancelReason = "Cancel&nbsp;Reason")##
 #set( $strAdminRoomAssignment = "Room&nbsp;Assmt.")##

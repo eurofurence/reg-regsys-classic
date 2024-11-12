@@ -90,6 +90,10 @@
 #set( $strAdminTypeDay = "Tagesgast - nur Tagesgastpakete werden in Rechnung gestellt")##
 #set( $strAdminDisableBanCheck = "Check auf Bans abschalten")##
 #set( $strAdminStatus = "Status")##
+#set( $strAdminStatusHistory = "Status&nbsp;History")##
+#set( $strAdminStatusHeadingDate = "Zeitpunkt")##
+#set( $strAdminStatusHeadingStatus = "Status")##
+#set( $strAdminStatusHeadingComment = "Kommentar")##
 #set( $strAdminRoomQuota = "Quota f&uuml;r diesen Zimmertyp")##
 #set( $strAdminCancelReason = "Grund&nbsp;f&uuml;r&nbsp;Absage")##
 #set( $strAdminRoomAssignment = "Zimmerzuordnung")##
