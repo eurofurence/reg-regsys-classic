@@ -293,6 +293,10 @@ public class StringsEF {
         public String pageTitle = "Statistics";
     }
 
+    public static class GroupsPageMsgs {
+        public String pageTitle = "Roomshare Groups";
+    }
+
     public static class RoomsPageMsgs {
         public String pageTitle = "Rooms";
     }

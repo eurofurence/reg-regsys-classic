@@ -1,0 +1,4 @@
+## Strings used in the room management template wrapper
+#set( $strGroupManagementTitle = "Zimmergruppen verwalten")##
+#set( $strJavascriptDisabled = "Javascript ist deaktiviert!")##
+#set( $strPleaseEnableJavascript = "Bitte einschalten, um diese Seite zu benutzen.")##

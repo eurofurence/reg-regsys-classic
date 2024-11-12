@@ -19,6 +19,7 @@ public class PageRequestHandlerFactory {
         suppliersByPathInfo.put("/comments", CommentsPage::new);
         suppliersByPathInfo.put("/email", ResendStatusEmailPage::new);
         suppliersByPathInfo.put("/export", ExportPage::new);
+        suppliersByPathInfo.put("/groups", GroupsPage::new);
         suppliersByPathInfo.put("/input", InputPage::new);
         suppliersByPathInfo.put("/list", ListPage::new);
         suppliersByPathInfo.put("/mass-approve", MassApprovePage::new);

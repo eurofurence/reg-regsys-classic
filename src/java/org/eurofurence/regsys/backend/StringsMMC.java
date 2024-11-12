@@ -304,6 +304,10 @@ public class StringsMMC {
         public String pageTitle = "Statistiken";
     }
 
+    public static class GroupsPageMsgs {
+        public String pageTitle = "Zimmergruppen";
+    }
+
     public static class RoomsPageMsgs {
         public String pageTitle = "Zimmer";
     }

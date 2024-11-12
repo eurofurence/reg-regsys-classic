@@ -1,0 +1,10 @@
+#parse( "strings/groups.strings.vm" )
+<td class="contentbox">
+    #parse( "local/localmessage.vm" )
+
+    <div class="pageheader">$strGroupManagementTitle</div>
+    <hr class="contentbox"/>
+
+    <noscript><b>$strJavascriptDisabled</b> $strPleaseEnableJavascript</noscript>
+    <div id="app"></div>
+</td>
