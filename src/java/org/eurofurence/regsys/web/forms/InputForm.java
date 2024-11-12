@@ -13,6 +13,7 @@ import org.eurofurence.regsys.repositories.attendees.AttendeeService;
 import org.eurofurence.regsys.repositories.attendees.StatusChange;
 import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.config.ConfigService;
+import org.eurofurence.regsys.repositories.config.Configuration;
 import org.eurofurence.regsys.repositories.config.Option;
 import org.eurofurence.regsys.repositories.config.OptionList;
 import org.eurofurence.regsys.repositories.errors.DownstreamException;
@@ -813,9 +814,8 @@ public class InputForm extends Form {
         // accommodation section
 
         public boolean showAccommodationPackageSection() {
-            // TODO
+            // not currently supported
             return false;
-            // return Config.ROOM_CONFIGURATION == RoomManagementOption.ROOMS_AS_PACKAGES;
         }
 
         public String fieldAccomodationPackagesOff() {
@@ -943,17 +943,28 @@ public class InputForm extends Form {
             return textField(mayEditAdmin(), CANCEL_REASON, "", displaySize, 80);
         }
 
-        /*
-        public String fieldRoomAssmt(int displaySize, String style) {
-            if (Config.ROOM_CONFIGURATION == RoomManagementOption.ROOMS_HOUSE_GROUPS) {
-                List<RoomRepr> rooms = getRoomInfo();
-                List<String> values = rooms.stream().map(r -> r.id).collect(Collectors.toList());
-                List<String> showValuesAs = rooms.stream().map(r -> r.name).collect(Collectors.toList());
-                return selector(mayEditAdmin(), ROOMASSIGN, values, showValuesAs, Integer.toString(attendee.getRoomId()), 1);
-            } else
-                return textField(mayEditAdmin(), ROOMASSIGN, attendee.getRoomAssign(), displaySize, 20, style);
+        public boolean showGroup() {
+            Configuration config = getPage().getConfiguration();
+            return getPage().isLoggedIn() && config.groups != null && config.groups.enable;
         }
-        */
+
+        public boolean showRoom() {
+            Configuration config = getPage().getConfiguration();
+            return getPage().hasPermission(Permission.VIEW) && config.rooms != null && config.rooms.enable;
+        }
+
+        public String fieldRoomAssmt(int displaySize, String style) {
+            if (showRoom()) {
+//                List<RoomRepr> rooms = getRoomInfo();
+//                List<String> values = rooms.stream().map(r -> r.id).collect(Collectors.toList());
+//                List<String> showValuesAs = rooms.stream().map(r -> r.name).collect(Collectors.toList());
+//                return selector(mayEditAdmin(), ROOMASSIGN, values, showValuesAs, Integer.toString(attendee.getRoomId()), 1);
+                return "";
+            } else {
+                return "";
+            }
+        }
+
         public String fieldAdminComments() {
             return textArea(mayEditAdmin(), ADMIN_COMMENTS, adminInfo.adminComments, 5, 40);
         }
@@ -970,13 +981,14 @@ public class InputForm extends Form {
         public String fieldKeyDeposit(String style) {
             return checkbox(mayEditAdmin(), KEY_DEPOSIT, "1", str(attendee.getKeyDeposit()), style);
         }
+        */
 
         // roommates section
 
         public boolean showRoommatesSection() {
-            return Config.ROOM_CONFIGURATION == RoomManagementOption.ROOMS_AS_PACKAGES;
+            // hotel rooms not currently supported
+            return false;
         }
-         */
 
         public boolean isInitialReg() {
             return isNew();

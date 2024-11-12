@@ -1,7 +1,5 @@
 package org.eurofurence.regsys.backend;
 
-import org.eurofurence.regsys.backend.enums.RoomManagementOption;
-
 /**
  * Externalize human-readable message strings from the backend.
  *
@@ -45,10 +43,6 @@ public class StringsMMC {
 
         public String conStart = "26.05.2022";
         public String conEnd = "29.05.2022";
-
-        /* okay, so these are not strings, but it is useful to separate out all configuration */
-
-        public RoomManagementOption roomConfiguration = RoomManagementOption.ROOMS_HOUSE_GROUPS;
     }
 
     public static class UtilMsgs {
