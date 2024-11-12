@@ -7,7 +7,7 @@ const { useI18n } = VueI18n
 
 export const RoomForm = {
     props: ['id'],
-    emits: ['rooms-possibly-updated'],
+    emits: ['roomsPossiblyUpdated'],
     setup(props, { emit }) {
         debug('RoomForm.setup')
         const { t } = useI18n()
@@ -31,7 +31,7 @@ export const RoomForm = {
         const resetHandler = () => {
             debug('RoomForm.resetHandler')
             // even a reset will at least de-select the currently edited room
-            emit('rooms-possibly-updated')
+            emit('roomsPossiblyUpdated')
             errorList.resetErrors()
             id.value = ''
             name.value = ''

@@ -7,7 +7,7 @@ const { useI18n } = VueI18n
 
 export const RoomList = {
     props: ['reload'], // increment to trigger list reload
-    emits: ['room-clicked'],
+    emits: ['roomClicked'],
     setup(props, { emit }) {
         debug('RoomList.setup', props)
         const { t } = useI18n()
@@ -21,7 +21,7 @@ export const RoomList = {
 
         const emitRoomClicked = (id) => {
             debug('RoomList.emitRoomClicked', id)
-            emit('room-clicked', id)
+            emit('roomClicked', id)
         }
 
         const fetchRoomList = () => {
