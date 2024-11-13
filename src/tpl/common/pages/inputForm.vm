@@ -7,13 +7,6 @@
             <hr class="contentbox">
           </TD>
         </TR>
-#if (!$form.isNew() && $strSellingRegistrationInfo)##
-        <TR>
-          <TD class="input" colspan="2">
-            $strSellingRegistrationInfo
-          </TD>
-        </TR>
-#end##
         <TR>
           <TD class="label" ALIGN="right" VALIGN="middle" width="20%">$strNickname</TD>
           <TD class="input" ALIGN="left" VALIGN="middle" width="80%">$form.fieldNick(40)</TD>
@@ -209,6 +202,138 @@
         </TR>
 
 ##
+## ======================= Group and Room =====================================
+## only relevant if youth hostel style convention
+
+#if ($form.showGroupAndRoomSection())## ---section---
+    <TR>
+        <TD COLSPAN="2" ALIGN="left" VALIGN="middle">
+            <a name="roomshare"></a>
+            <div class="headline"><br>$strGroupAndRoom</br></div>
+            <hr class="contentbox">
+        </TD>
+    </TR>
+    <TR>
+        <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strGroup</TD>
+        <TD class="input" ALIGN="left" VALIGN="top">
+            #if ($form.hasGroup())##
+            <table border="0" CELLPADDING="0" CELLSPACING="0">
+                <tr>
+                    <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strGroupName</TD>
+                    <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">$form.fieldGroupName()</TD>
+                </tr>
+                <tr>
+                    <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strGroupFlags</TD>
+                    <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">$form.fieldGroupFlags()</TD>
+                </tr>
+                <tr>
+                    <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strGroupComments</TD>
+                    <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">$form.fieldGroupComments()</TD>
+                </tr>
+                <tr>
+                    <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strGroupIsOwner</TD>
+                    <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">$form.fieldGroupIsOwner($strGroupOwnerYes,$strGroupOwnerNo)</TD>
+                </tr>
+                <tr>
+                    <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strGroupMembers</TD>
+                    <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">
+                        <TABLE class="searchlist" BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+                            <TR>
+                                <TH class="searchlist" align="left">$strGroupMembersId</TH>
+                                <TH class="searchlist" align="left">$strGroupMembersNickname</TH>
+                            </TR>
+                            #foreach ($memberEntry in $form.getGroupMembersHumanReadable())##
+                                <TR>
+                                    <TD class="searchlist" align="right">$memberEntry.id</TD>
+                                    <TD class="searchlist">$memberEntry.nickname</TD>
+                                </TR>
+                            #end##
+                        </TABLE>
+                    </TD>
+                </tr>
+                <tr>
+                    <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strGroupInvites</TD>
+                    <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">
+                        <TABLE class="searchlist" BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+                            <TR>
+                                <TH class="searchlist" align="left">$strGroupMembersId</TH>
+                                <TH class="searchlist" align="left">$strGroupMembersNickname</TH>
+                            </TR>
+                            #foreach ($inviteEntry in $form.getGroupInvitesHumanReadable())##
+                                <TR>
+                                    <TD class="searchlist" align="right">$inviteEntry.id</TD>
+                                    <TD class="searchlist">$inviteEntry.nickname</TD>
+                                </TR>
+                            #end##
+                        </TABLE>
+                    </TD>
+                </tr>
+            </table>
+            #else##
+                $strNoGroup
+            #end##
+        </TD>
+    </TR>
+    <TR>
+        <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strRoom</TD>
+        <TD class="input" ALIGN="left" VALIGN="top">
+            #if ($form.hasRoom())##
+                <table border="0" CELLPADDING="0" CELLSPACING="0">
+                    <tr>
+                        <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strRoomName</TD>
+                        <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">$form.fieldRoomName()</TD>
+                    </tr>
+                    <tr>
+                        <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strRoomSize</TD>
+                        <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">$form.fieldRoomSize()</TD>
+                    </tr>
+                    <tr>
+                        <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strRoomFlags</TD>
+                        <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">$form.fieldRoomFlags()</TD>
+                    </tr>
+                    <tr>
+                        <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strRoomComments</TD>
+                        <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">$form.fieldRoomComments()</TD>
+                    </tr>
+                    <tr>
+                        <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strRoomOccupants</TD>
+                        <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">
+                            <TABLE class="searchlist" BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+                                <TR>
+                                    <TH class="searchlist" align="left">$strRoomOccupantsId</TH>
+                                    <TH class="searchlist" align="left">$strRoomOccupantsNickname</TH>
+                                </TR>
+                                #foreach ($occupantEntry in $form.getRoomOccupantsHumanReadable())##
+                                    <TR>
+                                        <TD class="searchlist" align="right">$occupantEntry.id</TD>
+                                        <TD class="searchlist">$occupantEntry.nickname</TD>
+                                    </TR>
+                                #end##
+                            </TABLE>
+                        </TD>
+                    </tr>
+                </table>
+            #else##
+                <p>$strRoomAssignMsg</p>
+                <table border="0" CELLPADDING="0" CELLSPACING="0">
+                    <tr>
+                        <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strRoomName</TD>
+                        <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">$form.fieldRoomName()</TD>
+                    </tr>
+                #if ($form.hasGroup())##
+                    <tr>
+                        <TD class="label" ALIGN="right" VALIGN="top" nowrap="nowrap">$strRoomAssignWholeGroup</TD>
+                        <TD class="input" ALIGN="left" VALIGN="top" nowrap="nowrap">$form.fieldRoomAssignWholeGroup()</TD>
+                    </tr>
+                #end##
+                </table>
+            #end##
+        </TD>
+    </TR>
+
+#end## ---section---
+
+##
 ## ==================== Roommates =======================================
 ## (only relevant if room management is set to ROOMS_AS_PACKAGES)
 
@@ -304,6 +429,25 @@
       </TR>
   #end##
         <TR>
+          <TD class="label" ALIGN="right" VALIGN="middle">$strAdminStatusHistory</TD>
+          <TD class="input" ALIGN="left" VALIGN="middle">
+              <TABLE class="searchlist" BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+                  <TR>
+                     <TH class="searchlist" align="left">$strAdminStatusHeadingDate</TH>
+                     <TH class="searchlist" align="left">$strAdminStatusHeadingStatus</TH>
+                     <TH class="searchlist" align="left">$strAdminStatusHeadingComment</TH>
+                  </TR>
+                  #foreach ($statusEntry in $form.getStatusHistoryHumanReadable())##
+                      <TR>
+                          <TD class="searchlist" width="20%">$statusEntry.timestamp</TD>
+                          <TD class="searchlist" width="20%">$statusEntry.status</TD>
+                          <TD class="searchlist" width="60%">$statusEntry.comment</TD>
+                      </TR>
+                  #end##
+              </TABLE>
+          </TD>
+        </TR>
+        <TR>
           <TD class="label" ALIGN="right" VALIGN="middle">$strAdminStatus</TD>
           <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldStatus("big")</TD>
         </TR>
@@ -317,12 +461,6 @@
           <TD class="label" ALIGN="right" VALIGN="middle">$strAdminCancelReason</TD>
           <TD class="input" ALIGN="left" VALIGN="middle">$form.fieldCancelReason(40)</TD>
         </TR>
-  #if (false)##
-        <TR>
-          <TD class="label" ALIGN="right" VALIGN="top">$strAdminRoomAssignment</TD>
-          <TD class="input"  ALIGN="left" VALIGN="middle">$form.fieldRoomAssmt(20,"small")</TD>
-        </TR>
-  #end##
         <TR>
           <TD class="label" ALIGN="right" VALIGN="middle">$strAdminTotalDues</TD>
           <TD class="input"  ALIGN="left" VALIGN="middle">$form.getAmountDue() &euro;</TD>

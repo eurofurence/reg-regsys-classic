@@ -167,6 +167,25 @@ public class Configuration {
         public String failureRedirect;
     }
 
+    public static class GroupsConfig {
+        @JsonProperty("enable")
+        public boolean enable;
+
+        @JsonProperty("max_size")
+        public int maxSize;
+
+        @JsonProperty("flags")
+        public List<String> flags = new ArrayList<>();
+    }
+
+    public static class RoomsConfig {
+        @JsonProperty("enable")
+        public boolean enable;
+
+        @JsonProperty("flags")
+        public List<String> flags = new ArrayList<>();
+    }
+
     @JsonProperty("choices")
     public Choices choices;
 
@@ -193,4 +212,10 @@ public class Configuration {
 
     @JsonProperty("sepa")
     public SepaConfig sepa;
+
+    @JsonProperty("groups")
+    public GroupsConfig groups;
+
+    @JsonProperty("rooms")
+    public RoomsConfig rooms;
 }

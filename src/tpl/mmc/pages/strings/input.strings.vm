@@ -19,7 +19,6 @@
 #set( $strStatusPaymentsPending = "Zahlung ausstehend")##
 #set( $strViewPayments = "Zahlungen auflisten")##
 #set( $strNameAndAddressHeading = "Name & Adresse")##
-#set( $strSellingRegistrationInfo = "<b>Wichtig:</b> Wenn Du Deine Registrierung &uuml;bertragen (verkaufen) magst, musst Du uns das mitteilen. Bitte &auml;ndere nicht selbst&auml;ndig die Registrierungsdaten!<br>")##
 #set( $strNickname = "Nickname")##
 #set( $strFirstName = "Vorname")##
 #set( $strLastName = "Nachname")##
@@ -76,11 +75,36 @@
 #set( $confShowGender = 0)##
 #set( $confShowPronouns = 1)##
 ##
+#set( $strGroupAndRoom = "Zimmergruppe und Zimmer")##
+#set( $strGroup = "Zimmergruppe")##
+#set( $strGroupName = "Name")##
+#set( $strGroupFlags = "Eigenschaften")##
+#set( $strGroupComments = "Kommentar")##
+#set( $strGroupIsOwner = "Gr&uuml;nder?")##
+#set( $strGroupOwnerYes = "ja")##
+#set( $strGroupOwnerNo = "nein")##
+#set( $strGroupMembers = "Mitglieder")##
+#set( $strGroupMembersId = "Badge&nbsp;Nr.")##
+#set( $strGroupMembersNickname = "Nickname")##
+#set( $strGroupInvites = "Einladungen")##
+#set( $strNoGroup = "Dieser Teilnehmer ist in keiner Zimmergruppe")##
+#set( $strRoom = "Zimmerzuweisung")##
+#set( $strRoomName = "Name")##
+#set( $strRoomSize = "Bettenzahl")##
+#set( $strRoomFlags = "Eigenschaften")##
+#set( $strRoomComments = "Kommentar")##
+#set( $strRoomOccupants = "Belegung")##
+#set( $strRoomOccupantsId = "Badge&nbsp;Nr.")##
+#set( $strRoomOccupantsNickname = "Nickname")##
+#set( $strRoomAssignMsg = "Nach der Auswahl eines Zimmers speichern des Teilnehmers nicht vergessen!")##
+#set( $strRoomAssignWholeGroup = "Ganze&nbsp;Gruppe&nbsp;zuweisen")##
+##
 #set( $strRoomSharing = "Zimmerpartner")##
 #set( $strRoomSharingInitialMsg = "Wenn du einen Zimmertyp mit mehreren Betten w&auml;hlst, kannst du sp&auml;ter an dieser Stelle die Anmeldenummer deiner Zimmerpartner eintragen, sobald deine Anmeldung akzeptiert wurde.")##
 #set( $strRoommateConfirmed = "BEST&Auml;TIGT")##
 #set( $strRoommateNotConfirmed = "NICHT BEST&Auml;TIGT:")##
 #set( $strRoommateCannotChange = "<b>Bitte beachte</b>, dass die Zimmerzuordnung jetzt nicht mehr ge&auml;ndert werden kann.")##
+##
 #set( $strAdminHeader = "Felder f&uuml;r Admins")##
 #set( $strAdminDelete = "Diese Anmeldung l&ouml;schen")##
 #set( $strAdminConfirmPrompt = "Diese Anmeldung wirklich l&ouml;schen?")##
@@ -90,9 +114,12 @@
 #set( $strAdminTypeDay = "Tagesgast - nur Tagesgastpakete werden in Rechnung gestellt")##
 #set( $strAdminDisableBanCheck = "Check auf Bans abschalten")##
 #set( $strAdminStatus = "Status")##
+#set( $strAdminStatusHistory = "Status&nbsp;History")##
+#set( $strAdminStatusHeadingDate = "Zeitpunkt")##
+#set( $strAdminStatusHeadingStatus = "Status")##
+#set( $strAdminStatusHeadingComment = "Kommentar")##
 #set( $strAdminRoomQuota = "Quota f&uuml;r diesen Zimmertyp")##
 #set( $strAdminCancelReason = "Grund&nbsp;f&uuml;r&nbsp;Absage")##
-#set( $strAdminRoomAssignment = "Zimmerzuordnung")##
 #set( $strAdminTotalDues = "Gesamtbetrag")##
 #set( $strAdminRemainingDues = "Restbetrag")##
 #set( $strAdminDueDate = "F&auml;lligkeit")##

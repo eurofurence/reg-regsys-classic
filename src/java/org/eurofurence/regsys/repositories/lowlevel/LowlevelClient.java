@@ -73,7 +73,7 @@ public class LowlevelClient {
             if (status >= 300) {
                 RuntimeException e = httpError(status, response, null);
                 long done = System.currentTimeMillis();
-                if (status == 400 || status == 401 || status == 403) {
+                if (status == 400 || status == 401 || status == 403 || status == 404) {
                     LOGGER.info("downstream " + requestName + " -> " + status + " failed (" + (done - started) + " ms)");
                 } else {
                     LOGGER.warn("downstream " + requestName + " -> " + status + " failed (" + (done - started) + " ms)");

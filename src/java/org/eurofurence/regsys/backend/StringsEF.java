@@ -1,7 +1,5 @@
 package org.eurofurence.regsys.backend;
 
-import org.eurofurence.regsys.backend.enums.RoomManagementOption;
-
 /**
  * Externalize human-readable message strings from the backend.
  *
@@ -42,10 +40,6 @@ public class StringsEF {
 
         public String conStart = "18.09.2024";
         public String conEnd = "21.09.2024";
-
-        /* okay, so these are not strings, but it is useful to separate out all configuration */
-
-        public RoomManagementOption roomConfiguration = RoomManagementOption.ROOMS_EXTERNAL;
     }
 
     public static class UtilMsgs {
@@ -160,6 +154,7 @@ public class StringsEF {
         public String emailsDoNotMatch = "The two email addresses do not match. Please enter the same email address twice.";
         public String dbErrorSaveManualDues = "Unable to save manual dues settings due to database error: ";
         public String tshirtSizeSelectPrompt = "[Select Size]";
+        public String roomSelectPrompt = "[Select Room]";
         public String adminLinkRoommateNoneDescription = "No id given";
         public String adminLinkRoommateInvalid = "invalid id:";
         public String displayRoommateNoneDescription = "No id given";
@@ -297,5 +292,13 @@ public class StringsEF {
 
     public static class StatsPageMsgs {
         public String pageTitle = "Statistics";
+    }
+
+    public static class GroupsPageMsgs {
+        public String pageTitle = "Roomshare Groups";
+    }
+
+    public static class RoomsPageMsgs {
+        public String pageTitle = "Rooms";
     }
 }

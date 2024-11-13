@@ -1,7 +1,5 @@
 package org.eurofurence.regsys.backend;
 
-import org.eurofurence.regsys.backend.enums.RoomManagementOption;
-
 /**
  * Externalize human-readable message strings from the backend.
  *
@@ -45,10 +43,6 @@ public class StringsMMC {
 
         public String conStart = "26.05.2022";
         public String conEnd = "29.05.2022";
-
-        /* okay, so these are not strings, but it is useful to separate out all configuration */
-
-        public RoomManagementOption roomConfiguration = RoomManagementOption.ROOMS_HOUSE_GROUPS;
     }
 
     public static class UtilMsgs {
@@ -171,6 +165,7 @@ public class StringsMMC {
         public String emailsDoNotMatch = "Die beiden Emailadressen sind nicht identisch. Bitte zweimal dasselbe eingeben.";
         public String dbErrorSaveManualDues = "Fehler beim setzen des manuellen Betrages in der Datenbank: ";
         public String tshirtSizeSelectPrompt = "[Gr&ouml;&szlig;e w&auml;hlen]";
+        public String roomSelectPrompt = "[Zimmer w&auml;hlen]";
         public String adminLinkRoommateNoneDescription = "Keine ID angegeben";
         public String adminLinkRoommateInvalid = "Ung&uuml;ltige ID id:";
         public String displayRoommateNoneDescription = "Keine ID angegeben";
@@ -308,5 +303,13 @@ public class StringsMMC {
 
     public static class StatsPageMsgs {
         public String pageTitle = "Statistiken";
+    }
+
+    public static class GroupsPageMsgs {
+        public String pageTitle = "Zimmergruppen";
+    }
+
+    public static class RoomsPageMsgs {
+        public String pageTitle = "Zimmer";
     }
 }

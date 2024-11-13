@@ -1,0 +1,4 @@
+## Strings used in the room management template wrapper
+#set( $strRoomManagementTitle = "Manage Rooms")##
+#set( $strJavascriptDisabled = "Javascript is disabled!")##
+#set( $strPleaseEnableJavascript = "Please enable it to use this page.")##

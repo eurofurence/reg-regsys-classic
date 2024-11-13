@@ -390,6 +390,19 @@ input
     background-color: #ffffff;
 }
 
+input.error
+{
+    width: 300px;
+    margin: 0px 0px 0px 4px;
+    font-family: Arial;
+    font-size: 10pt;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ff0000;
+    padding-left: 3px;
+    background-color: #ffffff;
+}
+
 input.tiny
 {
         width: 32px;

@@ -1,0 +1,4 @@
+<script src="../vue/vue.global.prod.js"></script>
+<script src="../vue/vue-i18n.global.prod.js"></script>
+<script src="../vue/axios.min.js"></script>
+<script src="../vue/rooms/index.js" type="module"></script>
