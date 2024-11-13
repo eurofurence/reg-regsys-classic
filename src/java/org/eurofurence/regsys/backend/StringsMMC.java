@@ -165,6 +165,7 @@ public class StringsMMC {
         public String emailsDoNotMatch = "Die beiden Emailadressen sind nicht identisch. Bitte zweimal dasselbe eingeben.";
         public String dbErrorSaveManualDues = "Fehler beim setzen des manuellen Betrages in der Datenbank: ";
         public String tshirtSizeSelectPrompt = "[Gr&ouml;&szlig;e w&auml;hlen]";
+        public String roomSelectPrompt = "[Zimmer w&auml;hlen]";
         public String adminLinkRoommateNoneDescription = "Keine ID angegeben";
         public String adminLinkRoommateInvalid = "Ung&uuml;ltige ID id:";
         public String displayRoommateNoneDescription = "Keine ID angegeben";

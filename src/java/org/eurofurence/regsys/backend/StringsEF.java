@@ -154,6 +154,7 @@ public class StringsEF {
         public String emailsDoNotMatch = "The two email addresses do not match. Please enter the same email address twice.";
         public String dbErrorSaveManualDues = "Unable to save manual dues settings due to database error: ";
         public String tshirtSizeSelectPrompt = "[Select Size]";
+        public String roomSelectPrompt = "[Select Room]";
         public String adminLinkRoommateNoneDescription = "No id given";
         public String adminLinkRoommateInvalid = "invalid id:";
         public String displayRoommateNoneDescription = "No id given";

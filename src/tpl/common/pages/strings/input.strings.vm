@@ -19,7 +19,6 @@
 #set( $strStatusPaymentsPending = "Payments pending")##
 #set( $strViewPayments = "View Payments")##
 #set( $strNameAndAddressHeading = "Name & Address")##
-#set( $strSellingRegistrationInfo = "<b>Important:</b> If you want to transfer (sell) your ticket, you must contact us. Just reply to any of the mails from the registration system. Do not just change the registration data!<br>")##
 #set( $strNickname = "Nickname")##
 #set( $strFirstName = "First Name")##
 #set( $strLastName = "Last Name")##
@@ -76,11 +75,36 @@
 #set( $confShowPronouns = 1)##
 #set( $strSubmitSave = "Save Changes")##
 ##
+#set( $strGroupAndRoom = "Room Sharing")##
+#set( $strGroup = "Group&nbsp;(requested)")##
+#set( $strGroupName = "Name")##
+#set( $strGroupFlags = "Flags")##
+#set( $strGroupComments = "Comment")##
+#set( $strGroupIsOwner = "Owner?")##
+#set( $strGroupOwnerYes = "yes")##
+#set( $strGroupOwnerNo = "no")##
+#set( $strGroupMembers = "Members")##
+#set( $strGroupMembersId = "Badge&nbsp;No.")##
+#set( $strGroupMembersNickname = "Nickname")##
+#set( $strGroupInvites = "Invitations")##
+#set( $strNoGroup = "This attendee is not in a roomshare group")##
+#set( $strRoom = "Room&nbsp;(assigned)")##
+#set( $strRoomName = "Name")##
+#set( $strRoomSize = "Number&nbsp;of&nbsp;Beds")##
+#set( $strRoomFlags = "Flags")##
+#set( $strRoomComments = "Comment")##
+#set( $strRoomOccupants = "Occupants")##
+#set( $strRoomOccupantsId = "Badge&nbsp;No.")##
+#set( $strRoomOccupantsNickname = "Nickname")##
+#set( $strRoomAssignMsg = "Assign a room by choosing from the drop-down and saving the attendee")##
+#set( $strRoomAssignWholeGroup = "Assign&nbsp;whole&nbsp;group")##
+##
 #set( $strRoomSharing = "Room Sharing")##
 #set( $strRoomSharingInitialMsg = "If you select a room type with two or more beds, you will be able to log back in to the registration system and enter the registration IDs of the persons you would like to share your room with. You can do so after your registration has been accepted by our staff, otherwise you will be randomly assigned a roommate who has booked the same room category.")##
 #set( $strRoommateConfirmed = "CONFIRMED")##
 #set( $strRoommateNotConfirmed = "NOT CONFIRMED:")##
 #set( $strRoommateCannotChange = "<b>Please note</b> that room assignments have been finalized and cannot be changed anymore.")##
+##
 #set( $strAdminHeader = "Admin Section")##
 #set( $strAdminDelete = "Delete this registration")##
 #set( $strAdminConfirmPrompt = "Please confirm that you want to delete this registration!")##
@@ -96,7 +120,6 @@
 #set( $strAdminStatusHeadingComment = "Comment")##
 #set( $strAdminRoomQuota = "Room quota")##
 #set( $strAdminCancelReason = "Cancel&nbsp;Reason")##
-#set( $strAdminRoomAssignment = "Room&nbsp;Assmt.")##
 #set( $strAdminTotalDues = "Total&nbsp;Dues")##
 #set( $strAdminRemainingDues = "Remaining&nbsp;Dues")##
 #set( $strAdminDueDate = "Due&nbsp;Date")##

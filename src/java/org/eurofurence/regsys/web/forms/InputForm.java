@@ -21,6 +21,7 @@ import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
 import org.eurofurence.regsys.repositories.errors.NotFoundException;
 import org.eurofurence.regsys.repositories.rooms.Group;
+import org.eurofurence.regsys.repositories.rooms.Member;
 import org.eurofurence.regsys.repositories.rooms.Room;
 import org.eurofurence.regsys.repositories.rooms.RoomService;
 import org.eurofurence.regsys.service.TransactionCalculator;
@@ -101,6 +102,8 @@ public class InputForm extends Form {
     private List<StatusChange> statusHistory;
     private Group group;
     private Room room;
+    private Room newRoom;
+    private List<Room> eligibleRooms;
     private String dueDate;
     private boolean dueDateChanged = false;
 
@@ -124,6 +127,8 @@ public class InputForm extends Form {
         statusHistory = new ArrayList<>();
         group = new Group();
         room = new Room();
+        newRoom = null;
+        eligibleRooms = new ArrayList<>();
         dueDate = "";
     }
 
@@ -137,6 +142,8 @@ public class InputForm extends Form {
         statusHistory = new ArrayList<>();
         group = new Group();
         room = new Room();
+        newRoom = null;
+        eligibleRooms = new ArrayList<>();
         dueDate = "";
         dueDateChanged = false;
     }
@@ -223,25 +230,49 @@ public class InputForm extends Form {
 
     private void loadGroupThrows(long dbId, RequestAuth auth, String requestId) {
         group = new Group();
-        try {
-            List<Group> groupList = roomService.performListGroups(dbId, false, auth, requestId);
-            if (groupList != null && !groupList.isEmpty()) {
-                group = groupList.get(0);
+
+        Configuration config = getPage().getConfiguration();
+        if (config.groups != null && config.groups.enable) {
+            try {
+                List<Group> groupList = roomService.performListGroups(dbId, false, auth, requestId);
+                if (groupList != null && !groupList.isEmpty()) {
+                    group = groupList.get(0);
+                }
+            } catch (NotFoundException ignore) {
+                // perfectly valid
             }
+        }
+    }
+
+    // we only call this if it is needed (attending status + not currently in a room)
+    private void subLoadEligibleRoomsThrows(RequestAuth auth, String requestId) {
+        try {
+            List<Room> allRooms = roomService.performListRooms(0, auth, requestId);
+            eligibleRooms = allRooms.stream()
+                    .filter(r -> r.occupants == null || r.occupants.size() < r.size)
+                    .toList();
         } catch (NotFoundException ignore) {
-            // perfectly valid
+            // acceptable - no rooms set up yet
         }
     }
 
     private void loadRoomThrows(long dbId, RequestAuth auth, String requestId) {
         room = new Room();
-        try {
-            List<Room> roomList = roomService.performListRooms(dbId, auth, requestId);
-            if (roomList != null && !roomList.isEmpty()) {
-                room = roomList.get(0);
+        eligibleRooms = new ArrayList<>();
+
+        Configuration config = getPage().getConfiguration();
+        if (config.rooms != null && config.rooms.enable) {
+            try {
+                List<Room> roomList = roomService.performListRooms(dbId, auth, requestId);
+                if (roomList != null && !roomList.isEmpty()) {
+                    room = roomList.get(0);
+                } else {
+                    subLoadEligibleRoomsThrows(auth, requestId);
+                }
+            } catch (NotFoundException ignore) {
+                // perfectly valid - now load available rooms
+                subLoadEligibleRoomsThrows(auth, requestId);
             }
-        } catch (NotFoundException ignore) {
-            // perfectly valid
         }
     }
 
@@ -258,8 +289,10 @@ public class InputForm extends Form {
         if (getPage().hasPermission(Permission.ADMIN)) {
             adminInfo = attendeeService.performGetAdminInfo(dbId, auth, requestId);
             loadStatusHistoryThrows(dbId, auth, requestId);
-            loadGroupThrows(dbId, auth, requestId);
-            loadRoomThrows(dbId, auth, requestId);
+            if (attendeeStatus.isParticipating()) {
+                loadGroupThrows(dbId, auth, requestId);
+                loadRoomThrows(dbId, auth, requestId);
+            }
         }
     }
 
@@ -286,6 +319,10 @@ public class InputForm extends Form {
 
     private void reloadAttendeeDueDateThrows() {
         dueDate = attendeeService.performGetDueDate(attendee.id, getPage().getTokenFromRequest(), getPage().getRequestId());
+    }
+
+    private void reloadRoomThrows() {
+        loadRoomThrows(attendee.id, getPage().getTokenFromRequest(), getPage().getRequestId());
     }
 
     /**
@@ -334,6 +371,16 @@ public class InputForm extends Form {
 
                     reloadAttendeeStatusThrows();
                     reloadAttendeeDueDateThrows();
+                }
+
+                boolean roomAssigned = newRoom != null
+                        && newRoom.id != null
+                        && !newRoom.id.isEmpty()
+                        && !newRoom.id.equals(room.id);
+                if (roomAssigned) {
+                    roomService.performAddToRoom(newRoom.id, attendee.id, auth, requestId);
+
+                    reloadRoomThrows();
                 }
             }
         } catch (DownstreamWebErrorException e) {
@@ -560,6 +607,22 @@ public class InputForm extends Form {
             }
         }
 
+        private void setRoomAssign(String t) {
+            if (t == null || "".equals(t)) {
+                return;
+            }
+            try {
+                // load room assignment and validate
+                newRoom = roomService.performGetRoomById(t, getPage().getTokenFromRequest(), getPage().getRequestId());
+            } catch (DownstreamWebErrorException e) {
+                addWebErrors(e.getErr());
+                newRoom = null;
+            } catch (DownstreamException e) {
+                addError(e.getMessage());
+                newRoom = null;
+            }
+        }
+
         public void parseAdminParams(HttpServletRequest request) {
             setManualDues(request.getParameter(MANUAL_DUES));
             setManualDueDesc(request.getParameter(MANUAL_DUE_DESC));
@@ -569,6 +632,7 @@ public class InputForm extends Form {
             setAdminComments(request.getParameter(ADMIN_COMMENTS));
             setPermissions(request.getParameter(PERMISSIONS));
             setDueDate(request.getParameter(DUE_DATE));
+            setRoomAssign(request.getParameter(ROOMASSIGN));
         }
     }
 
@@ -1015,28 +1079,6 @@ public class InputForm extends Form {
             return textField(mayEditAdmin(), CANCEL_REASON, value, displaySize, 80);
         }
 
-        public boolean showGroup() {
-            Configuration config = getPage().getConfiguration();
-            return getPage().isLoggedIn() && config.groups != null && config.groups.enable;
-        }
-
-        public boolean showRoom() {
-            Configuration config = getPage().getConfiguration();
-            return getPage().hasPermission(Permission.VIEW) && config.rooms != null && config.rooms.enable;
-        }
-
-        public String fieldRoomAssmt(int displaySize, String style) {
-            if (showRoom()) {
-//                List<RoomRepr> rooms = getRoomInfo();
-//                List<String> values = rooms.stream().map(r -> r.id).collect(Collectors.toList());
-//                List<String> showValuesAs = rooms.stream().map(r -> r.name).collect(Collectors.toList());
-//                return selector(mayEditAdmin(), ROOMASSIGN, values, showValuesAs, Integer.toString(attendee.getRoomId()), 1);
-                return "";
-            } else {
-                return "";
-            }
-        }
-
         public String fieldAdminComments() {
             return textArea(mayEditAdmin(), ADMIN_COMMENTS, adminInfo.adminComments, 5, 40);
         }
@@ -1054,6 +1096,165 @@ public class InputForm extends Form {
             return checkbox(mayEditAdmin(), KEY_DEPOSIT, "1", str(attendee.getKeyDeposit()), style);
         }
         */
+
+        // group and room section
+
+        public boolean showGroupConfig() {
+            Configuration config = getPage().getConfiguration();
+            return getPage().isLoggedIn() && config.groups != null && config.groups.enable;
+        }
+
+        public boolean showRoomConfig() {
+            Configuration config = getPage().getConfiguration();
+            return config.rooms != null && config.rooms.enable;
+        }
+
+        @SuppressWarnings("unused")
+        public boolean showGroupAndRoomSection() {
+            return attendeeStatus.isParticipating() && (showGroupConfig() || showRoomConfig());
+        }
+
+        private boolean groupContainsAttendee() {
+            return (group != null) &&
+                    (group.members != null) &&
+                    (group.members.stream().anyMatch(m -> m.id == attendee.id));
+        }
+
+        @SuppressWarnings("unused")
+        public boolean hasGroup() {
+            return groupContainsAttendee();
+        }
+
+        @SuppressWarnings("unused")
+        public String fieldGroupName() {
+            if (groupContainsAttendee()) {
+                return escape(group.name);
+            } else {
+                return "";
+            }
+        }
+
+        @SuppressWarnings("unused")
+        public String fieldGroupFlags() {
+            if (groupContainsAttendee() && group.flags != null) {
+                return String.join(",&nbsp;", group.flags);
+            } else {
+                return "";
+            }
+        }
+
+        @SuppressWarnings("unused")
+        public String fieldGroupComments() {
+            if (groupContainsAttendee() && group.comments != null) {
+                return escape(group.comments);
+            } else {
+                return "";
+            }
+        }
+
+        @SuppressWarnings("unused")
+        public String fieldGroupIsOwner(String yes, String no) {
+            if (groupContainsAttendee()) {
+                if (group.owner == attendee.id) {
+                    return yes;
+                } else {
+                    return no;
+                }
+            } else {
+                return "";
+            }
+        }
+
+        private List<Map<String,String>> membersHumanReadable(List<Member> entries) {
+            List<Map<String,String>> result = new ArrayList<>();
+            if (entries != null) {
+                entries.forEach(m -> {
+                    Map<String,String> entry = new HashMap<>();
+                    entry.put("id", Long.toString(m.id));
+                    entry.put("nickname", m.nickname);
+                    result.add(entry);
+                });
+            }
+            return result;
+        }
+
+        @SuppressWarnings("unused")
+        public List<Map<String,String>> getGroupMembersHumanReadable() {
+            return membersHumanReadable(group.members);
+        }
+
+        @SuppressWarnings("unused")
+        public List<Map<String,String>> getGroupInvitesHumanReadable() {
+            return membersHumanReadable(group.invites);
+        }
+
+        private boolean roomContainsAttendee() {
+            return (room != null) &&
+                    (room.occupants != null) &&
+                    (room.occupants.stream().anyMatch(m -> m.id == attendee.id));
+        }
+
+        @SuppressWarnings("unused")
+        public boolean hasRoom() {
+            return roomContainsAttendee();
+        }
+
+        @SuppressWarnings("unused")
+        public String fieldRoomName() {
+            if (roomContainsAttendee()) {
+                return escape(room.name);
+            } else {
+                List<String> keys = new ArrayList<>();
+                keys.add("");
+                keys.addAll(eligibleRooms.stream().map(r -> r.id).toList());
+
+                List<String> values = new ArrayList<>();
+                values.add(Strings.inputForm.roomSelectPrompt);
+                values.addAll(eligibleRooms.stream().map(r -> {
+                    int occ = 0;
+                    if (r.occupants != null)
+                        occ = r.occupants.size();
+                    return r.name + "&nbsp;(" + occ + "/" + r.size + ")";
+                }).toList());
+
+                return selector(mayEditAdmin(), ROOMASSIGN,
+                        keys,
+                        values,
+                        "", 1);
+            }
+        }
+
+        @SuppressWarnings("unused")
+        public String fieldRoomSize() {
+            if (roomContainsAttendee()) {
+                return Long.toString(room.size);
+            } else {
+                return "";
+            }
+        }
+
+        @SuppressWarnings("unused")
+        public String fieldRoomFlags() {
+            if (roomContainsAttendee() && room.flags != null) {
+                return String.join(",&nbsp;", room.flags);
+            } else {
+                return "";
+            }
+        }
+
+        @SuppressWarnings("unused")
+        public String fieldRoomComments() {
+            if (roomContainsAttendee() && room.comments != null) {
+                return escape(room.comments);
+            } else {
+                return "";
+            }
+        }
+
+        @SuppressWarnings("unused")
+        public List<Map<String,String>> getRoomOccupantsHumanReadable() {
+            return membersHumanReadable(room.occupants);
+        }
 
         // roommates section
 
