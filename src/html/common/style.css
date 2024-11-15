@@ -763,6 +763,20 @@ td.selected
     background-color: #80b0a0;
 }
 
+td.right
+{
+    text-align: right;
+}
+
+td.center
+{
+    text-align: center;
+}
+
+td.nobreak
+{
+    white-space: nowrap;
+}
 
 td.searchlist_pending
 {

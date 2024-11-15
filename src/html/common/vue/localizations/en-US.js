@@ -9,6 +9,7 @@ export const en_US = {
                 final: "Final?",
                 handicapped: "HC.ok.?",
                 comments: "Comment",
+                occupants: "Occupants",
             },
             info: 'Click on a room to edit it. Click on a column to filter/sort by it.',
             filter: 'Filter',

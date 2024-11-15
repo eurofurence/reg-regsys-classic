@@ -61,9 +61,10 @@ export const useRoomList = () => {
         const isHandicapped = (rm.flags ?? []).includes('handicapped')
 
         const matchesNameFilter = filter.name.value ? rm.name.toLowerCase().includes(filter.name.value.toLowerCase()) : true
+        const matchesANickFilter = filter.name.value ? (rm.occupants && rm.occupants.filter(o => o.nickname.toLowerCase().includes(filter.name.value.toLowerCase())).length > 0) : true
         const matchesFinalFilter = filter.final.matches(isFinal)
         const matchesHcFilter = filter.handicapped.matches(isHandicapped)
-        return matchesNameFilter && matchesFinalFilter && matchesHcFilter
+        return (matchesNameFilter || matchesANickFilter) && matchesFinalFilter && matchesHcFilter
     }
 
     // apply uses the internal cache to apply new filter settings.

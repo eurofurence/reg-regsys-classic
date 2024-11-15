@@ -9,6 +9,7 @@ export const de_DE = {
                 final: "Final?",
                 handicapped: "Beh.ger.?",
                 comments: "Kommentar",
+                occupants: "Belegung",
             },
             info: 'Zimmer anklicken, um zu editieren. Spalte anklicken zum filtern/sortieren.',
             filter: 'Filter',
