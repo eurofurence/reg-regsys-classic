@@ -1,6 +1,7 @@
 import { ListAllRooms } from '../apis/roomsrv.js'
 import { StoredErrorList } from '../stores/errorlist.js'
 import { debug } from '../shared/debug.js'
+import { useTernary } from '../use/useternary.js'
 
 const { ref, watch } = Vue
 const { useI18n } = VueI18n
@@ -15,8 +16,8 @@ export const RoomList = {
         const roomList = ref([])
         const selectedId = ref('')
         const filter = ref('')
-        const finalFilter = ref(undefined)
-        const hcFilter = ref(undefined)
+        const finalFilter = useTernary(undefined)
+        const hcFilter = useTernary(undefined)
 
         const setRoomList = (rooms) => {
             debug('RoomList.setRoomList', rooms)
@@ -42,8 +43,8 @@ export const RoomList = {
 
         const matchesFilter = (room) => {
             const matchesNameFilter = filter.value ? room.name.toLowerCase().includes(filter.value.toLowerCase()) : true
-            const matchesFinalFilter = finalFilter.value === undefined || (room.flags ?? []).includes('final') === finalFilter.value
-            const matchesHcFilter = hcFilter.value === undefined || (room.flags ?? []).includes('handicapped') === hcFilter.value
+            const matchesFinalFilter = finalFilter.matches((room.flags ?? []).includes('final'))
+            const matchesHcFilter = hcFilter.matches((room.flags ?? []).includes('handicapped'))
             return matchesNameFilter && matchesFinalFilter && matchesHcFilter
         }
         const fetchRoomList = () => {
@@ -58,35 +59,17 @@ export const RoomList = {
             })
         }
 
-        const cycleFilter = (triBoolValue) => {
-            if (triBoolValue === true) {
-                return false
-            } else if (triBoolValue === false) {
-                return undefined
-            } else {
-                return true
-            }
-        }
         const finalColumnClicked = () => {
             debug('RoomList.finalColumnClicked')
-            finalFilter.value = cycleFilter(finalFilter.value)
+            finalFilter.cycle()
             fetchRoomList()
             emitFilterChanged()
         }
         const hcColumnClicked = () => {
             debug('RoomList.hcColumnClicked')
-            hcFilter.value = cycleFilter(hcFilter.value)
+            hcFilter.cycle()
             fetchRoomList()
             emitFilterChanged()
-        }
-        const displayFilter = (triBoolValue) => {
-            if (triBoolValue === true) {
-                return '✔'
-            } else if (triBoolValue === false) {
-                return '❌'
-            } else {
-                return '·'
-            }
         }
 
         watch(filter, (newValue, oldValue) => {
@@ -111,7 +94,6 @@ export const RoomList = {
             finalColumnClicked,
             hcColumnClicked,
             emitRoomClicked,
-            displayFilter,
         }
     },
     template: `
@@ -124,8 +106,8 @@ export const RoomList = {
             <th class="searchlist" align="right">{{ t('rooms.list.header.no') }}</th>
             <th class="searchlist">{{ t('rooms.list.header.name') }}</th>
             <th class="searchlist" align="right">{{ t('rooms.list.header.size') }}</th>
-            <th class="searchlist" @click="finalColumnClicked">{{ t('rooms.list.header.final') }}&nbsp;{{ displayFilter(finalFilter) }}</th>
-            <th class="searchlist" @click="hcColumnClicked">{{ t('rooms.list.header.handicapped') }}&nbsp;{{ displayFilter(hcFilter) }}</th>
+            <th class="searchlist" @click="finalColumnClicked">{{ t('rooms.list.header.final') }}&nbsp;{{ finalFilter.display('✔','❌','·') }}</th>
+            <th class="searchlist" @click="hcColumnClicked">{{ t('rooms.list.header.handicapped') }}&nbsp;{{ hcFilter.display('✔','❌','·') }}</th>
             <th class="searchlist">{{ t('rooms.list.header.comments') }}</th>
         </tr>
         <tr v-for="(r, i) in roomList" class="searchlist_sep" @click="emitRoomClicked(r.id)">
