@@ -758,6 +758,12 @@ td.searchlist
         border-collapse: collapse;
 }
 
+td.selected
+{
+    background-color: #80b0a0;
+}
+
+
 td.searchlist_pending
 {
         border-width: 0px 1px 0px 1px;;

@@ -36,6 +36,6 @@ export const App = {
     template: `
         <ErrorList />
         <RoomForm :id="roomId" @rooms-possibly-updated="reloadRooms"/>
-        <RoomList :reload="updateCount" @room-clicked="(id) => setRoomId(id)"/>
+        <RoomList :reload="updateCount" @room-clicked="(id) => setRoomId(id)" @filter-changed="reloadRooms"/>
    `
 }

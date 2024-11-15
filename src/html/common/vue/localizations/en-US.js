@@ -2,15 +2,16 @@ export const en_US = {
     rooms: {
         list: {
             title: 'Current Rooms',
-            empty: 'There are currently no rooms. You should create one.',
             header: {
                 no: "No.",
                 name: "Name",
                 size: "Size",
                 final: "Final?",
+                handicapped: "HC.ok.?",
                 comments: "Comment",
             },
-            click: 'Click on a room to edit it',
+            info: 'Click on a room to edit it. Click on a column to filter/sort by it.',
+            filter: 'Filter',
         },
         create: {
             title: 'Create Room',
@@ -18,6 +19,8 @@ export const en_US = {
             namehint: 'please enter a name',
             size: 'Beds',
             comments: 'Comments',
+            final: 'Final',
+            handicapped: 'Handicapped',
             save: 'Save new room!',
             cancel: 'Cancel!',
         },
@@ -27,6 +30,8 @@ export const en_US = {
             namehint: 'please enter a name',
             size: 'Beds',
             comments: 'Comments',
+            final: 'Final',
+            handicapped: 'Handicapped',
             save: 'Save changes!',
             cancel: 'Cancel!',
         },
