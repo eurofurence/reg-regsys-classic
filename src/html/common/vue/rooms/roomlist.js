@@ -1,9 +1,7 @@
-import { ListAllRooms } from '../apis/roomsrv.js'
-import { StoredErrorList } from '../stores/errorlist.js'
 import { debug } from '../shared/debug.js'
-import { useTernary } from '../use/useternary.js'
+import { useRoomList } from '../use/useroomlist.js'
 
-const { ref, watch } = Vue
+const { watch } = Vue
 const { useI18n } = VueI18n
 
 export const RoomList = {
@@ -13,93 +11,61 @@ export const RoomList = {
         debug('RoomList.setup', props)
         const { t } = useI18n()
 
-        const roomList = ref([])
-        const selectedId = ref('')
-        const filter = ref('')
-        const finalFilter = useTernary(undefined)
-        const hcFilter = useTernary(undefined)
+        const list = useRoomList()
 
-        const setRoomList = (rooms) => {
-            debug('RoomList.setRoomList', rooms)
-            roomList.value = rooms
-            selectedId.value = ''
+        const roomClicked = (id) => {
+            debug('RoomList.roomClicked', id)
+            list.select(id)
+            emit('roomClicked', list.selected.value)
         }
-
-        const emitRoomClicked = (id) => {
-            debug('RoomList.emitRoomClicked', id)
-            if (selectedId.value === id) {
-                // allow un-select
-                selectedId.value = ''
-            } else {
-                selectedId.value = id
-            }
-            emit('roomClicked', selectedId.value)
-        }
-        const emitFilterChanged = () => {
-            debug('RoomList.emitFilterChanged')
-            selectedId.value = ''
-            emit('filterChanged')
-        }
-
-        const matchesFilter = (room) => {
-            const matchesNameFilter = filter.value ? room.name.toLowerCase().includes(filter.value.toLowerCase()) : true
-            const matchesFinalFilter = finalFilter.matches((room.flags ?? []).includes('final'))
-            const matchesHcFilter = hcFilter.matches((room.flags ?? []).includes('handicapped'))
-            return matchesNameFilter && matchesFinalFilter && matchesHcFilter
-        }
-        const fetchRoomList = () => {
-            debug('RoomList.fetchRoomList')
-            ListAllRooms((rooms) => {
-                debug('RoomList.fetchRoomList.success', rooms)
-                rooms = rooms.filter(matchesFilter)
-                setRoomList(rooms)
-            }, (status, apiError) => {
-                debug('RoomList.fetchRoomList.error', status, apiError)
-                StoredErrorList.errors.addError(apiError)
-            })
-        }
-
         const finalColumnClicked = () => {
             debug('RoomList.finalColumnClicked')
-            finalFilter.cycle()
-            fetchRoomList()
-            emitFilterChanged()
+            list.filter.final.cycle()
+            list.apply()
+            emit('filterChanged')
         }
         const hcColumnClicked = () => {
             debug('RoomList.hcColumnClicked')
-            hcFilter.cycle()
-            fetchRoomList()
-            emitFilterChanged()
+            list.filter.handicapped.cycle()
+            list.apply()
+            emit('filterChanged')
         }
 
-        watch(filter, (newValue, oldValue) => {
+        watch(list.filter.name, (newValue, oldValue) => {
             if (newValue !== oldValue) {
-                fetchRoomList()
-                emitFilterChanged()
+                debug('RoomList.filter.name changed', oldValue, newValue)
+                list.apply()
+                emit('filterChanged')
             }
         })
 
         watch(() => props.reload, (newValue, oldValue) => {
             debug('RoomList.watch props.reload', oldValue, newValue)
-            fetchRoomList()
+            list.reload()
         })
+
+        const rooms = list.rooms
+        const selected = list.selected
+        const nameFilter = list.filter.name
+        const finalFilter = list.filter.final
+        const hcFilter = list.filter.handicapped
 
         return {
             t,
-            roomList,
-            selectedId,
-            filter,
+            rooms,
+            selected,
+            nameFilter,
             finalFilter,
             hcFilter,
+            roomClicked,
             finalColumnClicked,
             hcColumnClicked,
-            emitRoomClicked,
         }
     },
     template: `
 <div class="headline"><br/>{{ t('rooms.list.title') }}</div>
 <hr class="contentbox"/>
-<p>{{ t('rooms.list.filter') }}: <input type="text" size="40" maxlength="80" v-model.trim="filter"/></p>
+<p>{{ t('rooms.list.filter') }}: <input type="text" size="40" maxlength="80" v-model.trim="nameFilter"/></p>
 <p>{{ t('rooms.list.info') }}</p>
 <table class="searchlist">
         <tr>
@@ -110,13 +76,13 @@ export const RoomList = {
             <th class="searchlist" @click="hcColumnClicked">{{ t('rooms.list.header.handicapped') }}&nbsp;{{ hcFilter.display('✔','❌','·') }}</th>
             <th class="searchlist">{{ t('rooms.list.header.comments') }}</th>
         </tr>
-        <tr v-for="(r, i) in roomList" class="searchlist_sep" @click="emitRoomClicked(r.id)">
-            <td :class="r.id === selectedId ? 'searchlist selected' : 'searchlist'" align="right">{{ i+1 }}</td>
-            <td :class="r.id === selectedId ? 'searchlist selected' : 'searchlist'">{{ r.name }}</td>
-            <td :class="r.id === selectedId ? 'searchlist selected' : 'searchlist'" align="right">{{ r.size }}</td>
-            <td :class="r.id === selectedId ? 'searchlist selected' : 'searchlist'" align="center">{{ (r.flags ?? []).includes('final') ? '✔' : '' }}</td>
-            <td :class="r.id === selectedId ? 'searchlist selected' : 'searchlist'" align="center">{{ (r.flags ?? []).includes('handicapped') ? '✔' : '' }}</td>
-            <td :class="r.id === selectedId ? 'searchlist selected' : 'searchlist'">{{ r.comments }}</td>
+        <tr v-for="(r, i) in rooms" class="searchlist_sep" @click="roomClicked(r.id)">
+            <td :class="selected && r.id === selected.id ? 'searchlist selected' : 'searchlist'" align="right">{{ i+1 }}</td>
+            <td :class="selected && r.id === selected.id ? 'searchlist selected' : 'searchlist'">{{ r.name }}</td>
+            <td :class="selected && r.id === selected.id ? 'searchlist selected' : 'searchlist'" align="right">{{ r.size }}</td>
+            <td :class="selected && r.id === selected.id ? 'searchlist selected' : 'searchlist'" align="center">{{ (r.flags ?? []).includes('final') ? '✔' : '' }}</td>
+            <td :class="selected && r.id === selected.id ? 'searchlist selected' : 'searchlist'" align="center">{{ (r.flags ?? []).includes('handicapped') ? '✔' : '' }}</td>
+            <td :class="selected && r.id === selected.id ? 'searchlist selected' : 'searchlist'">{{ r.comments }}</td>
         </tr>
 </table>
 `
