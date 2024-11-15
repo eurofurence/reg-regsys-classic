@@ -17,7 +17,7 @@
 #set($strNavExport = "Export")##
 #set($strNavManageBans = "Manage&nbsp;Bans")##
 #set($strNavEditAnnouncements = "Edit&nbsp;Announcements")##
-#set($strNavManageGroups = "Roomshare&nbsp;Groups")##
+#set($strNavManageGroups = "Groups&nbsp;(Roomshares)")##
 #set($strNavManageRooms = "Rooms")##
 #set($strNavMarkOverdue = "Mark&nbsp;Overdue")##
 #set($strNavSendNotifications = "Send&nbsp;Notifications")##

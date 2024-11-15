@@ -2,15 +2,17 @@ export const de_DE = {
     rooms: {
         list: {
             title: 'Zimmerliste',
-            empty: 'Aktuell sind keine Zimmer definiert. Du solltest welche anlegen.',
             header: {
                 no: "Nr.",
                 name: "Name",
                 size: "Größe",
                 final: "Final?",
+                handicapped: "Beh.ger.?",
                 comments: "Kommentar",
+                occupants: "Belegung",
             },
-            click: 'Zimmer anklicken, um zu editieren',
+            info: 'Zimmer anklicken, um zu editieren. Spalte anklicken zum filtern/sortieren.',
+            filter: 'Filter',
         },
         create: {
             title: 'Neues Zimmer',
@@ -18,6 +20,8 @@ export const de_DE = {
             namehint: 'bitte Namen eingeben',
             size: 'Bettenzahl',
             comments: 'Kommentar',
+            final: 'Final',
+            handicapped: 'Behindertengerecht',
             save: 'Neues Zimmer speichern!',
             cancel: 'Abbrechen',
         },
@@ -27,6 +31,8 @@ export const de_DE = {
             namehint: 'bitte Namen eingeben',
             size: 'Bettenzahl',
             comments: 'Kommentar',
+            final: 'Final',
+            handicapped: 'Behindertengerecht',
             save: 'Änderungen Speichern!',
             cancel: 'Abbrechen',
         },
