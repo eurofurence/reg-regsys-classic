@@ -9,8 +9,8 @@ const { ref } = Vue
 //
 // This composable integrates with the backend API and has a local cache to avoid unnecessary fetches.
 //
-// errors are asynchronously added to the errorlist store, but the errorlist is never cleared - you have to do that
-// from the outside.
+// errors are asynchronously added to the errorlist store, but the errorlist is never cleared - you have
+// to do that from the outside.
 export const useRoomList = () => {
     // the filtered list of rooms. Updated by fetch() or filter().
     //

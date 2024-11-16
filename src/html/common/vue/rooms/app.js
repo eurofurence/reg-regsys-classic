@@ -3,7 +3,7 @@ import { RoomList } from './roomlist.js'
 import { RoomForm } from './roomform.js'
 import { debug } from '../shared/debug.js'
 
-const { ref } = Vue
+const { ref, onMounted } = Vue
 
 export const App = {
     setup() {
@@ -20,6 +20,8 @@ export const App = {
             roomId.value = ''
             updateCount.value++
         }
+
+        onMounted(() => reloadRooms())
 
         return {
             roomId,
