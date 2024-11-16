@@ -1,4 +1,47 @@
 export const en_US = {
+    groups: {
+        list: {
+            title: 'Current Groups',
+            header: {
+                no: "No.",
+                name: "Name",
+                size: "Size",
+                public: "Public?",
+                wheelchair: "Wheelchair?",
+                comments: "Comment",
+                members: "Members",
+                invited: "Invitations",
+            },
+            info: 'Click on a group to edit it. Click on a column to filter/sort by it.',
+            filter: 'Filter',
+        },
+        create: {
+            title: 'Create Group',
+            name: 'Name',
+            namehint: 'please enter a name',
+            size: 'Max.Size',
+            owner: 'Owner',
+            comments: 'Comments',
+            flags: 'Flags',
+            public: 'Public',
+            wheelchair: 'Wheelchair',
+            save: 'Save new group!',
+            cancel: 'Cancel!',
+        },
+        edit: {
+            title: 'Edit Group',
+            name: 'Name',
+            namehint: 'please enter a name',
+            size: 'Max.Size',
+            owner: 'Owner',
+            comments: 'Comments',
+            flags: 'Flags',
+            public: 'Public',
+            wheelchair: 'Wheelchair',
+            save: 'Save changes!',
+            cancel: 'Cancel!',
+        },
+    },
     rooms: {
         list: {
             title: 'Current Rooms',

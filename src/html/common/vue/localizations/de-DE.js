@@ -1,4 +1,47 @@
 export const de_DE = {
+    groups: {
+        list: {
+            title: 'Gruppenliste',
+            header: {
+                no: "Nr.",
+                name: "Name",
+                size: "Größe",
+                public: "Öffentlich?",
+                wheelchair: "Rollstuhl?",
+                comments: "Kommentar",
+                members: "Mitglieder",
+                invited: "Eingeladen",
+            },
+            info: 'Gruppe anklicken, um zu editieren. Spalte anklicken zum filtern/sortieren.',
+            filter: 'Filter',
+        },
+        create: {
+            title: 'Neue Gruppe',
+            name: 'Name',
+            namehint: 'bitte Namen eingeben',
+            size: 'Max.Größe',
+            owner: 'Ansprechpartner',
+            comments: 'Kommentar',
+            flags: 'Eigenschaften',
+            public: 'Öffentlich',
+            wheelchair: 'Rollstuhl',
+            save: 'Neue Gruppe speichern!',
+            cancel: 'Abbrechen',
+        },
+        edit: {
+            title: 'Gruppe bearbeiten',
+            name: 'Name',
+            namehint: 'bitte Namen eingeben',
+            size: 'Max.Größe',
+            owner: 'Ansprechpartner',
+            comments: 'Kommentar',
+            flags: 'Eigenschaften',
+            public: 'Öffentlich',
+            wheelchair: 'Rollstuhl',
+            save: 'Änderungen Speichern!',
+            cancel: 'Abbrechen',
+        },
+    },
     rooms: {
         list: {
             title: 'Zimmerliste',
