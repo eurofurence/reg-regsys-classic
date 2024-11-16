@@ -60,6 +60,21 @@ export const RoomForm = {
           <td class="input" ALIGN="left" VALIGN="middle" width="80%"><input type="text" size="5" maxlength="5" v-model.trim="editor.size.value" :class="{ error: editor.isSizeError.value }"/></td>
         </tr>
         <tr>
+          <td class="label" ALIGN="right" VALIGN="top" width="20%"><label for="room-final">{{ tkey('flags') }}</label></TD>
+          <td class="input" ALIGN="left" VALIGN="middle" width="80%">
+            <TABLE BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
+              <TR>
+                <TD class="input" width="5%"><input id="room-final" type="checkbox" v-model="editor.final.value" class="check"/></TD>
+                <TD class="input" width="45%"><label for="room-final">{{ tkey('final') }}</label></TD>
+              </TR>
+              <TR>
+                <TD class="input" width="5%"><input id="room-handicapped" type="checkbox" v-model="editor.handicapped.value" class="check"/></TD>
+                <TD class="input" width="45%"><label for="room-handicapped">{{ tkey('handicapped') }}</label></TD>
+              </TR>
+            </TABLE>
+          </td>
+        </tr>
+        <tr>
           <td class="label" ALIGN="right" VALIGN="middle" width="20%">{{ tkey('comments') }}</TD>
           <td class="input" ALIGN="left" VALIGN="middle" width="80%"><input type="text" size="40" maxlength="80" v-model.trim="editor.comments.value"/></td>
         </tr>

@@ -86,10 +86,10 @@ export const useRoomEditor = () => {
     const flagsList = () => {
         const result = []
         if (final.value) {
-            result.add('final')
+            result.push('final')
         }
         if (handicapped.value) {
-            result.add('handicapped')
+            result.push('handicapped')
         }
         return result
     }
