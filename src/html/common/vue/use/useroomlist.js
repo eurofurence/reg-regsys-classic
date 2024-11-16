@@ -9,8 +9,8 @@ const { ref } = Vue
 //
 // This composable integrates with the backend API and has a local cache to avoid unnecessary fetches.
 //
-// errors are asynchronously added to the errorlist store, but the errorlist is never cleared - you have to do that
-// from the outside.
+// errors are asynchronously added to the errorlist store, but the errorlist is never cleared - you have
+// to do that from the outside.
 export const useRoomList = () => {
     // the filtered list of rooms. Updated by fetch() or filter().
     //
@@ -62,9 +62,10 @@ export const useRoomList = () => {
 
         const matchesNameFilter = filter.name.value ? rm.name.toLowerCase().includes(filter.name.value.toLowerCase()) : true
         const matchesANickFilter = filter.name.value ? (rm.occupants && rm.occupants.filter(o => o.nickname.toLowerCase().includes(filter.name.value.toLowerCase())).length > 0) : true
+        const matchesCommentFilter = filter.name.value ? rm.comments && rm.comments.toLowerCase().includes(filter.name.value.toLowerCase()) : true
         const matchesFinalFilter = filter.final.matches(isFinal)
         const matchesHcFilter = filter.handicapped.matches(isHandicapped)
-        return (matchesNameFilter || matchesANickFilter) && matchesFinalFilter && matchesHcFilter
+        return (matchesNameFilter || matchesANickFilter || matchesCommentFilter) && matchesFinalFilter && matchesHcFilter
     }
 
     // apply uses the internal cache to apply new filter settings.

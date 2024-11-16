@@ -68,3 +68,35 @@ export const GetRoomByID = ( id, successHandler, apiErrorHandler ) => {
         successHandler(response.data)
     }, apiErrorHandler )
 }
+
+export const ListAllGroups = ( setGroups, apiErrorHandler ) => {
+    debug('ListAllGroups')
+    apiCall('get', '/groups', null, null, (response) => {
+        if (response?.data?.groups) {
+            setGroups(response.data.groups)
+        }
+    }, apiErrorHandler )
+}
+
+export const CreateGroup = ( group, successHandler, apiErrorHandler ) => {
+    debug('CreateGroup', group)
+    apiCall('post', '/groups', null, group, (response) => {
+        // TODO get id of new group from location and place into group, so handler knows which group to update
+        group.id = ''
+        successHandler(group)
+    }, apiErrorHandler )
+}
+
+export const UpdateGroup = ( group, successHandler, apiErrorHandler ) => {
+    debug('UpdateGroup', group)
+    apiCall('put', '/groups/' + group.id, null, group, (response) => {
+        successHandler(group)
+    }, apiErrorHandler )
+}
+
+export const GetGroupByID = ( id, successHandler, apiErrorHandler ) => {
+    debug('GetGroupByID', id)
+    apiCall('get', '/groups/' + id, null, null,(response) => {
+        successHandler(response.data)
+    }, apiErrorHandler )
+}

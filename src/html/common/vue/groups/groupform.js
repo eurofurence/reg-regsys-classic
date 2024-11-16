@@ -1,33 +1,33 @@
 import { debug } from '../shared/debug.js'
-import { useRoomEditor } from '../use/useroomeditor.js'
+import { useGroupEditor } from '../use/usegroupeditor.js'
 
 const { watch } = Vue
 const { useI18n } = VueI18n
 
-export const RoomForm = {
+export const GroupForm = {
     props: ['id'],
-    emits: ['roomsPossiblyUpdated'],
+    emits: ['groupsPossiblyUpdated'],
     setup(props, { emit }) {
-        debug('RoomForm.setup')
+        debug('GroupForm.setup')
 
-        const editor = useRoomEditor()
+        const editor = useGroupEditor()
 
         const resetHandler = () => {
-            debug('RoomForm.resetHandler')
+            debug('GroupForm.resetHandler')
             editor.setupForId(undefined, () => {
-                // even a reset will at least de-select the currently edited room
-                emit('roomsPossiblyUpdated')
+                // even a reset will at least de-select the currently edited group
+                emit('groupsPossiblyUpdated')
             })
         }
         const submitHandler = () => {
-            debug('RoomForm.submitHandler')
-            editor.save((room) => {
-                emit('roomsPossiblyUpdated')
+            debug('GroupForm.submitHandler')
+            editor.save((group) => {
+                emit('groupsPossiblyUpdated')
             })
         }
 
         watch(() => props.id, (newIdValue, oldIdValue) => {
-            debug('RoomForm.watch props.id changed', oldIdValue, newIdValue)
+            debug('GroupForm.watch props.id changed', oldIdValue, newIdValue)
             // no need to trigger event, the update comes from the outside, also it would reset the form.
             editor.setupForId(newIdValue, undefined)
         })
@@ -36,7 +36,7 @@ export const RoomForm = {
 
         const { t } = useI18n()
         const tkey = (extension) => {
-            return t(editor.isNew.value ? 'rooms.create.' + extension : 'rooms.edit.' + extension)
+            return t(editor.isNew.value ? 'groups.create.' + extension : 'groups.edit.' + extension)
         }
 
         return {
@@ -57,19 +57,23 @@ export const RoomForm = {
         </tr>
         <tr>
           <td class="label" ALIGN="right" VALIGN="middle" width="20%">{{ tkey('size') }}</TD>
-          <td class="input" ALIGN="left" VALIGN="middle" width="80%"><input type="text" size="5" maxlength="5" v-model.trim="editor.size.value" :class="{ error: editor.isSizeError.value }"/></td>
+          <td class="input" ALIGN="left" VALIGN="middle" width="80%"><input type="text" size="5" maxlength="5" v-model.trim="editor.maxSize.value" :class="{ error: editor.isSizeError.value }"/></td>
         </tr>
         <tr>
-          <td class="label" ALIGN="right" VALIGN="top" width="20%"><label for="room-final">{{ tkey('flags') }}</label></TD>
+          <td class="label" ALIGN="right" VALIGN="middle" width="20%">{{ tkey('owner') }}</TD>
+          <td class="input" ALIGN="left" VALIGN="middle" width="80%"><input type="text" size="10" maxlength="10" v-model.trim="editor.owner.value" :class="{ error: editor.isOwnerError.value }"/></td>
+        </tr>
+        <tr>
+          <td class="label" ALIGN="right" VALIGN="top" width="20%"><label for="group-final">{{ tkey('flags') }}</label></TD>
           <td class="input" ALIGN="left" VALIGN="middle" width="80%">
             <TABLE BORDER="0" CELLPADDING="3" CELLSPACING="0" WIDTH="100%">
               <TR>
-                <TD class="input" width="5%"><input id="room-final" type="checkbox" v-model="editor.final.value" class="check"/></TD>
-                <TD class="input" width="45%"><label for="room-final">{{ tkey('final') }}</label></TD>
+                <TD class="input" width="5%"><input id="group-public" type="checkbox" v-model="editor.isPublic.value" class="check"/></TD>
+                <TD class="input" width="45%"><label for="group-public">{{ tkey('public') }}</label></TD>
               </TR>
               <TR>
-                <TD class="input" width="5%"><input id="room-handicapped" type="checkbox" v-model="editor.handicapped.value" class="check"/></TD>
-                <TD class="input" width="45%"><label for="room-handicapped">{{ tkey('handicapped') }}</label></TD>
+                <TD class="input" width="5%"><input id="group-wheelchair" type="checkbox" v-model="editor.wheelchair.value" class="check"/></TD>
+                <TD class="input" width="45%"><label for="group-wheelchair">{{ tkey('wheelchair') }}</label></TD>
               </TR>
             </TABLE>
           </td>
