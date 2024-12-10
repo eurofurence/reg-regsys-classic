@@ -132,4 +132,7 @@ public class Transaction {
 
     @JsonProperty("creation_date")
     public String creationDateISO;
+
+    @JsonProperty("reason")
+    public String reason;
 }
