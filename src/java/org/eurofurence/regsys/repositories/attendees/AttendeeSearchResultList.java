@@ -7,14 +7,6 @@ import java.util.List;
 
 public class AttendeeSearchResultList {
     public static class AttendeeSearchResult {
-        public static class PackageInfo {
-            @JsonProperty("name")
-            public String name;
-
-            @JsonProperty("count")
-            public long count;
-        }
-
         @JsonProperty("id")
         public long id;
 
