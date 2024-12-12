@@ -169,6 +169,10 @@ public class StringsEF {
         public String invalidAttendeeType = "Please write to us to be switched back from day guest to full membership. This needs to be done by an administrator.";
         public String mustProvideCancelReason = "You must enter a reason for the cancellation";
 
+        public String parameterParseError(String param, String msg) {
+            return "internal error: failed to parse parameter " + param + ": " + msg;
+        }
+
         public String roommateCaption(int nr, int outOf) {
             if (outOf > 1) {
                 if (nr == 1)
