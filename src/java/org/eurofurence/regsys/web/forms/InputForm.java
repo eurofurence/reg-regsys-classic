@@ -135,7 +135,7 @@ public class InputForm extends Form {
     public synchronized void initialize() {
         attendee = new Attendee();
         attendee.flags = getDefaultFlags().getDbString();
-        attendee.packages = getDefaultPackages().getDbString();
+        attendee.packagesList = getDefaultPackages().getAsPackagesList();
         attendee.options = getDefaultOptions().getDbString();
         attendee.registrationLanguage = "en-US"; // have a default
         attendee.country = "DE"; // have a default
@@ -201,7 +201,7 @@ public class InputForm extends Form {
 
     public OptionList getAttendeePackages() {
         OptionList packages = new OptionList(Option.OptionTypes.Package, configService.getConfig().choices.packages, o -> true);
-        packages.parseFromDbString(nvl(attendee.packages));
+        packages.parseFromPackagesList(attendee.packagesList);
         return packages;
     }
 
@@ -419,7 +419,7 @@ public class InputForm extends Form {
                 String value = request.getParameter(parname); // may be null when NOT selected
                 if (value == null) value = "0";
                 if (isAdmin || !o.readonly) {
-                    o.optionEnable = "1".equals(value);
+                    o.count = "1".equals(value) ? 1 : 0;
                 }
             }
         }
@@ -456,13 +456,13 @@ public class InputForm extends Form {
             // silently selects options which are mandatory (those should be shown set&readonly to the user anyways)
             handleMandatoryPackagesNotImplemented(list);
 
-            attendee.packages = list.getDbString();
+            attendee.packagesList = list.getAsPackagesList();
         }
 
         private void deselectHiddenPackagesNotImplemented(OptionList list) {
             // TODO downstream will reject invalid combinations, then we'll show the error
             for (Option o : list) {
-                if (!o.optionEnable || o.readonly) continue;
+                if (o.count == 0 || o.readonly) continue;
 
 //                 if (o.isConstraintsHiding(attendee.getPackages())) {
 //                     attendee.setPackageByCode(o.code, 0);
@@ -885,7 +885,7 @@ public class InputForm extends Form {
                 // omit unselected admin only options, and even if so, only show as readonly
                 if (o.adminOnly && !auth(Permission.ADMIN)) {
                     o.readonly = true;
-                    if (!o.optionEnable)
+                    if (o.count == 0)
                         continue;
                 }
                 oList.add(o);
@@ -894,7 +894,7 @@ public class InputForm extends Form {
         }
 
         public String fieldFlag(Option o) {
-            return checkbox(mayEdit(), FLAG + o.code, "1", o.optionEnable ? "1" : "0", "check", false);
+            return checkbox(mayEdit(), FLAG + o.code, "1", o.count > 0 ? "1" : "0", "check", false);
         }
 
         public String getFlagParam(Option o) {
@@ -941,7 +941,7 @@ public class InputForm extends Form {
             OptionList packages = getAttendeePackages();
             for (Option o: packages) {
                 // omit unselected admin only options
-                if (o.adminOnly && !o.optionEnable && !auth(Permission.ADMIN)) {
+                if (o.adminOnly && o.count == 0 && !auth(Permission.ADMIN)) {
                     continue;
                 }
                 oList.add(o);
@@ -952,9 +952,9 @@ public class InputForm extends Form {
         public String fieldPackage(Option o) {
             if (o.readonly && !auth(Permission.ADMIN)) {
                 // show visual read-only 'X' and also add the parameter hidden so that input validation is easier
-                return (o.optionEnable ? "[X]" : "[&nbsp;]") + hiddenField(PACKAGE + o.code, o.optionEnable ? "1" : "0");
+                return (o.count > 0 ? "[X]" : "[&nbsp;]") + hiddenField(PACKAGE + o.code, o.count > 0 ? "1" : "0");
             } else {
-                return checkbox(mayEdit(), PACKAGE + o.code, "1", o.optionEnable ? "1" : "0", "check");
+                return checkbox(mayEdit(), PACKAGE + o.code, "1", o.count > 0 ? "1" : "0", "check");
             }
         }
 
@@ -997,7 +997,7 @@ public class InputForm extends Form {
                 // omit unselected admin only options
                 if (o.adminOnly && !auth(Permission.ADMIN)) {
                     o.readonly = true;
-                    if (!o.optionEnable) continue;
+                    if (o.count == 0) continue;
                 }
                 oList.add(o);
             }
@@ -1005,7 +1005,7 @@ public class InputForm extends Form {
         }
 
         public String fieldOption(Option o) {
-            return checkbox(mayEdit(), OPTION + o.code, "1", o.optionEnable ? "1" : "0", "check", false);
+            return checkbox(mayEdit(), OPTION + o.code, "1", o.count > 0 ? "1" : "0", "check", false);
         }
 
         public String getOptionParam(Option o) {

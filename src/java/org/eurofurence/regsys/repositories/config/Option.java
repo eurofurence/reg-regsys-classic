@@ -1,5 +1,9 @@
 package org.eurofurence.regsys.repositories.config;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 /* This class is more or less a struct to hold the configuration and values of optional registration
  * components. Use the static createXXX methods to build your set of options in a convenient way.
  *
@@ -26,20 +30,20 @@ public class Option {
     /** Possibly longer description, may or may not be displayed */
     public String                 description;
 
-    public boolean                optionEnable;
-
     public boolean                optionDefault; // initial default value
 
     // Properties only relevant for Optiontypes Accomodation & Sales Option
     public long                   price;   // only for type 2 or 3
     public float                  vat;          // value added tax, in percent
 
+    // Properties only relevant for Packages (Sales Options)
+    public int           maxCount; // always filled and always >= 1
+    public List<Integer> allowedCounts; // always filled with the list of allowed counts, never null/empty
+
     // Properties only relevant for Optiontype Accomodation
     public int                    bedsPerRoom;
 
     public int                    searchSetting; // -1 any, 0 no, 1 yes
-
-    public int                    counter;      // for stats page
 
     public boolean                readonly;     // false = can be changed, true = cannot be changed (previously called
     // "forced sales option")
@@ -48,9 +52,8 @@ public class Option {
     // (but will see once admin has selected them for him)
     public boolean                adminOnly;
 
-    /** private Constructor - please use OptionAssembler to create Option instances. */
-    private Option() {
-    }
+    // is the option actually selected
+    public int                count;
 
     public Option(Option.OptionTypes _type, String _code, Configuration.ChoiceConfig fromConfiguration) {
         this.optionType = _type;
@@ -59,71 +62,21 @@ public class Option {
         this.shortname = fromConfiguration.description;
         this.description = fromConfiguration.description;
         this.optionDefault= fromConfiguration.defaultValue;
-        this.optionEnable = fromConfiguration.defaultValue;
+        this.count = fromConfiguration.defaultValue ? 1 : 0;
         this.price = fromConfiguration.price;
         this.vat = fromConfiguration.vatPercent;
         this.readonly = fromConfiguration.readOnly;
         this.adminOnly = fromConfiguration.adminOnly;
-    }
-
-    /** In preparation of immutable Options (at least their config parts) - a factory method */
-    public static class OptionAssembler {
-
-        private OptionTypes            optionType;
-        private String                 code;
-        private String                 name;
-        private String                 shortname;
-        private String                 description;
-        private boolean                optionDefault;
-        private long                   price;
-        private float                  vat;
-        // private Constants.DueDateType  dueDateType;
-        private int                    bedsPerRoom;
-        private boolean                adminOnly;
-        private boolean                readOnly;
-
-        public static OptionAssembler choice(String _code, String _name, String _description) {
-            OptionAssembler oa = new OptionAssembler(_code, _name, _description);
-            oa.optionType = OptionTypes.Choice;
-            return oa;
-        }
-
-        public static OptionAssembler choice(String _code, String _name) {
-            return choice(_code, _name, "");
-        }
-
-        public OptionAssembler(String _code, String _name, String _description) {
-            this.code = _code;
-            this.name = _name;
-            this.description = _description;
-            this.readOnly = false;
-            this.adminOnly = false;
-            this.vat = 19; // defaults to 19%
-            //this.dueDateType = Constants.DueDateType.DATE2;
-        }
-
-        public OptionAssembler setDefault() {
-            this.optionDefault = true;
-            return this;
-        }
-
-        /** Creates an Option instance representing internal state of this OptionAssembler */
-        public Option createInstance() {
-            Option o = new Option();
-            o.optionType = this.optionType;
-            o.readonly = this.readOnly;
-            o.code = this.code;
-            o.name = this.name;
-            o.shortname = this.shortname != null ? this.shortname : this.name;
-            o.description = this.description;
-            o.optionEnable = o.optionDefault = this.optionDefault;
-            o.searchSetting = -1;
-            o.price = this.price;
-            o.vat = this.vat;
-            //o.dueDateType = this.dueDateType;
-            o.adminOnly = this.adminOnly;
-            o.bedsPerRoom = this.bedsPerRoom;
-            return o;
+        if (fromConfiguration.maxCount >= 1) {
+            this.maxCount = fromConfiguration.maxCount;
+            if (fromConfiguration.allowedCounts != null && !fromConfiguration.allowedCounts.isEmpty()) {
+                this.allowedCounts = fromConfiguration.allowedCounts;
+            } else {
+                this.allowedCounts = IntStream.range(1, fromConfiguration.maxCount+1).boxed().collect(Collectors.toList());
+            }
+        } else {
+            this.maxCount = 1;
+            this.allowedCounts = List.of(1);
         }
     }
 

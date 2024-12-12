@@ -82,7 +82,9 @@ public class AttendeeSearchResultList {
         @JsonProperty("options_list")
         public List<String> optionsList;
 
+        // TODO JsonIgnore and fix all accesses
         @JsonProperty("packages")
+        @Deprecated
         public String packages;
 
         @JsonProperty("packages_list")

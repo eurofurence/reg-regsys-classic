@@ -25,19 +25,19 @@ public class StandardExport extends AbstractCsvExport {
         // calculate arrival/departure dates
         Calendar cal = new GregorianCalendar();
         cal.setTime(TypeChecks.parseStaticDate(Strings.conf.conStart));
-        //if (member.getPackageByCode("early").optionEnable) {
+        //if (member.getPackageByCode("early").count > 0) {
         //    cal.add(Calendar.DAY_OF_MONTH, -1);
         //}
         String arrivalDate = TypeChecks.formatDate(cal.getTime());
         cal = new GregorianCalendar();
         cal.setTime(TypeChecks.parseStaticDate(Strings.conf.conEnd));
-        //if (member.getPackageByCode("late").optionEnable) {
+        //if (member.getPackageByCode("late").count > 0) {
         //    cal.add(Calendar.DAY_OF_MONTH, 1);
         //}
         String departureDate = TypeChecks.formatDate(cal.getTime());
 
-        String dog = ""; // member.getPackageByCode("doggy").optionEnable ? "X" : "";
-        String earthbound = ""; // attendee.getFlag("earthbound").optionEnable ? "X" : "";
+        String dog = ""; // member.getPackageByCode("doggy").count > 0 ? "X" : "";
+        String earthbound = ""; // attendee.getFlag("earthbound").count > 0 ? "X" : "";
         String wheelchair = flags.contains("hc") ? "X" : "";
 
         String line = csv(attendee.lastName)
