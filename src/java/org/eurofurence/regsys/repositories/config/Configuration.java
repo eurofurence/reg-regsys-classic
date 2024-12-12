@@ -9,6 +9,12 @@ import java.util.Map;
 
 public class Configuration {
     public static class ChoiceConfig {
+        @JsonProperty("allowed_counts")
+        public List<Integer> allowedCounts = new ArrayList<>();
+
+        @JsonProperty("max_count")
+        public int maxCount;
+
         @JsonProperty("description")
         public String description;
 
