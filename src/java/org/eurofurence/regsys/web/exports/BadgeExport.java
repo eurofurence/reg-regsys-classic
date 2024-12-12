@@ -3,11 +3,15 @@ package org.eurofurence.regsys.web.exports;
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.HardcodedConfig;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
+import org.eurofurence.regsys.repositories.attendees.PackageInfo;
 import org.eurofurence.regsys.repositories.config.ConfigService;
 import org.eurofurence.regsys.repositories.config.Configuration;
 import org.eurofurence.regsys.web.forms.FormHelper;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class BadgeExport extends AbstractCsvExport {
     private final Configuration config = new ConfigService(HardcodedConfig.CONFIG_URL).getConfig();
@@ -38,12 +42,33 @@ public class BadgeExport extends AbstractCsvExport {
                 + csv("Druck-SuperSponsor")
                 + csv("Druck-Staff")
                 + csv("Druck-Director")
-                + csv("Day");
+                + csv("Day")
+                + csv("Day-Mon")
+                + csv("Day-Tue")
+                + csv("Day-Wed")
+                + csv("Day-Thu")
+                + csv("Day-Fri")
+                + csv("Day-Sat")
+                + csv("Day-Sun")
+                + csv("Ultra-Sponsor");
+    }
+
+    private boolean packagesMatch(List<PackageInfo> packagesList, Predicate<PackageInfo> safeFilter) {
+        return packagesList.stream().anyMatch(e -> e != null && e.name != null && safeFilter.test(e));
+    }
+    private boolean packagesContains(List<PackageInfo> packagesList, String packageName) {
+        return packagesList.stream().anyMatch(e -> e != null && e.name != null && e.name.equals(packageName));
+    }
+    private long lookupCount(List<PackageInfo> packagesList, String packageName) {
+        return packagesList.stream()
+                .filter(e -> e != null && e.name != null && e.name.equals(packageName))
+                .map(e -> e.count)
+                .mapToLong(Long::longValue)
+                .sum();
     }
 
     @Override
     public String getRecord(AttendeeSearchResultList.AttendeeSearchResult attendee) {
-        Set<String> packages = setFrom(attendee.packages.split(","));
         Set<String> flags = setFrom(attendee.flags.split(","));
 
         boolean isNotParticipating = attendee.status != null && Constants.MemberStatus.byNewRegsysValue(attendee.status).isNotParticipating();
@@ -51,11 +76,11 @@ public class BadgeExport extends AbstractCsvExport {
         boolean isDirector = flags.contains("director");
 
         boolean isGuest = flags.contains("guest");
-        boolean isDay = packages.stream().anyMatch(e -> e != null && e.startsWith("day-"));
+        boolean isDay = packagesMatch(attendee.packagesList, e -> e.name.startsWith("day-"));
         boolean isRegular = !isGuest && !isDay && !isNotParticipating;
 
-        boolean isSupersponsor = isRegular && packages.contains("sponsor2");
-        boolean isSponsor = isRegular && !isSupersponsor && packages.contains("sponsor");;
+        boolean isSupersponsor = isRegular && packagesContains(attendee.packagesList, "sponsor2");
+        boolean isSponsor = isRegular && !isSupersponsor && packagesContains(attendee.packagesList, "sponsor");;
         boolean isAttendee = isRegular && !isSupersponsor && !isSponsor;
 
         String regType = "regular";
@@ -64,6 +89,8 @@ public class BadgeExport extends AbstractCsvExport {
         } else if (isDay) {
             regType = "day";
         }
+
+        long ultraSponsorCount = lookupCount(attendee.packagesList, "ultrasponsor");
 
         return csv(attendee.badgeId)
                 + csv(attendee.nickname)
@@ -89,7 +116,15 @@ public class BadgeExport extends AbstractCsvExport {
                 + csv(isSupersponsor ? "x" : "")
                 + csv(isStaff ? "x" : "")
                 + csv(isDirector ? "x" : "")
-                + csv(isDay ? getBadgeDayGuestCode(attendee) : "");
+                + csv(isDay ? "x" : "")
+                + csv(packagesContains(attendee.packagesList, "day-mon") ? "x" : "")
+                + csv(packagesContains(attendee.packagesList, "day-tue") ? "x" : "")
+                + csv(packagesContains(attendee.packagesList, "day-wed") ? "x" : "")
+                + csv(packagesContains(attendee.packagesList, "day-thu") ? "x" : "")
+                + csv(packagesContains(attendee.packagesList, "day-fri") ? "x" : "")
+                + csv(packagesContains(attendee.packagesList, "day-sat") ? "x" : "")
+                + csv(packagesContains(attendee.packagesList, "day-sun") ? "x" : "")
+                + csv(ultraSponsorCount > 0 ? Long.toString(ultraSponsorCount) : "");
     }
 
     private String lookupCountryName(String code) {
@@ -100,52 +135,12 @@ public class BadgeExport extends AbstractCsvExport {
     }
 
     private String getBadgeSponsorDesc(AttendeeSearchResultList.AttendeeSearchResult attendee) {
-        Set<String> packages = setFrom(attendee.packages.split(","));
-        if (packages.contains("sponsor")) {
+        if (packagesContains(attendee.packagesList, "sponsor")) {
             return "Sponsor";
-        } else if (packages.contains("sponsor2")) {
+        } else if (packagesContains(attendee.packagesList, "sponsor2")) {
             return "Supersponsor";
         } else {
             return "";
         }
-    }
-
-    private String getBadgeDayGuestCode(AttendeeSearchResultList.AttendeeSearchResult attendee) {
-        Set<String> packages = setFrom(attendee.packages.split(","));
-        String result = "";
-        if (packages.contains("day-thu")) {
-            result += "DO";
-        }
-        if (packages.contains("day-fri")) {
-            if (result.length() > 0)
-                result += ",";
-            result += "FR";
-        }
-        if (packages.contains("day-sat")) {
-            if (result.length() > 0)
-                result += ",";
-            result += "SA";
-        }
-        if (packages.contains("day-sun")) {
-            if (result.length() > 0)
-                result += ",";
-            result += "SU";
-        }
-        if (packages.contains("day-mon")) {
-            if (result.length() > 0)
-                result += ",";
-            result += "MO";
-        }
-        if (packages.contains("day-tue")) {
-            if (result.length() > 0)
-                result += ",";
-            result += "TU";
-        }
-        if (packages.contains("day-wed")) {
-            if (result.length() > 0)
-                result += ",";
-            result += "WE";
-        }
-        return result;
     }
 }

@@ -1,5 +1,6 @@
 package org.eurofurence.regsys.repositories.attendees;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -82,8 +83,8 @@ public class AttendeeSearchResultList {
         @JsonProperty("options_list")
         public List<String> optionsList;
 
-        // TODO JsonIgnore and fix all accesses
         @JsonProperty("packages")
+        @JsonIgnore
         @Deprecated
         public String packages;
 

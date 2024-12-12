@@ -1,9 +1,12 @@
 package org.eurofurence.regsys.web.exports;
 
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
+import org.eurofurence.regsys.repositories.attendees.PackageInfo;
 import org.eurofurence.regsys.web.forms.FormHelper;
 
+import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class WaiverExport extends AbstractCsvExport {
     @Override
@@ -28,13 +31,16 @@ public class WaiverExport extends AbstractCsvExport {
                 + csv("Room");
     }
 
+    private boolean packagesMatch(List<PackageInfo> packagesList, Predicate<PackageInfo> safeFilter) {
+        return packagesList.stream().anyMatch(e -> e != null && e.name != null && safeFilter.test(e));
+    }
+
     @Override
     public String getRecord(AttendeeSearchResultList.AttendeeSearchResult attendee) {
-        Set<String> packages = setFrom(attendee.packages.split(","));
         Set<String> flags = setFrom(attendee.flags.split(","));
 
         boolean isGuest = flags.contains("guest");
-        boolean isDay = packages.contains("day-thu") || packages.contains("day-fri") || packages.contains("day-sat");
+        boolean isDay = packagesMatch(attendee.packagesList, e -> e.name.startsWith("day-"));
 
         String regType = "regular";
         if (isGuest) {

@@ -19,7 +19,6 @@ public class StandardExport extends AbstractCsvExport {
 
     @Override
     public String getRecord(AttendeeSearchResultList.AttendeeSearchResult attendee) {
-        Set<String> packages = setFrom(attendee.packages.split(","));
         Set<String> flags = setFrom(attendee.flags.split(","));
 
         // calculate arrival/departure dates

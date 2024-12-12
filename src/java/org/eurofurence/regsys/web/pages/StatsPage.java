@@ -5,6 +5,7 @@ import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.backend.types.IsoDate;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
+import org.eurofurence.regsys.repositories.attendees.PackageInfo;
 import org.eurofurence.regsys.repositories.config.Configuration;
 import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.NotFoundException;
@@ -18,10 +19,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+
+import java.util.*;
 
 public class StatsPage extends Page {
     // ---- parameters ----
@@ -212,15 +211,19 @@ public class StatsPage extends Page {
         }
     }
 
-    private void inc(Map<String,Long> map, String key) {
+    private void inc(Map<String,Long> map, String key, long count) {
         if (map == null || key == null || "".equals(key))
             return;
         if (map.containsKey(key)) {
             long old = map.get(key);
-            map.put(key, old + 1L);
+            map.put(key, old + count);
         } else {
-            map.put(key, 1L);
+            map.put(key, count);
         }
+    }
+
+    private void inc(Map<String,Long> map, String key) {
+        inc(map, key, 1L);
     }
 
     private boolean contains(String commasepvalues, String v) {
@@ -234,12 +237,12 @@ public class StatsPage extends Page {
         return false;
     }
 
-    private boolean containsSubkey(String commasepvalues, String v) {
-        if (commasepvalues == null || "".equals(commasepvalues) || v == null)
+    private boolean containsSubkey(List<PackageInfo> pkg, String v) {
+        if (pkg == null || v == null)
             return false;
-        for (String it: commasepvalues.split(",")) {
-            if (it != null && !"".equals(it)) {
-                if (it.contains(v)) {
+        for (PackageInfo entry: pkg) {
+            if (entry != null && entry.name != null) {
+                if (entry.name.contains(v)) {
                     return true;
                 }
             }
@@ -252,6 +255,14 @@ public class StatsPage extends Page {
             return;
         for (String it: commasepvalues.split(",")) {
             inc(map, it);
+        }
+    }
+
+    private void incWithCounts(Map<String,Long> map, List<PackageInfo> pkgList) {
+        if (map == null || pkgList == null)
+            return;
+        for (PackageInfo entry: pkgList) {
+            inc(map, entry.name, entry.count);
         }
     }
 
@@ -304,13 +315,13 @@ public class StatsPage extends Page {
                     inc(by_status, "overdue_count");
                 }
 
-                incAfterSplit(by_package, a.packages);
+                incWithCounts(by_package, a.packagesList);
                 incAfterSplit(by_flag, a.flags);
                 incAfterSplit(by_flag, a.options);
 
                 if (contains(a.flags, "guest")) {
                     by_type[1]++;
-                } else if (containsSubkey(a.packages, "day_")) {
+                } else if (containsSubkey(a.packagesList, "day_")) {
                     by_type[2]++;
                 } else {
                     by_type[0]++;
