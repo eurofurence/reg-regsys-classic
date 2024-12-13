@@ -1,5 +1,6 @@
 package org.eurofurence.regsys.repositories.attendees;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
@@ -7,14 +8,6 @@ import java.util.List;
 
 public class AttendeeSearchResultList {
     public static class AttendeeSearchResult {
-        public static class PackageInfo {
-            @JsonProperty("name")
-            public String name;
-
-            @JsonProperty("count")
-            public long count;
-        }
-
         @JsonProperty("id")
         public long id;
 
@@ -91,6 +84,8 @@ public class AttendeeSearchResultList {
         public List<String> optionsList;
 
         @JsonProperty("packages")
+        @JsonIgnore
+        @Deprecated
         public String packages;
 
         @JsonProperty("packages_list")

@@ -18,4 +18,5 @@
 #set($strHeaderComment = "Comment")##
 #set($strHeaderLink = "Link")##
 #set($strHeaderId = "ReferenceId")##
+#set($strHeaderInfo = "Info")##
 #set($strNeedJs = "<b>Note: Javascript is disabled.</b> Please enable to use full functionality.")##

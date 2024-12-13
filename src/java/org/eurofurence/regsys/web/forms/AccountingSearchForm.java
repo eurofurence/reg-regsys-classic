@@ -3,6 +3,7 @@ package org.eurofurence.regsys.web.forms;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
+import org.eurofurence.regsys.repositories.attendees.PackageInfo;
 import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
 import org.eurofurence.regsys.repositories.payments.PaymentService;
@@ -53,7 +54,7 @@ public class AccountingSearchForm extends Form {
         public String nickname;
         public String flags;
         public String options;
-        public String packages;
+        public List<PackageInfo> packagesList;
         public String status;
         public long totalDues;
         public long paymentBalance;
@@ -171,7 +172,7 @@ public class AccountingSearchForm extends Form {
                 inf.nickname = sr.nickname;
                 inf.flags = sr.flags;
                 inf.options = sr.options;
-                inf.packages = sr.packages;
+                inf.packagesList = sr.packagesList;
                 inf.status = sr.status;
                 inf.totalDues = valueOrZero(sr.totalDues);
                 inf.paymentBalance = valueOrZero(sr.paymentBalance);

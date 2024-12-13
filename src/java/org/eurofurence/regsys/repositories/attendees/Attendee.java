@@ -1,6 +1,9 @@
 package org.eurofurence.regsys.repositories.attendees;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 
 public class Attendee {
     @JsonProperty("id")
@@ -67,7 +70,12 @@ public class Attendee {
     public String options;
 
     @JsonProperty("packages")
+    @JsonIgnore
+    @Deprecated
     public String packages;
+
+    @JsonProperty("packages_list")
+    public List<PackageInfo> packagesList;
 
     @JsonProperty("user_comments")
     public String userComments;

@@ -3,7 +3,9 @@ package org.eurofurence.regsys.repositories.payments;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @JsonIgnoreProperties({"status_history"})
@@ -132,4 +134,34 @@ public class Transaction {
 
     @JsonProperty("creation_date")
     public String creationDateISO;
+
+    public static class PackageState {
+        @JsonProperty("name")
+        public String name;
+
+        @JsonProperty("count")
+        public long count;
+    }
+
+    public static class ManualDues {
+        @JsonProperty("amount")
+        public long amount;
+
+        @JsonProperty("description")
+        public String description;
+    }
+
+    public static class ReasonDecoded {
+        @JsonProperty("packages_list")
+        public List<PackageState> packagesList = new ArrayList<>();
+
+        @JsonProperty("manual_dues")
+        public Map<String,ManualDues> manualDues = new HashMap<>();
+
+        @JsonProperty("error")
+        public boolean error;
+    }
+
+    @JsonProperty("reason")
+    public String reason;
 }

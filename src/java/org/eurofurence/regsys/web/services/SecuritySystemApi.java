@@ -6,6 +6,7 @@ import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.SHA384;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
+import org.eurofurence.regsys.repositories.attendees.PackageInfo;
 import org.eurofurence.regsys.repositories.config.Configuration;
 
 import java.security.InvalidKeyException;
@@ -98,7 +99,7 @@ public class SecuritySystemApi extends AbstractAttendeeListService {
             info.comments = StringEscapeUtils.unescapeHtml4(attendee.userComments);
             info.adminComments = StringEscapeUtils.unescapeHtml4(attendee.adminComments);
 
-            info.packages = mapOptionList(attendee.packages);
+            info.packages = mapOptionList(attendee.packagesList);
             info.flags = mapOptionList(attendee.flags);
 
             info.attendeeType = calculateType(info.packages, info.flags);
@@ -120,6 +121,21 @@ public class SecuritySystemApi extends AbstractAttendeeListService {
         } else {
             return "standard";
         }
+    }
+
+    private List<String> mapOptionList(List<PackageInfo> pkgList) {
+        List<String> result = new ArrayList<>();
+        if (pkgList == null) {
+            return result;
+        }
+        pkgList.forEach(entry -> {
+            if (entry != null && entry.name != null) {
+                for (long i = 0; i < entry.count; i++) {
+                    result.add(entry.name);
+                }
+            }
+        });
+        return result;
     }
 
     private List<String> mapOptionList(String commaSeparated) {

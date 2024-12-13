@@ -5,6 +5,8 @@ import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
 import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.config.Configuration;
+import org.eurofurence.regsys.repositories.config.Option;
+import org.eurofurence.regsys.repositories.config.OptionList;
 import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.NotFoundException;
 import org.eurofurence.regsys.web.servlets.HttpMethod;
@@ -132,24 +134,26 @@ public class PackageApi extends Service {
 
             boolean updated = false;
 
-            String temp = "," + attendee.packages + ",";
+            OptionList temp = new OptionList(Option.OptionTypes.Package, getConfiguration().choices.packages, o -> true);
+            temp.parseFromPackagesList(attendee.packagesList);
+            Option o = temp.getByCodeMaybeNull(packageName);
+            if (o == null)
+                throw new ServiceException("packageapi.validation.failure.package.not.configured", getRequestId());
+
             if (getMethod() == HttpMethod.POST) {
-                if (!temp.contains(","+packageName+",")) {
-                    temp += packageName + ",";
+                if (o.count == 0) {
+                    o.count = 1;
                     updated = true;
                 }
             } else if (getMethod() == HttpMethod.DELETE) {
-                if (temp.contains(","+packageName+",")) {
-                    temp = temp.replace(packageName+",", "");
+                if (o.count > 0) {
+                    o.count = 0;
                     updated = true;
                 }
             }
 
             if (updated) {
-                temp = temp.replaceFirst("^,", "");
-                temp = temp.replaceFirst(",$", "");
-                attendee.packages = temp;
-
+                attendee.packagesList = temp.getAsPackagesList();
                 attendeeService.performUpdateAttendee(attendee, downstreamAuth, getRequestId());
             }
         } catch (NotFoundException e) {
@@ -162,9 +166,9 @@ public class PackageApi extends Service {
     protected ResponseDTO createResponse() {
         ResponseDTO response = new ResponseDTO();
 
-        String temp = "," + attendee.packages + ",";
-        response.packages = allowedPackageNames.stream()
-                .filter(n -> temp.contains(","+n+","))
+        response.packages = attendee.packagesList.stream()
+                .filter(entry -> entry.count > 0 && allowedPackageNames.contains(entry.name))
+                .map(entry -> entry.name)
                 .sorted().collect(Collectors.toList());
 
         return response;

@@ -180,6 +180,10 @@ public class StringsMMC {
         public String invalidAttendeeType = "Bitte melde dich bei uns!";
         public String mustProvideCancelReason = "Du must einen Grund f&uuml;r die Absage eingeben.";
 
+        public String parameterParseError(String param, String msg) {
+            return "Interner Fehler: Parameter " + param + " konnte nicht verarbeitet werden: " + msg;
+        }
+
         public String roommateCaption(int nr, int outOf) {
             if (outOf > 1) {
                 if (nr == 1)

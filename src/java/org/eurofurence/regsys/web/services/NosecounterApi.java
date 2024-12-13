@@ -10,16 +10,10 @@ import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import org.eurofurence.regsys.repositories.attendees.PackageInfo;
+
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class NosecounterApi extends AbstractAttendeeListService {
@@ -239,6 +233,13 @@ public class NosecounterApi extends AbstractAttendeeListService {
                 .collect(Collectors.toSet());
     }
 
+    private boolean packagesMatch(List<PackageInfo> packagesList, Predicate<PackageInfo> safeFilter) {
+        return packagesList.stream().anyMatch(e -> e != null && e.name != null && safeFilter.test(e));
+    }
+    private boolean packagesContains(List<PackageInfo> packagesList, String packageName) {
+        return packagesList.stream().anyMatch(e -> e != null && e.name != null && e.name.equals(packageName));
+    }
+
     private void recordInfo(AttendeeSearchResultList.AttendeeSearchResult attendee, ResponseDTO response) {
         Constants.MemberStatus status = Constants.MemberStatus.SEARCH_IGNORE;
         try {
@@ -247,11 +248,10 @@ public class NosecounterApi extends AbstractAttendeeListService {
         }
 
         Set<String> flags = mapOptionList(attendee.flags);
-        Set<String> packages = mapOptionList(attendee.packages);
         Set<String> options = mapOptionList(attendee.options);
 
         boolean isGuest = flags.contains("guest");
-        boolean isDay = packages.stream().anyMatch(v -> v.startsWith("day_"));
+        boolean isDay = packagesMatch(attendee.packagesList, e -> e.name.startsWith("day-"));
         boolean isRegular = !isGuest && !isDay;
 
         int age = 18;
@@ -275,8 +275,8 @@ public class NosecounterApi extends AbstractAttendeeListService {
         String shirtsize = attendee.tshirtSize;
         String country = attendee.country;
 
-        boolean isSupersponsor = isRegular && packages.contains("sponsor2");
-        boolean isSponsor = isRegular && !isSupersponsor && packages.contains("sponsor");
+        boolean isSupersponsor = isRegular && packagesContains(attendee.packagesList, "sponsor2");
+        boolean isSponsor = isRegular && !isSupersponsor && packagesContains(attendee.packagesList, "sponsor");;
         boolean isNormal = isRegular && !isSupersponsor && !isSponsor;
 
         boolean isArtist = options.contains("art");

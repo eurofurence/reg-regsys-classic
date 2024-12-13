@@ -4,10 +4,7 @@ import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 import org.eurofurence.regsys.repositories.config.Configuration;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SummerBoatApi extends AbstractAttendeeListService {
@@ -36,12 +33,23 @@ public class SummerBoatApi extends AbstractAttendeeListService {
     // ------------------------ mapper -----------------------------------------
 
     private SummerBoatInfoDto infoFromAttendee(AttendeeSearchResultList.AttendeeSearchResult attendee) {
+        List<String> packages = new ArrayList<>();
+        if (attendee.packagesList != null) {
+            attendee.packagesList.forEach(entry -> {
+                if (entry != null && entry.name != null) {
+                    for (long i = 0; i < entry.count; i++) {
+                        packages.add(entry.name);
+                    }
+                }
+            });
+        }
+
         SummerBoatInfoDto info = new SummerBoatInfoDto();
         info.id = attendee.id;
         info.nick = attendee.nickname;
         info.status = attendee.status;
         info.email = attendee.email;
-        info.packages = Arrays.stream(attendee.packages.split(",")).collect(Collectors.toList());
+        info.packages = packages;
         info.lastName = attendee.lastName;
         info.firstName = attendee.firstName;
         info.birthday = attendee.birthday;
