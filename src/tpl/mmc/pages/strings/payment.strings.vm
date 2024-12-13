@@ -18,4 +18,5 @@
 #set($strHeaderComment = "Kommentar")##
 #set($strHeaderLink = "Link")##
 #set($strHeaderId = "ReferenceId")##
+#set($strHeaderInfo = "Info")##
 #set($strNeedJs = "<b>Note: Javascript ist abgeschaltet.</b> Bitte anmachen, sonst funktioniert's nicht.")##

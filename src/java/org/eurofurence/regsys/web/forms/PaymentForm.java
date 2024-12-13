@@ -1,10 +1,9 @@
 package org.eurofurence.regsys.web.forms;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 
 import org.eurofurence.regsys.backend.HardcodedConfig;
@@ -149,6 +148,35 @@ public class PaymentForm extends Form {
 
     public String getComments() {
         return escape(transaction.comment);
+    }
+
+    public String getReason() {
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            Transaction.ReasonDecoded reason = mapper.readerFor(Transaction.ReasonDecoded.class).readValue(transaction.reason);
+            StringBuilder b = new StringBuilder();
+            if (reason.packagesList != null && !reason.packagesList.isEmpty()) {
+                b.append("Packages:\n");
+                for (Transaction.PackageState entry : reason.packagesList) {
+                    b.append("  ").append(entry.count).append("x ").append(escape(entry.name)).append("\n");
+                }
+                b.append("\n");
+            }
+            if (reason.manualDues != null && !reason.manualDues.isEmpty()) {
+                b.append("Manual:\n");
+                for (Map.Entry<String, Transaction.ManualDues> entry : reason.manualDues.entrySet()) {
+                    b.append("  ").append(entry.getKey()).append(": ")
+                            .append(FormHelper.toCurrencyDecimals(entry.getValue().amount))
+                            .append(" - ").append(escape(entry.getValue().description)).append("\n");
+                }
+                b.append("\n");
+            }
+
+            return b.toString();
+        } catch (JsonProcessingException e) {
+            return "(failed to parse transaction reason)";
+        }
     }
 
     public String getPaylink() {
@@ -551,7 +579,8 @@ public class PaymentForm extends Form {
                             escape(getComments()),
                             getPaylink(),
                             escape(getTransactionId()),
-                            styleClass
+                            styleClass,
+                            "&nbsp;"
                     });
                 } else {
                     paymentlines.add(new String[]{
@@ -565,7 +594,8 @@ public class PaymentForm extends Form {
                             escape(getComments()),
                             "&nbsp;",
                             "&nbsp;",
-                            styleClass
+                            styleClass,
+                            "<img src='../images/info.png' title='"+getReason()+"'/>"
                     });
                 }
             }

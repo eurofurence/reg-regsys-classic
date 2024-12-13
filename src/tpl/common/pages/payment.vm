@@ -51,6 +51,7 @@
               <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderComment</b></TH>
               <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderLink</b></TH>
               <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderId</b></TH>
+              <TH class="searchlist" ALIGN="center" VALIGN="top"><b>$strHeaderInfo</b></TH>
             </TR>
 #foreach( $line in $paymentlines )##
             <TR>
@@ -65,6 +66,7 @@
               <TD class="$line.get(10)" ALIGN="left" VALIGN="top">$line.get(7)</TD>
               <TD class="$line.get(10)" ALIGN="left" VALIGN="top">$line.get(8)</TD>
               <TD class="$line.get(10)" ALIGN="left" VALIGN="top">$line.get(9)</TD>
+              <TD class="$line.get(10)" ALIGN="center" VALIGN="top">$line.get(11)</TD>
             </TR>
 #end##
           </TABLE>
