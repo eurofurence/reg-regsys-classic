@@ -39,7 +39,6 @@ sourceSets {
 }
 
 dependencies {
-    // providedCompile 'org.apache.tomcat:tomcat-servlet-api:10.1.34'
     implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.34'
     implementation 'org.apache.commons:commons-lang3:3.17.0'
     implementation 'org.apache.velocity:velocity-engine-core:2.4.1'

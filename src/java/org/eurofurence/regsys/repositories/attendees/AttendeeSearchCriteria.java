@@ -59,6 +59,9 @@ public class AttendeeSearchCriteria {
 
         @JsonProperty("add_info")
         public Map<String, Integer> addInfo = new HashMap<>();
+
+        @JsonProperty("identity_subjects")
+        public List<String> identitySubjects = new ArrayList<>();
     }
 
     @JsonProperty("match_any")
