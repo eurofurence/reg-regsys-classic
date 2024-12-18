@@ -114,6 +114,12 @@ public class AttendeeSearchResultList {
 
         @JsonProperty("admin_comments")
         public String adminComments;
+
+        @JsonProperty("identity_subject")
+        public String identitySubject;
+
+        @JsonProperty("avatar")
+        public String avatar;
     }
 
     @JsonProperty("attendees")
