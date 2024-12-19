@@ -145,6 +145,9 @@ public class Configuration {
 
         @JsonProperty("system_language")
         public String systemLanguage = "en-US";
+
+        @JsonProperty("enable_bank_import")
+        public boolean enableBankImport;
     }
 
     public static class SepaConfig {

@@ -19,6 +19,10 @@
       #set( $hr = "yes" )##
       <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.AccountingURL">$strNavAccounting</a><br/>
 #end##
+#if( $navbar.showBankImport() )##
+    #set( $hr = "yes" )##
+    <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.BankImportURL">$strNavBankImport</a><br/>
+#end##
 #if( $navbar.showStatistics() )##
       #set( $hr = "yes" )##
       <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.StatisticsURL">$strNavStatistics</a><br/>

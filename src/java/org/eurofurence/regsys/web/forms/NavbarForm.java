@@ -48,6 +48,21 @@ public class NavbarForm extends Form {
         return "accounting";
     }
 
+    // camtv8 import
+
+    private boolean bankImportEnabled() {
+        Configuration conf = getPage().getConfiguration();
+        return conf.web != null && conf.web.enableBankImport;
+    }
+
+    public boolean showBankImport() {
+        return getPage().hasPermission(Constants.Permission.ADMIN) && bankImportEnabled();
+    }
+
+    public String getBankImportURL() {
+        return "camtv8";
+    }
+
     // statistics
 
     @SuppressWarnings("unused")
