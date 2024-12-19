@@ -119,6 +119,12 @@ public class StringsMMC {
         public String permMail = "Berechtigungsfehler beim Mailversand an Teilnehmer id %1$s. Teilnehmer &uuml;bersprungen.";
     }
 
+    public static class Camtv8ImportPageMsgs {
+        public String pageTitle = "Kontoauszugsdatei importieren";
+        public String uploadError = "Fehler beim Hochladen der Datei: ";
+        public String parseError = "Fehler beim parsen der Datei: ";
+    }
+
     public static class CommentsPageMsgs {
         public String pageTitle = "Kommentare auflisten";
     }

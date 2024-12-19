@@ -108,6 +108,12 @@ public class StringsEF {
         public String permMail = "Permission denied to mail attendee with id %1$s. Skipping and proceeding.";
     }
 
+    public static class Camtv8ImportPageMsgs {
+        public String pageTitle = "Import Bank Statement";
+        public String uploadError = "Error uploading file: ";
+        public String parseError = "Error parsing file: ";
+    }
+
     public static class CommentsPageMsgs {
         public String pageTitle = "Comment Listing";
     }

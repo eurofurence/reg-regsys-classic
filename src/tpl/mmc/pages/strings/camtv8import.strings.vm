@@ -1,0 +1,11 @@
+## Strings used in the landing page
+##
+## you may also wish to customize the other startXX.vm templates that contain
+## large blocks of text.
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+#set($strTitleUpload = "Kontoauszugdatei hochladen")##
+#set($strSubmitUpload = "Hochladen!")##
+#set($strExplanation = "Das System unterstützt CAMTv8 053 XML-Dateien. Weil einige Banken ihre Kontoauszüge in CAMTv8 052 liefern, wird auch dieses Format unterstützt, auch wenn es eigentlich für untertägige Vorabbuchungen gedacht ist.")
+#set($strNeedJs = "<b>Note: Javascript ist abgeschaltet.</b> Bitte anmachen, sonst funktioniert's nicht.")##

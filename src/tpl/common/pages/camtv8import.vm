@@ -1,0 +1,26 @@
+#parse( "strings/camtv8import.strings.vm" )
+<td class="contentbox">
+#parse( "errorlisting.vm" )
+
+#if( $mode == "before-upload" )##
+    <div class="pageheader">$strTitleUpload</div>
+    <noscript>
+        $strNeedJs
+    </noscript>
+    <hr class="contentbox"/>
+    <p>$strExplanation</p>
+
+    $uploadform.getFormHeader()
+
+    $uploadform.getFileSelector()
+    $uploadform.getFormSubmitButton($strSubmitUpload, "submit")
+
+    $uploadform.getFormFooter()
+#elseif( $mode == "upload" )##
+    TODO
+    $uploadform.getEntries()
+    TODO
+#else##
+    (invalid mode parameter - this is a bug)
+#end##
+</td>
