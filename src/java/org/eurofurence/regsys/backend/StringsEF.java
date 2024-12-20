@@ -108,6 +108,15 @@ public class StringsEF {
         public String permMail = "Permission denied to mail attendee with id %1$s. Skipping and proceeding.";
     }
 
+    public static class Camtv8ImportPageMsgs {
+        public String pageTitle = "Import Bank Statement";
+        public String uploadError = "Error uploading file: ";
+        public String parseError = "Error parsing file: ";
+        public String emptyError = "No entries found, or no entries with positive amounts";
+        public String noAttendeesReceived = "Loading attendees failed";
+        public String internalNeedId = "No value for badge number specified. This is a bug.";
+    }
+
     public static class CommentsPageMsgs {
         public String pageTitle = "Comment Listing";
     }

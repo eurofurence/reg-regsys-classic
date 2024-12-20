@@ -32,6 +32,7 @@ public class Strings extends StringsEF {
     public static BansPageMsgs bansPage = new BansPageMsgs();
     public static BulkmailPageMsgs bulkmailPage = new BulkmailPageMsgs();
     public static CommentsPageMsgs commentsPage = new CommentsPageMsgs();
+    public static Camtv8ImportPageMsgs camtv8ImportPage = new Camtv8ImportPageMsgs();
     public static EmailPageMsgs emailPage = new EmailPageMsgs();
     public static ExportPageMsgs exportPage = new ExportPageMsgs();
     public static InputFormMsgs inputForm = new InputFormMsgs();

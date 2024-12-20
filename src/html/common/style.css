@@ -763,6 +763,11 @@ td.selected
     background-color: #80b0a0;
 }
 
+td.left
+{
+    text-align: left;
+}
+
 td.right
 {
     text-align: right;
@@ -846,6 +851,82 @@ tr.searchlist_sep
         border-collapse: collapse;
 }
 
+table.info
+{
+    border-width: 1px;
+    border-style: solid;
+    border-color: #006357;
+    border-spacing: 3px;
+    padding: 3px;
+    background-color: #ffffff;
+    font-family: Arial;
+    font-size: 10pt;
+    color: #000000;
+    vertical-align:top;
+    align:center;
+    border-collapse: collapse;
+}
+
+th.info
+{
+    border-width: 0px 1px 0px 0px;
+    border-style: dotted;
+    border-color: #FFFFFF;
+    border-spacing: 3px;
+    padding: 8px;
+    background-color: #006357;
+    font-family: Arial;
+    font-size: 10pt;
+    font-weight: bold;
+    color: #ffffff;
+    vertical-align:top;
+    text-align:center;
+    border-collapse: collapse;
+}
+
+td.info
+{
+    border-style: solid;
+    border-color: #006357;
+    border-spacing: 0px;
+    padding: 1px 8px 0px 8px;
+    background-color: #ffffff;
+    font-family: Arial;
+    font-size: 10pt;
+    font-weight: bold;
+    color: #000000;
+    border-collapse: collapse;
+}
+
+td.nosep
+{
+    border-width: 0px 1px 0px 1px;;
+}
+
+td.sep
+{
+    border-width: 1px 1px 0px 1px;;
+}
+
+td.top
+{
+    vertical-align:top;
+}
+
+td.middle
+{
+    vertical-align:middle;
+}
+
+td.black
+{
+    color: #000000;
+}
+
+td.grey
+{
+    color: #606060;
+}
 
 div.searchlist_text
 {

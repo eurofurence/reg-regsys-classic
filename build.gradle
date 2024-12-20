@@ -52,6 +52,10 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.2'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
     implementation 'commons-validator:commons-validator:1.9.0'
+
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
+    implementation 'com.sun.xml.bind:jaxb-impl:4.0.5'
+
     // security updates
     implementation 'commons-codec:commons-codec:1.17.1'
 

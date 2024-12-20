@@ -1,0 +1,27 @@
+## Strings used in the landing page
+##
+## you may also wish to customize the other startXX.vm templates that contain
+## large blocks of text.
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+#set($strTitleUpload = "Upload Bank Statement File")##
+#set($strSubmitUpload = "Upload!")##
+#set($strUploadExplanation = "You can upload CAMTv8 053 XML files, with 052 supported as a fallback. Normally, 053 is the correct format and 052 is only used for intraday prebooked transactions, but some banks use this format for the account statement as well.")
+#set($strNeedJs = "<b>Note: Javascript is disabled.</b> Please enable to use full functionality.")##
+#set($strTitleBook = "Book Payments")##
+#set($strSubmitBook = "Apply!")##
+#set($strBookExplanation = "I have tried to match payments to outstanding dues. Check correct matches, or leave unchecked and manually book them in another window.")
+#set($strHeaderMatch = "Match")##
+#set($strHeaderAmount = "Amount")##
+#set($strHeaderCurrency = "Curr.")##
+#set($strHeaderValuationDate = "Valuation")##
+#set($strHeaderName = "Name / Matched Name")##
+#set($strHeaderInformation = "Subject / Badge and Nick")##
+#set($strTitleBookPerformed = "Payments Booked")##
+#set($strBookPerformedExplanation = "The following operations were performed:")
+#set($strHeaderRow = "Row")##
+#set($strHeaderBadge = "Badge")##
+#set($strHeaderNick = "Nick")##
+#set($strHeaderUsed = "Using")##
+#set($strHeaderResult = "Result")##
