@@ -123,6 +123,9 @@ public class StringsMMC {
         public String pageTitle = "Kontoauszugsdatei importieren";
         public String uploadError = "Fehler beim Hochladen der Datei: ";
         public String parseError = "Fehler beim parsen der Datei: ";
+        public String emptyError = "Keine Buchungen gefunden, oder keine Buchungen mit positivem Überweisungsbetrag";
+        public String noAttendeesReceived = "Fehler beim Laden der Teilnehmerliste";
+        public String internalNeedId = "Keine Badgenummer weitergereicht. Dies ist ein Bug.";
     }
 
     public static class CommentsPageMsgs {

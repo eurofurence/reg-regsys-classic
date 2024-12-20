@@ -17,6 +17,9 @@ public class Entry {
 
     public List<String> information; // RmtInf.Ustrd
 
+    // index into an attendee list (used for matching, -1 = no match)
+    public int matchPosition = -1;
+
     @Override
     public String toString() {
         return "Entry [amount=" + amount + ", currency=" + currency + ", bookingDate="

@@ -32,7 +32,7 @@ public class Parser {
                     .toList();
 
         } catch (JAXBException | XMLStreamException e) {
-            throw new RuntimeException("error parsing CAMTv8 052 or 053 XML", e);
+            throw new RuntimeException("error parsing CAMTv8 052 or 053 XML: " + e.getMessage(), e);
         }
     }
 }

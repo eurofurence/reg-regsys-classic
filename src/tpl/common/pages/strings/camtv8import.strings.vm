@@ -12,9 +12,9 @@
 #set($strTitleBook = "Book Payments")##
 #set($strSubmitBook = "Apply!")##
 #set($strBookExplanation = "I have tried to match payments to outstanding dues. Check correct matches, or leave unchecked and manually book them in another window.")
+#set($strHeaderMatch = "Match")##
 #set($strHeaderAmount = "Amount")##
 #set($strHeaderCurrency = "Curr.")##
-#set($strHeaderBookingDate = "Booked")##
 #set($strHeaderValuationDate = "Valuation")##
-#set($strHeaderDebitorName = "Name")##
-#set($strHeaderInformation = "Information")##
+#set($strHeaderName = "Name / Matched Name")##
+#set($strHeaderInformation = "Subject / Badge and Nick")##

@@ -22,24 +22,43 @@
     <p>$strBookExplanation</p>
 
     $bookingform.getFormHeader()
-    <TABLE class="searchlist">
+    <TABLE class="info">
         <TR>
-            <TH class="searchlist" ALIGN="right" VALIGN="top"><b>$strHeaderAmount</b></TH>
-            <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderCurrency</b></TH>
-            <TH class="searchlist" ALIGN="center" VALIGN="top"><b>$strHeaderBookingDate</b></TH>
-            <TH class="searchlist" ALIGN="center" VALIGN="top"><b>$strHeaderValuationDate</b></TH>
-            <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderDebitorName</b></TH>
-            <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderInformation</b></TH>
+            <TH class="info" ALIGN="right" VALIGN="top" width="10%"><b>$strHeaderMatch</b></TH>
+            <TH class="info" ALIGN="right" VALIGN="top" width="10%"><b>$strHeaderAmount</b></TH>
+            <TH class="info" ALIGN="left" VALIGN="top" width="10%"><b>$strHeaderCurrency</b></TH>
+            <TH class="info" ALIGN="center" VALIGN="top" width="10%"><b>$strHeaderValuationDate</b></TH>
+            <TH class="info" ALIGN="left" VALIGN="top" width="10%"><b>$strHeaderName</b></TH>
+            <TH class="info" ALIGN="left" VALIGN="top" width="40%"><b>$strHeaderInformation</b></TH>
         </TR>
         #foreach( $line in $entrylines )##
-        <TR>
-            <TD class="searchlist" ALIGN="right" VALIGN="top">$line.get(0)</TD>
-            <TD class="searchlist" ALIGN="left" VALIGN="top">$line.get(1)</TD>
-            <TD class="searchlist" ALIGN="center" VALIGN="top">$line.get(2)</TD>
-            <TD class="searchlist" ALIGN="center" VALIGN="top">$line.get(3)</TD>
-            <TD class="searchlist" ALIGN="left" VALIGN="top">$line.get(4)</TD>
-            <TD class="searchlist" ALIGN="left" VALIGN="top">$line.get(5)</TD>
-        </TR>
+        #if( $line.get(7) == "yes" )##
+            <TR>
+                <TD class="info sep black nobreak middle center" rowspan="2" width="10%">$line.get(13)</TD>
+                <TD class="info sep black nobreak middle right" rowspan="2" width="10%">$line.get(0)</TD>
+                <TD class="info sep black nobreak middle left" rowspan="2" width="10%">$line.get(1)</TD>
+                <TD class="info sep black nobreak middle center" rowspan="2" width="10%">$line.get(2)</TD>
+                <TD class="info sep black nobreak top left" width="10%" title="$line.get(4)">$line.get(3)</TD>
+                <TD class="info sep black nobreak top left" width="40%" title="$line.get(6)">$line.get(5)</TD>
+            </TR>
+            <TR>
+                <TD class="info nosep black nobreak top left" title="$line.get(10)">$line.get(9)</TD>
+                <TD class="info nosep black nobreak top left" title="$line.get(12)">$line.get(8) $line.get(12)</TD>
+            </TR>
+        #else##
+            <TR>
+                <TD class="info sep grey middle center" rowspan="2" width="10%">$line.get(13)</TD>
+                <TD class="info sep grey nobreak middle right" rowspan="2" width="10%">$line.get(0)</TD>
+                <TD class="info sep grey nobreak middle left" rowspan="2" width="10%">$line.get(1)</TD>
+                <TD class="info sep grey nobreak middle center" rowspan="2" width="10%">$line.get(2)</TD>
+                <TD class="info sep grey nobreak top left" width="10%" title="$line.get(4)">$line.get(3)</TD>
+                <TD class="info sep grey nobreak top left" width="40%" title="$line.get(6)">$line.get(5)</TD>
+            </TR>
+            <TR>
+                <TD class="info nosep grey nobreak top left">&nbsp;</TD>
+                <TD class="info nosep grey nobreak top left">&nbsp;</TD>
+            </TR>
+        #end##
         #end##
     </TABLE>
     $bookingform.getFormSubmitButton($strSubmitBook, "submit")

@@ -3,15 +3,18 @@ package org.eurofurence.regsys.web.forms;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import jakarta.xml.bind.UnmarshalException;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.service.camtv8.Entry;
 import org.eurofurence.regsys.service.camtv8.Parser;
 import org.eurofurence.regsys.web.pages.Camtv8ImportPage;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *  Represents the form used to upload a Camtv8 file.
@@ -71,14 +74,18 @@ public class Camtv8UploadForm extends Form {
             fileItemsList.stream()
                     .filter(fileItem -> "uploadfile".equals(fileItem.getName()))
                     .forEach(fileItem -> {
-                try {
-                    entries = Parser.parse(fileItem.getInputStream());
-                } catch (IOException e) {
-                    addError(Strings.camtv8ImportPage.parseError + e.getMessage());
-                }
-            });
+                        try {
+                            entries = Parser.parse(fileItem.getInputStream());
+                        } catch (Exception e) {
+                            addError(Strings.camtv8ImportPage.parseError + e.getMessage());
+                        }
+                    });
         } catch (IOException | ServletException e) {
             addError(Strings.camtv8ImportPage.uploadError + e.getMessage());
+        }
+
+        if (entries.isEmpty()) {
+            addError(Strings.camtv8ImportPage.emptyError);
         }
     }
 

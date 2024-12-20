@@ -72,6 +72,7 @@ public class Camtv8ImportPage extends Page {
                 getCamtv8BookingForm().initialize();
             } else if (mode.equals(MODE_UPLOAD)) {
                 getCamtv8UploadForm().processUpload();
+                getCamtv8BookingForm().loadUnpaidAttendees();
 
                 if (hasErrors()) {
                     getCamtv8UploadForm().initialize();
