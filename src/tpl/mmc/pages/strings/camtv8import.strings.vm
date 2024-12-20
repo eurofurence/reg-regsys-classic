@@ -18,3 +18,11 @@
 #set($strHeaderValuationDate = "Valuta")##
 #set($strHeaderName = "Name / Reg. Name")##
 #set($strHeaderInformation = "Betreff / Badge und Nick")##
+#set($strTitleBookPerformed = "Zahlungen wurden gebucht")##
+#set($strBookPerformedExplanation = "Die folgenden Buchungen wurden vorgenommen:")
+#set($strHeaderRow = "Zeile")##
+#set($strHeaderBadge = "Badge")##
+#set($strHeaderNick = "Nick")##
+#set($strHeaderUsed = "Nutze")##
+#set($strHeaderResult = "Ergebnis")##
+

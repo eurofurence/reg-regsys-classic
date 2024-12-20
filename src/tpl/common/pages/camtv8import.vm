@@ -64,6 +64,31 @@
     $bookingform.getFormSubmitButton($strSubmitBook, "submit")
 
     $bookingform.getFormFooter()
+#elseif( $mode == "book" )##
+    <div class="pageheader">$strTitleBookPerformed</div>
+    <hr class="contentbox"/>
+    <p>$strBookPerformedExplanation</p>
+
+    <TABLE class="info">
+        <TR>
+            <TH class="info" ALIGN="right" VALIGN="top"><b>$strHeaderRow</b></TH>
+            <TH class="info" ALIGN="right" VALIGN="top"><b>$strHeaderAmount</b></TH>
+            <TH class="info" ALIGN="right" VALIGN="top"><b>$strHeaderBadge</b></TH>
+            <TH class="info" ALIGN="right" VALIGN="top"><b>$strHeaderNick</b></TH>
+            <TH class="info" ALIGN="right" VALIGN="top"><b>$strHeaderUsed</b></TH>
+            <TH class="info" ALIGN="right" VALIGN="top"><b>$strHeaderResult</b></TH>
+        </TR>
+        #foreach( $line in $bookinglog )##
+        <TR>
+            <TD class="info sep black nobreak top right">$line.get(0)</TD>
+            <TD class="info sep black nobreak top right">$line.get(1)</TD>
+            <TD class="info sep black nobreak top right">$line.get(2)</TD>
+            <TD class="info sep black nobreak top left" title="$line.get(4)">$line.get(3)</TD>
+            <TD class="info sep black nobreak top left">$line.get(5)</TD>
+            <TD class="info sep black nobreak top center">$line.get(6)</TD>
+        </TR>
+        #end##
+    </TABLE>
 #else##
     (invalid mode parameter - this is a bug)
 #end##

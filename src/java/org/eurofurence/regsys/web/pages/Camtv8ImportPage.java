@@ -95,13 +95,6 @@ public class Camtv8ImportPage extends Page {
                 } else {
                     getCamtv8BookingForm().setEntries(getCamtv8UploadForm().getEntries());
                     getCamtv8BookingForm().processBooking();
-
-                    if (hasErrors()) {
-                        // show booking form again
-                        mode = MODE_UPLOAD;
-                    }
-
-                    entrylines = getCamtv8BookingForm().getEntriesWebListing();
                 }
             } else {
                 throw new DbException("invalid mode - this is a bug");
@@ -124,6 +117,7 @@ public class Camtv8ImportPage extends Page {
         veloContext.put("uploadform", getCamtv8UploadForm());
         veloContext.put("bookingform", getCamtv8BookingForm());
         veloContext.put("entrylines", entrylines);
+        veloContext.put("bookinglog", getCamtv8BookingForm().getBookingLog());
 
         return Page.renderTemplate(getServletContext(), "html.vm", veloContext);
     }

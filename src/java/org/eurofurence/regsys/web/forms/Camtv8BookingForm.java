@@ -4,17 +4,18 @@ import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.backend.persistence.DbException;
+import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
+import org.eurofurence.regsys.repositories.errors.DownstreamException;
+import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
 import org.eurofurence.regsys.repositories.payments.PaymentService;
 import org.eurofurence.regsys.repositories.payments.Transaction;
 import org.eurofurence.regsys.service.TransactionCalculator;
 import org.eurofurence.regsys.service.camtv8.Entry;
 import org.eurofurence.regsys.web.pages.Camtv8ImportPage;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  *  Represents the form used to book payments based on a parsed Camtv8 entry list.
@@ -28,12 +29,17 @@ public class Camtv8BookingForm extends Form {
     public static final String PERFORM = "perform"; // followed by _ and line number
     public static final String BADGENO = "badgeno"; // followed by _ and line number
 
+    public static final String PERFORM_VALUE = "book";
+
     // ------------ attributes -----------------------
 
     private List<Entry> entries = new ArrayList<>();
     private List<AttendeeSearchResultList.AttendeeSearchResult> attendeeList = new ArrayList<>();
+
     private List<Transaction> transactions = new ArrayList<>();
     private Transaction transaction = new Transaction();
+    private Attendee attendee = new Attendee();
+    private List<String[]> bookingLog = new ArrayList<>();
 
     private final PaymentService paymentService = new PaymentService();
     private final TransactionCalculator calculator = new TransactionCalculator();
@@ -48,6 +54,7 @@ public class Camtv8BookingForm extends Form {
         attendeeList = new ArrayList<>();
         transactions = new ArrayList<>();
         transaction = new Transaction();
+        bookingLog = new ArrayList<>();
     }
 
     // ---------- proxy methods for entity access -------
@@ -134,9 +141,8 @@ public class Camtv8BookingForm extends Form {
                 }
             }
 
-            if (bestMatch != -1) {
-                entry.matchPosition = bestMatch;
-            }
+            // we need to overwrite, attendee list may have changed since getting entries from session
+            entry.matchPosition = bestMatch;
         });
     }
 
@@ -151,7 +157,93 @@ public class Camtv8BookingForm extends Form {
     }
 
     public void processBooking() {
-        // TODO
+        Map<Integer,Long> badgeNumberToBookFromEntries = new TreeMap<>(); // entry position in entries -> badge number
+
+        // extract badgeNumberToBookFromEntries from request parameters
+        Map<String,String[]> parameters = getPage().getRequest().getParameterMap();
+        parameters.entrySet().stream()
+                .filter(e -> e.getKey().startsWith(PERFORM + "_"))
+                .filter(e -> e.getValue() != null && Arrays.asList(e.getValue()).contains(PERFORM_VALUE))
+                .forEach(e -> {
+                    String keyNumber = e.getKey().replace(PERFORM + "_", "");
+                    try {
+                        Integer key = Integer.parseInt(keyNumber);
+
+                        String[] badgeRaw = parameters.get(BADGENO + "_" + keyNumber);
+                        if (badgeRaw != null && badgeRaw.length > 0) {
+                            long value = Long.parseLong(badgeRaw[0]);
+
+                            if (value > 0) {
+                                badgeNumberToBookFromEntries.put(key, value);
+                            } else {
+                                addError("invalid perform or badgeno parameter '" + e.getKey() + "': invalid badge number");
+                            }
+                        }
+                    } catch (NumberFormatException ex) {
+                        addError("invalid perform or badgeno parameter '" + e.getKey() + "': " + ex.getMessage());
+                    }
+                });
+
+
+        badgeNumberToBookFromEntries.forEach((key, value) -> {
+            String[] protocol = new String[7];
+            try {
+                loadTransactionsForAttendee(value);
+                protocol[0] = Integer.toString(key + 1); // row number
+
+                Entry entry = entries.get(key);
+                protocol[1] = FormHelper.toCurrencyDecimals(entry.amount);
+
+                protocol[2] = Long.toString(value); // badge number
+
+                attendee = getPage().getAttendeeService().performGetAttendee(value, getPage().getTokenFromRequest(), getPage().getRequestId());
+                protocol[3] = escape(shorten(attendee.nickname, 30));
+                protocol[4] = escape(attendee.nickname);
+
+                transaction = new Transaction(); // new transaction as fallback
+                transaction.transactionType = Transaction.TransactionType.PAYMENT.getValue();
+                transaction.method = Transaction.Method.TRANSFER.getValue();
+                protocol[5] = "new tx";
+
+                // first check if we have a matching _tentative_ payment, if so, we can use its id (will also keep the paylink intact)
+                transactions.forEach(t -> {
+                    if (Transaction.TransactionType.PAYMENT.getValue().equals(t.transactionType)
+                            && Transaction.Method.TRANSFER.getValue().equals(t.method)
+                            && Transaction.Status.TENTATIVE.getValue().equals(t.status)) {
+                        transaction = t;
+                        protocol[5] = "tentative " + t.transactionIdentifier;
+                    }
+                });
+                // now check if we have a matching _pending_ payment, if so, use its id (prefer over tentative)
+                transactions.forEach(t -> {
+                    if (Transaction.TransactionType.PAYMENT.getValue().equals(t.transactionType)
+                        && Transaction.Method.TRANSFER.getValue().equals(t.method)
+                        && Transaction.Status.PENDING.getValue().equals(t.status)) {
+                        transaction = t;
+                        protocol[5] = "pending " + t.transactionIdentifier;
+                    }
+                });
+
+                // if existing, update to valid
+                transaction.status = Transaction.Status.VALID.getValue();
+                transaction.amount.grossCent = entry.amount;
+                transaction.amount.currency = "EUR";
+                transaction.comment = entry.debitorAccount + " " + String.join(" ", entry.information);
+                transaction.effectiveDate = entry.valuationDate;
+
+                if (transaction.transactionIdentifier == null || "".equals(transaction.transactionIdentifier)) {
+                    paymentService.performCreateTransaction(transaction, getPage().getTokenFromRequest(), getPage().getRequestId());
+                } else {
+                    paymentService.performUpdateTransaction(transaction.transactionIdentifier, transaction, getPage().getTokenFromRequest(), getPage().getRequestId());
+                }
+
+                protocol[6] = "success";
+
+                bookingLog.add(protocol);
+            } catch (Exception e) {
+                addError("FAILED to process transactions for badge number "+value+": " + e.getMessage());
+            }
+        });
     }
 
     // --------------------- form output methods ------------------------------------------------
@@ -167,6 +259,10 @@ public class Camtv8BookingForm extends Form {
 
     public String getFormSubmitButton(String caption, String style) {
         return "<INPUT ID='bookingsubmit' TYPE='SUBMIT' VALUE='" + escape(caption) + "' CLASS='" + escape(style) + "'/>";
+    }
+
+    public String getFormFooter() {
+        return "</FORM>";
     }
 
     private String shorten(String full, int maxLen) {
@@ -201,7 +297,7 @@ public class Camtv8BookingForm extends Form {
                 r[10] = escape(name);
                 r[11] = escape(shorten(a.nickname, 30));
                 r[12] = escape(a.nickname);
-                r[13] = Form.checkbox(true, PERFORM + "_" + i, "book", "", "check")
+                r[13] = Form.checkbox(true, PERFORM + "_" + i, PERFORM_VALUE, "", "check")
                       + Form.hiddenField(BADGENO + "_" + i, Long.toString(a.id));
             } else {
                 r[7] = "no";
@@ -217,7 +313,7 @@ public class Camtv8BookingForm extends Form {
         return result;
     }
 
-    public String getFormFooter() {
-        return "</FORM>";
+    public List<String[]> getBookingLog() {
+        return bookingLog;
     }
 }
