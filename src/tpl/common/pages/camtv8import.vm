@@ -8,7 +8,7 @@
         $strNeedJs
     </noscript>
     <hr class="contentbox"/>
-    <p>$strExplanation</p>
+    <p>$strUploadExplanation</p>
 
     $uploadform.getFormHeader()
 
@@ -17,9 +17,34 @@
 
     $uploadform.getFormFooter()
 #elseif( $mode == "upload" )##
-    TODO
-    $uploadform.getEntries()
-    TODO
+    <div class="pageheader">$strTitleBook</div>
+    <hr class="contentbox"/>
+    <p>$strBookExplanation</p>
+
+    $bookingform.getFormHeader()
+    <TABLE class="searchlist">
+        <TR>
+            <TH class="searchlist" ALIGN="right" VALIGN="top"><b>$strHeaderAmount</b></TH>
+            <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderCurrency</b></TH>
+            <TH class="searchlist" ALIGN="center" VALIGN="top"><b>$strHeaderBookingDate</b></TH>
+            <TH class="searchlist" ALIGN="center" VALIGN="top"><b>$strHeaderValuationDate</b></TH>
+            <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderDebitorName</b></TH>
+            <TH class="searchlist" ALIGN="left" VALIGN="top"><b>$strHeaderInformation</b></TH>
+        </TR>
+        #foreach( $line in $entrylines )##
+        <TR>
+            <TD class="searchlist" ALIGN="right" VALIGN="top">$line.get(0)</TD>
+            <TD class="searchlist" ALIGN="left" VALIGN="top">$line.get(1)</TD>
+            <TD class="searchlist" ALIGN="center" VALIGN="top">$line.get(2)</TD>
+            <TD class="searchlist" ALIGN="center" VALIGN="top">$line.get(3)</TD>
+            <TD class="searchlist" ALIGN="left" VALIGN="top">$line.get(4)</TD>
+            <TD class="searchlist" ALIGN="left" VALIGN="top">$line.get(5)</TD>
+        </TR>
+        #end##
+    </TABLE>
+    $bookingform.getFormSubmitButton($strSubmitBook, "submit")
+
+    $bookingform.getFormFooter()
 #else##
     (invalid mode parameter - this is a bug)
 #end##

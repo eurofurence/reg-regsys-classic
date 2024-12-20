@@ -1,6 +1,7 @@
 package org.eurofurence.regsys.web.forms;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.service.camtv8.Entry;
@@ -25,7 +26,7 @@ public class Camtv8UploadForm extends Form {
 
     // ------------ attributes -----------------------
 
-    List<Entry> entries = new ArrayList<>();
+    private List<Entry> entries = new ArrayList<>();
 
     // ------------ constructors -----------------------
 
@@ -42,9 +43,27 @@ public class Camtv8UploadForm extends Form {
         return entries;
     }
 
-    //
-    // Business methods
-    //
+    // ---------- business methods ---------
+
+    public static final String CAMTV8_UPLOAD_FORM_SESSION_KEY = "Camtv8UploadForm_Session_Entries";
+
+    public void storeEntriesInSession(HttpSession session) {
+        session.setAttribute(CAMTV8_UPLOAD_FORM_SESSION_KEY, entries);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void getEntriesFromSession(HttpSession session) {
+        try {
+            Object entriesFromSession = session.getAttribute(CAMTV8_UPLOAD_FORM_SESSION_KEY);
+            if (entriesFromSession != null) {
+                entries = (List<Entry>) entriesFromSession;
+            } else {
+                addError("Camtv8UploadForm: No entries found in session - this is a bug");
+            }
+        } catch (ClassCastException e) {
+            addError("Camtv8UploadForm: ClassCastException - this is a bug");
+        }
+    }
 
     public void processUpload() {
         try {

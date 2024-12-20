@@ -12,11 +12,13 @@ import org.eurofurence.regsys.backend.persistence.DbException;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
+import org.eurofurence.regsys.web.forms.Camtv8BookingForm;
 import org.eurofurence.regsys.web.forms.Camtv8UploadForm;
 import org.eurofurence.regsys.web.forms.PaymentForm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *  Represents the account statement XML upload page in the registration system.
@@ -47,6 +49,7 @@ public class Camtv8ImportPage extends Page {
         super.initialize(servletContext, request, response, session);
 
         createCamtv8UploadForm();
+        createCamtv8BookingForm();
     }
 
     @Override
@@ -61,18 +64,44 @@ public class Camtv8ImportPage extends Page {
             mode = MODE_BEFORE_UPLOAD;
         }
 
+        List<String[]> entrylines = new ArrayList<>();
+
         try {
             if (mode.equals(MODE_BEFORE_UPLOAD)) {
                 getCamtv8UploadForm().initialize();
+                getCamtv8BookingForm().initialize();
             } else if (mode.equals(MODE_UPLOAD)) {
                 getCamtv8UploadForm().processUpload();
 
                 if (hasErrors()) {
                     getCamtv8UploadForm().initialize();
+                    getCamtv8BookingForm().initialize();
                     mode = MODE_BEFORE_UPLOAD;
+                } else {
+                    getCamtv8UploadForm().storeEntriesInSession(getSession());
+                    getCamtv8BookingForm().setEntries(getCamtv8UploadForm().getEntries());
                 }
+
+                getCamtv8BookingForm().matchup();
+                entrylines = getCamtv8BookingForm().getEntriesWebListing();
             } else if (mode.equals(MODE_BOOK)) {
-                // TODO
+                getCamtv8UploadForm().getEntriesFromSession(getSession());
+
+                if (hasErrors()) {
+                    getCamtv8UploadForm().initialize();
+                    getCamtv8BookingForm().initialize();
+                    mode = MODE_BEFORE_UPLOAD;
+                } else {
+                    getCamtv8BookingForm().setEntries(getCamtv8UploadForm().getEntries());
+                    getCamtv8BookingForm().processBooking();
+
+                    if (hasErrors()) {
+                        // show booking form again
+                        mode = MODE_UPLOAD;
+                    }
+
+                    entrylines = getCamtv8BookingForm().getEntriesWebListing();
+                }
             } else {
                 throw new DbException("invalid mode - this is a bug");
             }
@@ -92,6 +121,8 @@ public class Camtv8ImportPage extends Page {
         veloContext.put("mode", mode);
         veloContext.put("navbar", getNavbarForm());
         veloContext.put("uploadform", getCamtv8UploadForm());
+        veloContext.put("bookingform", getCamtv8BookingForm());
+        veloContext.put("entrylines", entrylines);
 
         return Page.renderTemplate(getServletContext(), "html.vm", veloContext);
     }
@@ -130,5 +161,18 @@ public class Camtv8ImportPage extends Page {
 
     public Camtv8UploadForm getCamtv8UploadForm() {
         return uploadForm;
+    }
+
+    // booking form
+
+    private Camtv8BookingForm bookingForm;
+
+    public void createCamtv8BookingForm() {
+        bookingForm = new Camtv8BookingForm();
+        bookingForm.givePage(this);
+    }
+
+    public Camtv8BookingForm getCamtv8BookingForm() {
+        return bookingForm;
     }
 }
