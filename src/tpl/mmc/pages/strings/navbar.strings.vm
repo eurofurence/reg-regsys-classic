@@ -9,6 +9,7 @@
 ##
 #set($strNavStartPage = "Startseite")##
 #set($strNavAccounting = "Buchhaltung")##
+#set($strNavBankImport = "Kontoauszug&nbsp;Import")##
 #set($strNavStatistics = "Statistik")##
 #set($strNavListNew = "Liste&nbsp;Neuzug&auml;nge")##
 #set($strNavListAll = "List&nbsp;alle")##

@@ -1,0 +1,28 @@
+## Strings used in the landing page
+##
+## you may also wish to customize the other startXX.vm templates that contain
+## large blocks of text.
+##
+## the ## at the end of lines prevents blank lines in the output of this template
+##
+#set($strTitleUpload = "Kontoauszugdatei hochladen")##
+#set($strSubmitUpload = "Hochladen!")##
+#set($strUploadExplanation = "Das System unterstützt CAMTv8 053 XML-Dateien. Weil einige Banken ihre Kontoauszüge in CAMTv8 052 liefern, wird auch dieses Format unterstützt, auch wenn es eigentlich für untertägige Vorabbuchungen gedacht ist.")
+#set($strNeedJs = "<b>Note: Javascript ist abgeschaltet.</b> Bitte anmachen, sonst funktioniert's nicht.")##
+#set($strTitleBook = "Zahlungen buchen")##
+#set($strSubmitBook = "Jetzt buchen!")##
+#set($strBookExplanation = "Ich habe versucht, die eingegangenen Zahlungen zu ausstehenden Buchungen zuzuordnen. Anhaken, wenn's passt, sonst bitte nicht anhaken und in einem parallel geöffneten Fenster manuell buchen.")
+#set($strHeaderMatch = "Zuordnung")##
+#set($strHeaderAmount = "Betrag")##
+#set($strHeaderCurrency = "Währung")##
+#set($strHeaderValuationDate = "Valuta")##
+#set($strHeaderName = "Name / Reg. Name")##
+#set($strHeaderInformation = "Betreff / Badge und Nick")##
+#set($strTitleBookPerformed = "Zahlungen wurden gebucht")##
+#set($strBookPerformedExplanation = "Die folgenden Buchungen wurden vorgenommen:")
+#set($strHeaderRow = "Zeile")##
+#set($strHeaderBadge = "Badge")##
+#set($strHeaderNick = "Nick")##
+#set($strHeaderUsed = "Nutze")##
+#set($strHeaderResult = "Ergebnis")##
+

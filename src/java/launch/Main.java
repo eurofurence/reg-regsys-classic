@@ -83,6 +83,8 @@ public class Main {
         //      </cookie-config>
         //    </session-config>
 
+        context.setAllowCasualMultipartParsing(true);
+
         String serviceServletName = "ServiceServlet";
         String pageServletName = "PageServlet";
         String errorServletName = "ErrorServlet";
