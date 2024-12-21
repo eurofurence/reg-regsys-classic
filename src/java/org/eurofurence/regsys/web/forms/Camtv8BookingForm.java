@@ -117,6 +117,13 @@ public class Camtv8BookingForm extends Form {
         return bestScore[0];
     }
 
+    private boolean containsIgnoringCase(String haystack, String needle) {
+        if (haystack == null || needle == null) {
+            return false;
+        }
+        return haystack.toLowerCase().contains(needle.toLowerCase());
+    }
+
     public void matchup() {
         entries.forEach(entry -> {
             int bestMatch = -1;
@@ -127,12 +134,12 @@ public class Camtv8BookingForm extends Form {
                 if (a.currentDues == entry.amount) {
                     double score = 0d;
                     if (informationBadgeNo(entry.information, a.id))
-                        score += 110d;
+                        score += 90d;
                     score += 50 * informationNicknameScore(entry.information, a.nickname);
-                    if (entry.debitorName.contains(a.lastName))
-                        score += 75d;
-                    if (entry.debitorName.contains(a.firstName))
-                        score += 30d;
+                    if (containsIgnoringCase(entry.debitorName, a.lastName))
+                        score += 65d;
+                    if (containsIgnoringCase(entry.debitorName, a.firstName))
+                        score += 20d;
 
                     if (score > bestScore && score > 100d) {
                         bestMatch = i;
