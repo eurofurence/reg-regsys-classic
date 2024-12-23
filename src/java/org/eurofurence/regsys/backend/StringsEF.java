@@ -9,9 +9,9 @@ package org.eurofurence.regsys.backend;
  */
 public class StringsEF {
     public static class ConfigStrings {
-        public String conventionLongname = "Eurofurence 28";
-        public String conventionHumanReadableDate = "September 18-21, 2024"; // used in the navbar
-        public String conventionYear = "2024"; // used in lots of places on the web page and for credit card payment subject
+        public String conventionLongname = "Eurofurence 29";
+        public String conventionHumanReadableDate = "September 3-6, 2025"; // used in the navbar
+        public String conventionYear = "2025"; // used in lots of places on the web page and for credit card payment subject
 
         public String termsURL = "https://help.eurofurence.org/legal/terms";
         public String rulesURL = "https://help.eurofurence.org/legal/roc";
@@ -35,11 +35,11 @@ public class StringsEF {
 
         public String defaultBirthday = "31.12.1900";
 
-        public String paymentStart = "01.12.2023";
-        public String paymentEnd = "31.12.2024";
+        public String paymentStart = "01.12.2024";
+        public String paymentEnd = "31.12.2025";
 
-        public String conStart = "18.09.2024";
-        public String conEnd = "21.09.2024";
+        public String conStart = "03.09.2025";
+        public String conEnd = "06.09.2025";
     }
 
     public static class UtilMsgs {
@@ -58,8 +58,8 @@ public class StringsEF {
         public String dateFormatMessage = "Please use format DD.MM.YYYY, as in 06.11.1972";
         public String tooOldMessage = "Over 115 years of age? Come on!";
         public String tooYoungMessage = "Sorry, people under 18 years cannot attend Eurofurence.";
-        public String regDateMessage = "Registration starts Jan 2018 and ends on the last day of the con!";
-        public String payDateMessage = "Payments must be received within 2024.";
+        public String regDateMessage = "Registration starts Jan 2025 and ends on the last day of the con!";
+        public String payDateMessage = "Payments must be received within 2025.";
     }
 
     public static class AccountingPageMsgs {
