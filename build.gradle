@@ -57,7 +57,7 @@ dependencies {
     implementation 'com.sun.xml.bind:jaxb-impl:4.0.5'
 
     // security updates
-    implementation 'commons-codec:commons-codec:1.17.1'
+    implementation 'commons-codec:commons-codec:1.18.0'
 
     // embed tomcat 10.1
     implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.34'
