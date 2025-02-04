@@ -208,6 +208,7 @@ public class Camtv8BookingForm extends Form {
                 protocol[4] = escape(attendee.nickname);
 
                 transaction = new Transaction(); // new transaction as fallback
+                transaction.debitorId = value;
                 transaction.transactionType = Transaction.TransactionType.PAYMENT.getValue();
                 transaction.method = Transaction.Method.TRANSFER.getValue();
                 protocol[5] = "new tx";
@@ -231,10 +232,11 @@ public class Camtv8BookingForm extends Form {
                     }
                 });
 
-                // if existing, update to valid
+                // if existing, update to valid, otherwise create as valid directly
                 transaction.status = Transaction.Status.VALID.getValue();
                 transaction.amount.grossCent = entry.amount;
                 transaction.amount.currency = "EUR";
+                transaction.amount.vatRatePercent = 19.0d;
                 transaction.comment = entry.debitorAccount + " " + String.join(" ", entry.information);
                 transaction.effectiveDate = entry.valuationDate;
 
