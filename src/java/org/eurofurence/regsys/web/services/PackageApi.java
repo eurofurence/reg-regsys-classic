@@ -132,6 +132,10 @@ public class PackageApi extends Service {
             downstreamAuth.apiToken = getConfiguration().downstream.apiToken;
             attendee = attendeeService.performGetAttendee(attendeeId, downstreamAuth, getRequestId());
 
+            if (getMethod() == HttpMethod.GET) {
+                return;
+            }
+
             boolean updated = false;
 
             OptionList temp = new OptionList(Option.OptionTypes.Package, getConfiguration().choices.packages, o -> true);
