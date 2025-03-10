@@ -60,7 +60,7 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.18.0'
 
     // embed tomcat 10.1
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.34'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.39'
 
     implementation 'co.elastic.logging:jul-ecs-formatter:1.6.0'
     implementation 'co.elastic.logging:ecs-logging-core:1.6.0'
