@@ -190,6 +190,11 @@ choices:
       price: 10000
       read_only: true
       vat_percent: 19
+    boat-cruise:
+      description: Summerboat Boat Cruise
+      price: 3000
+      read_only: true
+      vat_percent: 19
     boat-trip:
       description: Summerboat Boat Trip
       price: 4000

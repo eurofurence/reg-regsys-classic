@@ -55,6 +55,7 @@ public class PackageApi extends Service {
                 allowed.put("dealer-quad", downstream.ddToken);
             }
             if (downstream.boatToken != null && !"".equals(downstream.boatToken)) {
+                allowed.put("boat-cruise", downstream.boatToken);
                 allowed.put("boat-trip", downstream.boatToken);
                 allowed.put("boat-vip", downstream.boatToken);
                 allowed.put("boat-benefactor", downstream.boatToken);
