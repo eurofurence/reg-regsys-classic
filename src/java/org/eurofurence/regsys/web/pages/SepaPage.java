@@ -47,6 +47,7 @@ public class SepaPage extends Page {
     private String subject = "";
     private String language = "en-US";
     private boolean showInfo = false;
+    private boolean unavailable = false;
     private Transaction transaction = new Transaction();
     private final PaymentService paymentService = new PaymentService();
 
@@ -118,6 +119,11 @@ public class SepaPage extends Page {
     @SuppressWarnings("unused")
     public boolean mayView() {
         return showInfo;
+    }
+
+    @SuppressWarnings("unused")
+    public boolean unavailable() {
+        return unavailable;
     }
 
     @SuppressWarnings("unused")
@@ -215,6 +221,7 @@ public class SepaPage extends Page {
 
                 subject = getConfiguration().sepa.subjectPrefix + " " + me.nickname + " " + me.id.toString();
                 showInfo = true;
+                unavailable = getConfiguration().sepa.unavailable;
             } else if (status == Constants.MemberStatus.PAID || status == Constants.MemberStatus.CHECKED_IN) {
                 throw new DbDataException(Strings.sepaPage.nothingToPay);
             } else {

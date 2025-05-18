@@ -9,6 +9,25 @@
         <div class="headline">Zahlung per SEPA Bank&uuml;berweisung</div>
         <hr class="contentbox">
         $page.FormHeader
+        #if($page.unavailable())##
+            <TABLE BORDER="0" class="error">
+                <TR>
+                    <TH class="error">
+                        Es ist zu sp&auml;t f&uuml;r Zahlungen per &Uuml;berweisung!
+                    </TH>
+                </TR>
+                <TR>
+                    <TD class="error">Zahlungen per &Uuml;berweisung brauchen mehrere Tage, bis sie bei uns auf dem Konto eintreffen.
+                        So kurz vor der Convention bitten wir deshalb, auf &Uuml;berweisungen zu verzichten.</TD>
+                </TR>
+            </TABLE>
+            <TABLE>
+                <TR>
+                    <TD>${page.submitBack("Zur&uuml;ck", "submit_small")}</TD>
+                </TR>
+            </TABLE>
+        #else##
+        <p><b>Wichtig:</b> Dies ist kein Bankeinzug! Du musst selbst per online-Banking &uuml;berweisen!</p>
         <TABLE>
             <TR>
                 <TD class="label" ALIGN="right" VALIGN="middle">Kontoinhaber</TD>
@@ -40,9 +59,10 @@
             </TR>
             <TR>
                 <TD>${page.submitBack("Zur&uuml;ck", "submit_small")}</TD>
-                <TD>${page.submitSent("Ich habe gezahlt!", "submit")}</TD>
+                <TD>${page.submitSent("Ich habe &uuml;berwiesen!", "submit")}</TD>
             </TR>
         </TABLE>
+        #end##
         $page.FormFooter
     #else##
         <div class="contentbox">Ein Fehler ist aufgetreten.</div><br/>
@@ -63,6 +83,25 @@
         <div class="headline">Paying by SEPA money transfer</div>
         <hr class="contentbox">
         $page.FormHeader
+        #if($page.unavailable())##
+            <TABLE BORDER="0" class="error">
+                <TR>
+                    <TH class="error">
+                        It is too late to send SEPA money transfers!
+                    </TH>
+                </TR>
+                <TR>
+                    <TD class="error">SEPA transfers may take up to a week to process.
+                        This close to the convention we ask that you do not make payments by money transfer.</TD>
+                </TR>
+            </TABLE>
+            <TABLE>
+                <TR>
+                    <TD>${page.submitBack("Back", "submit_small")}</TD>
+                </TR>
+            </TABLE>
+        #else##
+        <p><b>Important:</b> You will have to transfer the money from your account yourself, for example using online banking.</p>
         <TABLE>
             <TR>
                 <TD class="label" ALIGN="right" VALIGN="middle">Account owner</TD>
@@ -97,6 +136,7 @@
                 <TD>${page.submitSent("I have sent this payment!", "submit")}</TD>
             </TR>
         </TABLE>
+        #end##
         $page.FormFooter
     #else##
         <div class="contentbox">An error has occurred.</div><br/>

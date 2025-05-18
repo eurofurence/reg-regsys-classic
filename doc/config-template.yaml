@@ -42,6 +42,7 @@ sepa:
   subject_prefix: 'AWECON'
   success_redirect: 'http://localhost:10000/app/register'
   failure_redirect: 'http://localhost:10000/app/register'
+  unavailable: false
 groups:
   enable: false # enable roomshare group management
   max_size: 6
