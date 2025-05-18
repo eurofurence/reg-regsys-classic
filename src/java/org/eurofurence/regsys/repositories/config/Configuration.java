@@ -174,6 +174,9 @@ public class Configuration {
 
         @JsonProperty("failure_redirect")
         public String failureRedirect;
+
+        @JsonProperty("unavailable")
+        public boolean unavailable;
     }
 
     public static class GroupsConfig {

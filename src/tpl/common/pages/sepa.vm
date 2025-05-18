@@ -9,6 +9,16 @@
         <div class="headline">Zahlung per SEPA Bank&uuml;berweisung</div>
         <hr class="contentbox">
         $page.FormHeader
+        #if($page.unavailable())##
+            <p><b>Es ist zu sp&auml;t f&uuml;r Zahlungen per &Uuml;berweisung!</b></p><br/><br/>
+            <p>Zahlungen per &Uuml;berweisung brauchen mehrere Tage, bis sie bei uns auf dem Konto eintreffen.
+            So kurz vor der Convention bitten wir deshalb, auf &Uuml;berweisungen zu verzichten.</p><br/><br/>
+            <TABLE>
+                <TR>
+                    <TD>${page.submitBack("Zur&uuml;ck", "submit_small")}</TD>
+                </TR>
+            </TABLE>
+        #else##
         <TABLE>
             <TR>
                 <TD class="label" ALIGN="right" VALIGN="middle">Kontoinhaber</TD>
@@ -43,6 +53,7 @@
                 <TD>${page.submitSent("Ich habe gezahlt!", "submit")}</TD>
             </TR>
         </TABLE>
+        #end##
         $page.FormFooter
     #else##
         <div class="contentbox">Ein Fehler ist aufgetreten.</div><br/>
@@ -63,6 +74,16 @@
         <div class="headline">Paying by SEPA money transfer</div>
         <hr class="contentbox">
         $page.FormHeader
+        #if($page.unavailable())##
+            <p><b>It is too late to send SEPA money transfers!</b></p><br/><br/>
+            <p>SEPA transfers may take up to a week to process.
+                This close to the convention we ask that you do not make payments by money transfer.</p><br/><br/>
+            <TABLE>
+                <TR>
+                    <TD>${page.submitBack("Back", "submit_small")}</TD>
+                </TR>
+            </TABLE>
+        #else##
         <TABLE>
             <TR>
                 <TD class="label" ALIGN="right" VALIGN="middle">Account owner</TD>
@@ -97,6 +118,7 @@
                 <TD>${page.submitSent("I have sent this payment!", "submit")}</TD>
             </TR>
         </TABLE>
+        #end##
         $page.FormFooter
     #else##
         <div class="contentbox">An error has occurred.</div><br/>
