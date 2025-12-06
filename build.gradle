@@ -1,3 +1,20 @@
+// as of gradle 9.x these sections must be at the top of the file. Not even
+// a def of variables is allowed before them ...
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+repositories {
+    mavenCentral()
+}
+
 // ======================= start configuration section ========================================
 
 // configure the convention to build for
@@ -10,22 +27,12 @@ def convention = "ef" // "ef", "mmc"
 def logmode = "ecs" // "plain", "ecs"
 
 // ======================= end configuration section ========================================
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-apply plugin: 'java'
-
 description = "The Eurofurence Registration System"
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
 
 group = 'org.eurofurence.regsys'
 version = '0.1.0-SNAPSHOT'
