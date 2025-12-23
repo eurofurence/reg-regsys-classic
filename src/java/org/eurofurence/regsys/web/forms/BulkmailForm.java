@@ -108,12 +108,21 @@ public class BulkmailForm extends AttendeeSelectionForm {
                 sendRequest.variables.put("due_date", att.dueDate);
                 sendRequest.variables.put("regsys_url", regsysUrl);
 
-                // variable in use by the payment failure notification system - make it possible to recognize template saves
-                sendRequest.variables.put("operation", "mail template save");
+                // variable in use by the payment failure notification system - make it possible to recognize bulk mail
+                sendRequest.variables.put("operation", "bulk mail");
+
+                sendRequest.async = true;
 
                 mailService.performSendMail(sendRequest, auth, requestId);
 
                 successCount++;
+
+                try {
+                    // prevent overloading mail server / service with async mail
+                    Thread.sleep(100L);
+                } catch (InterruptedException e) {
+                    // ignore, should only happen during container shutdown
+                }
             } catch (UnauthorizedException | ForbiddenException e) {
                 // huh? we should be admin - maybe token expired during operation
                 addError(String.format(Strings.bulkmailPage.permMail, Long.toString(att.id)));
