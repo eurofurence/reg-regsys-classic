@@ -25,4 +25,7 @@ public class MailSendRequest {
 
     @JsonProperty("variables")
     public Map<String, String> variables = new TreeMap<>();
+
+    @JsonProperty("async")
+    public boolean async;
 }

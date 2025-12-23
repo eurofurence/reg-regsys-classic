@@ -4,7 +4,6 @@ import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.repositories.attendees.Attendee;
 import org.eurofurence.regsys.repositories.mails.MailPreviewRequest;
-import org.eurofurence.regsys.repositories.mails.MailSendRequest;
 import org.eurofurence.regsys.repositories.mails.MailService;
 import org.eurofurence.regsys.repositories.mails.TemplateList;
 import org.eurofurence.regsys.web.forms.AnnouncementForm;
