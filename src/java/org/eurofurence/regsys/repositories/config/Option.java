@@ -52,6 +52,9 @@ public class Option {
     // (but will see once admin has selected them for him)
     public boolean                adminOnly;
 
+    public String                 category;
+    public int                    sorting;
+
     // is the option actually selected
     public int                count;
 
@@ -78,6 +81,8 @@ public class Option {
             this.maxCount = 1;
             this.allowedCounts = List.of(1);
         }
+        this.category = fromConfiguration.category;
+        this.sorting = fromConfiguration.sorting;
     }
 
     public String toString() {

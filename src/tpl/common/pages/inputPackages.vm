@@ -1,14 +1,17 @@
             <TABLE class="prices">
+              #foreach ($category in $form.getPackageCategories())##
               <TR>
-                <TD colspan="3" class="input" valign="middle"></TD>
-                <TH class="prices" ALIGN="center">Price</TH>
+                  <TD class="input" valign="middle"></TD>
+                  <TD colspan="2" class="input" valign="middle"><b>$category</b></TD>
+                  <TH class="prices" ALIGN="center">Price</TH>
               </TR>
-              #foreach ($option in $form.getPackages())##
+                #foreach ($option in $form.getPackages($category))##
               <TR>
                 <TH class="prices" align="center">$form.fieldPackage($option)</TH>
                 <TH class="prices"><label for="$form.getPackageParam($option)">&nbsp;&nbsp;$form.getOptionName($option)&nbsp;&nbsp;</label></TH>
                 <TH class="prices" align="right">$form.fieldPackageCount($option)</TH>
                 <TD class="prices">$form.getOptionPrice($option) &euro; </TD>
               </TR>
+                #end##
               #end##
             </TABLE>

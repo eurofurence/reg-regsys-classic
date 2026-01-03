@@ -71,8 +71,37 @@ public class StatsPage extends Page {
         return by_type;
     }
 
-    public Map<String, Long> getByPackage() {
-        return by_package;
+    public static class PackageCount {
+        public String category;
+        public String description;
+        public Long count;
+
+        public PackageCount(String category, String description, Long count) {
+            this.category = category;
+            this.description = description;
+            this.count = count;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public Long getCount() {
+            return count;
+        }
+    }
+
+    public List<PackageCount> getByPackage() {
+        List<PackageCount> result = new ArrayList<>();
+        getConfiguration().choices.packages.entrySet().stream().toList().stream()
+                .sorted(Map.Entry.comparingByKey()) // stable sort retains suborders, so this is the lowest priority
+                .sorted(Comparator.comparingInt(e -> e.getValue().sorting))
+                .sorted(Comparator.comparing(e -> e.getValue().category))
+                .forEach(e -> {
+                    result.add(new PackageCount(e.getValue().category, e.getValue().description, by_package.getOrDefault(e.getKey(), 0L)));
+                });
+
+        return result;
     }
 
     public Map<String, Long> getByFlag() {
