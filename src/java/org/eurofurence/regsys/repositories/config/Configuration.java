@@ -47,6 +47,9 @@ public class Configuration {
 
         @JsonProperty("group")
         public String group; // unused but helm chart creates it
+
+        @JsonProperty("limit")
+        public int limit;
     }
 
     public static class Choices {
