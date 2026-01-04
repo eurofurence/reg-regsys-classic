@@ -31,6 +31,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -955,7 +956,13 @@ public class InputForm extends Form {
             return FormHelper.toCurrencyDecimals(o.price);
         }
 
-        public List<Option> getPackages() {
+        public List<String> getPackageCategories() {
+            List<String> categories = new ArrayList<>();
+            return configService.getConfig().choices.packages.values().stream()
+                    .map(v -> v.category == null ? "" : v.category).distinct().sorted().toList();
+        }
+
+        public List<Option> getPackages(String category) {
             List<Option> oList = new ArrayList<Option>();
             OptionList packages = getAttendeePackages();
             for (Option o: packages) {
@@ -963,8 +970,14 @@ public class InputForm extends Form {
                 if (o.adminOnly && o.count == 0 && !auth(Permission.ADMIN)) {
                     continue;
                 }
-                oList.add(o);
+                // filter by category
+                if (category == null || category.equals(o.category)) {
+                    oList.add(o);
+                }
             }
+            // sort list, stable sort retains code order for identical sorting weights
+            oList.sort(Comparator.comparingInt(o -> o.sorting));
+
             return oList;
         }
 

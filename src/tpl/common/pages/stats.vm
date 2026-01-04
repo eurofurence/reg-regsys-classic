@@ -45,10 +45,10 @@
          <TD ALIGN="LEFT" VALIGN="TOP">
             <TABLE>
               <TR><TD colspan=2 ALIGN="LEFT"><div class="headline">Packages</div><hr class="contentbox"></TD></TR>
-              #foreach($e in $page.getByPackage().entrySet())
+              #foreach($e in $page.getByPackage())
               <TR>
-                <TD class="tbl_value" ALIGN="RIGHT">$e.value</TD>
-                <TD class="tbl_label">$e.key</TD>
+                <TD class="tbl_value" ALIGN="RIGHT">$e.getCount()</TD>
+                <TD class="tbl_label">$e.getDescription()</TD>
               </TR>
               #end
             </TABLE>

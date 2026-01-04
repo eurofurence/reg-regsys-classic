@@ -50,6 +50,12 @@ public class Configuration {
 
         @JsonProperty("limit")
         public int limit;
+
+        @JsonProperty("category")
+        public String category = ""; // group packages (display only)
+
+        @JsonProperty("sorting")
+        public int sorting; // incremental sorting of packages within category (display only)
     }
 
     public static class Choices {
