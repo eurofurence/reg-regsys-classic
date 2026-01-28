@@ -24,7 +24,7 @@ def convention = "ef" // "ef", "mmc"
 
 // configure the logging mode to build
 // (used to select a pair of config files, either ecs or plain)
-def logmode = "plain" // "plain", "ecs"
+def logmode = "ecs" // "plain", "ecs"
 
 // ======================= end configuration section ========================================
 description = "The Eurofurence Registration System"
