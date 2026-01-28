@@ -46,7 +46,7 @@ sourceSets {
 }
 
 dependencies {
-    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.50'
+    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.52'
     implementation 'org.apache.commons:commons-lang3:3.20.0'
     implementation 'org.apache.velocity:velocity-engine-core:2.4.1'
     implementation 'org.apache.commons:commons-text:1.15.0'
@@ -68,7 +68,7 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.20.0'
 
     // embed tomcat 10.1
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.50'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.52'
 
     implementation 'co.elastic.logging:jul-ecs-formatter:1.7.0'
     implementation 'co.elastic.logging:ecs-logging-core:1.7.0'
