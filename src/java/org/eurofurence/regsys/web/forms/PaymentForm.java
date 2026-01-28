@@ -182,12 +182,13 @@ public class PaymentForm extends Form {
     public String getPaylink() {
         boolean hasPaylink = transaction.paymentStartUrl != null && !"".equals(transaction.paymentStartUrl);
         if (hasPaylink) {
-            boolean isUsable = transaction.status != null && transaction.status.equals(Transaction.Status.TENTATIVE.getValue());
-            if (isUsable) {
-                return "<a href='" + transaction.paymentStartUrl + "'>paylink</a>";
-            } else {
-                return "(paylink)";
-            }
+//            boolean isUsable = transaction.status != null && transaction.status.equals(Transaction.Status.TENTATIVE.getValue());
+//            if (isUsable) {
+//                return "<a href='" + transaction.paymentStartUrl + "'>paylink</a>";
+//            } else {
+//                return "(paylink)";
+//            }
+            return "(paylink)";
         }
         return "&nbsp;";
     }
