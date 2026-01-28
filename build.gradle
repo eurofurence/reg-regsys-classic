@@ -24,7 +24,7 @@ def convention = "ef" // "ef", "mmc"
 
 // configure the logging mode to build
 // (used to select a pair of config files, either ecs or plain)
-def logmode = "ecs" // "plain", "ecs"
+def logmode = "plain" // "plain", "ecs"
 
 // ======================= end configuration section ========================================
 description = "The Eurofurence Registration System"
@@ -46,13 +46,13 @@ sourceSets {
 }
 
 dependencies {
-    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.50'
+    implementation 'org.apache.tomcat:tomcat-servlet-api:10.1.52'
     implementation 'org.apache.commons:commons-lang3:3.20.0'
     implementation 'org.apache.velocity:velocity-engine-core:2.4.1'
     implementation 'org.apache.commons:commons-text:1.15.0'
     implementation 'org.slf4j:slf4j-api:2.0.17'
     implementation 'co.elastic.logging:logback-ecs-encoder:1.7.0'
-    implementation 'ch.qos.logback:logback-classic:1.5.25'
+    implementation 'ch.qos.logback:logback-classic:1.5.26'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.21.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.21.0'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.21'
@@ -68,7 +68,7 @@ dependencies {
     implementation 'commons-codec:commons-codec:1.20.0'
 
     // embed tomcat 10.1
-    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.50'
+    implementation 'org.apache.tomcat.embed:tomcat-embed-core:10.1.52'
 
     implementation 'co.elastic.logging:jul-ecs-formatter:1.7.0'
     implementation 'co.elastic.logging:ecs-logging-core:1.7.0'
