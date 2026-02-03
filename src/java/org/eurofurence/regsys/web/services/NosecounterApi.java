@@ -220,6 +220,7 @@ public class NosecounterApi extends AbstractAttendeeListService {
             case 2022: return "24.08.2022";
             case 2023: return "03.09.2023";
             case 2024: return "18.09.2024";
+            case 2025: return "03.09.2025";
             default: return Strings.conf.conStart;
         }
     }
@@ -277,7 +278,8 @@ public class NosecounterApi extends AbstractAttendeeListService {
 
         boolean isSupersponsor = isRegular && packagesContains(attendee.packagesList, "sponsor2");
         boolean isSponsor = isRegular && !isSupersponsor && packagesContains(attendee.packagesList, "sponsor");;
-        boolean isNormal = isRegular && !isSupersponsor && !isSponsor;
+        boolean isContributor = isRegular && !isSupersponsor && !isSponsor && packagesContains(attendee.packagesList, "contributor");;
+        boolean isNormal = isRegular && !isSupersponsor && !isSponsor && !isContributor;
 
         boolean isArtist = options.contains("art");
         boolean isAnimator = options.contains("anim");
@@ -294,6 +296,8 @@ public class NosecounterApi extends AbstractAttendeeListService {
             register(response.sponsors, "supersponsor");
         if (isSponsor)
             register(response.sponsors, "sponsor");
+        if (isContributor)
+            register(response.sponsors, "contributor");
         if (isNormal)
             register(response.sponsors, "normal");
         if (isDay)
