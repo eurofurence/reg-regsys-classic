@@ -123,6 +123,7 @@ public class AccountingSearchForm extends Form {
 
             paymentResponse = paygateAdapter.performStatusCheck(t.transactionIdentifier, auth, getPage().getRequestId());
         } catch (Exception e) {
+            logger.warn("exception in status-check for " + t.transactionIdentifier + ": " + e.getMessage(), e);
             paymentResponse = new PaymentResponse();
             paymentResponse.referenceId = t.transactionIdentifier;
             paymentResponse.status = "<font color='red'>(syserr)</font>";
