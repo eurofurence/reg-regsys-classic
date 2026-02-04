@@ -9,6 +9,7 @@
 ##
 #set($strNavStartPage = "Start&nbsp;Page")##
 #set($strNavAccounting = "Accounting")##
+#set($strNavCreditCardStatusCheck = "CC&nbsp;Status&nbsp;Check")##
 #set($strNavBankImport = "Bank&nbsp;Import")##
 #set($strNavStatistics = "Statistics")##
 #set($strNavListNew = "List&nbsp;New")##

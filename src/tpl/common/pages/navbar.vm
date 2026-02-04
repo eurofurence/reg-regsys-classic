@@ -18,6 +18,7 @@
 #if( $navbar.showAccounting() )##
       #set( $hr = "yes" )##
       <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.AccountingURL">$strNavAccounting</a><br/>
+      <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.CreditCardStatusCheckURL">$strNavCreditCardStatusCheck</a><br/>
 #end##
 #if( $navbar.showBankImport() )##
     #set( $hr = "yes" )##

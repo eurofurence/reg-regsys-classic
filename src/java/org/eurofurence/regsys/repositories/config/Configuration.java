@@ -82,6 +82,9 @@ public class Configuration {
         @JsonProperty("payment_service")
         public String paymentService;
 
+        @JsonProperty("paygate_adapter")
+        public String paygateAdapter;
+
         @JsonProperty("room_service")
         public String roomService;
 

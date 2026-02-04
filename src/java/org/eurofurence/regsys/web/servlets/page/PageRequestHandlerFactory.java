@@ -18,6 +18,7 @@ public class PageRequestHandlerFactory {
         suppliersByPathInfo.put("/bulkmail", BulkmailPage::new);
         suppliersByPathInfo.put("/camtv8", Camtv8ImportPage::new);
         suppliersByPathInfo.put("/comments", CommentsPage::new);
+        suppliersByPathInfo.put("/creditcardstatuscheck", CreditCardStatusCheckPage::new);
         suppliersByPathInfo.put("/email", ResendStatusEmailPage::new);
         suppliersByPathInfo.put("/export", ExportPage::new);
         suppliersByPathInfo.put("/groups", GroupsPage::new);

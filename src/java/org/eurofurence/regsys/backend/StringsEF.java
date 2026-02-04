@@ -121,6 +121,10 @@ public class StringsEF {
         public String pageTitle = "Comment Listing";
     }
 
+    public static class CreditCardStatusCheckPageMsgs {
+        public String pageTitle = "Paygate Credit Card Status Check";
+    }
+
     public static class EmailPageMsgs {
         public String notifySent = "Emails have been sent to %1$d of %1$d attendees:";
         public String notifyWaiting = "Waiting for your confirmation. Emails will be sent to the following %1$d users:";

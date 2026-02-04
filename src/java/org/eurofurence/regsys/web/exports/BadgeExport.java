@@ -50,7 +50,8 @@ public class BadgeExport extends AbstractCsvExport {
                 + csv("Day-Fri")
                 + csv("Day-Sat")
                 + csv("Day-Sun")
-                + csv("Ultra-Sponsor");
+                + csv("Ultra-Sponsor")
+                + csv("Contributor");
     }
 
     private boolean packagesMatch(List<PackageInfo> packagesList, Predicate<PackageInfo> safeFilter) {
@@ -81,7 +82,8 @@ public class BadgeExport extends AbstractCsvExport {
 
         boolean isSupersponsor = isRegular && packagesContains(attendee.packagesList, "sponsor2");
         boolean isSponsor = isRegular && !isSupersponsor && packagesContains(attendee.packagesList, "sponsor");;
-        boolean isAttendee = isRegular && !isSupersponsor && !isSponsor;
+        boolean isContributor = isRegular && !isSupersponsor && !isSponsor && packagesContains(attendee.packagesList, "contributor");
+        boolean isAttendee = isRegular && !isSupersponsor && !isSponsor && !isContributor;
 
         String regType = "regular";
         if (isGuest) {
@@ -124,7 +126,8 @@ public class BadgeExport extends AbstractCsvExport {
                 + csv(packagesContains(attendee.packagesList, "day-fri") ? "x" : "")
                 + csv(packagesContains(attendee.packagesList, "day-sat") ? "x" : "")
                 + csv(packagesContains(attendee.packagesList, "day-sun") ? "x" : "")
-                + csv(ultraSponsorCount > 0 ? Long.toString(ultraSponsorCount) : "");
+                + csv(ultraSponsorCount > 0 ? Long.toString(ultraSponsorCount) : "")
+                + csv(isContributor ? "x" : "");
     }
 
     private String lookupCountryName(String code) {
@@ -139,6 +142,8 @@ public class BadgeExport extends AbstractCsvExport {
             return "Sponsor";
         } else if (packagesContains(attendee.packagesList, "sponsor2")) {
             return "Supersponsor";
+        } else if (packagesContains(attendee.packagesList, "contributor")) {
+            return "Contributor";
         } else {
             return "";
         }

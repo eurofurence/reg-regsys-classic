@@ -1,0 +1,7 @@
+<TABLE BORDER="0" CELLSPACING="2" CELLPADDING="2">
+    <FORM ACTION="creditcardstatuscheck" METHOD="GET" accept-charset="UTF-8">
+        <TR>
+            <TD COLSPAN="6" class="content_main" ALIGN="left"><INPUT TYPE="SUBMIT" NAME="execute" VALUE="$strformProcessSubmit" class="submit"/></TD>
+        </TR>
+    </FORM>
+</TABLE>

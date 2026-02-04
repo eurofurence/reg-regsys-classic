@@ -132,6 +132,10 @@ public class StringsMMC {
         public String pageTitle = "Kommentare auflisten";
     }
 
+    public static class CreditCardStatusCheckPageMsgs {
+        public String pageTitle = "Paygate Credit Card Status Check";
+    }
+
     public static class EmailPageMsgs {
         public String notifySent = "An %1$d von %1$d G&auml;ste wurden E-Mails versendet:";
         public String notifyWaiting = "Warte auf Deine Best&auml;tigung. An folgende %1$d G&auml;ste werden E-Mails versendet:";
