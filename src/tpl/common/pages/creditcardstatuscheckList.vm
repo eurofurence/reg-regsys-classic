@@ -1,0 +1,41 @@
+<TABLE class="searchlist">
+    <TR>
+        <TH class="searchlist" ALIGN="right" >$strcolNumber</TH>
+        <TH class="searchlist" ALIGN="right" >$strcolBadgeNo</TH>
+        <TH class="searchlist" ALIGN="left" >$strcolNick</TH>
+        <TH class="searchlist" ALIGN="right" >$strcolAmount</TH>
+        <TH class="searchlist" ALIGN="left" >$strcolDate</TH>
+        <TH class="searchlist" ALIGN="left" >$strcolStatus</TH>
+        <TH class="searchlist" ALIGN="left" >$strcolRefid</TH>
+        <TH class="searchlist" ALIGN="left" >$strcolComment</TH>
+    </TR>
+
+#foreach($i in [0..10000])## if there are more than this many results, the page will load forever anyway
+  #if($form.loadNext())## velocity has no while loop, seriously?
+
+    <TR>
+        <TD class="searchlist" ALIGN="right">$form.count</TD>
+        <TD class="searchlist" ALIGN="right"><a href="input?param_id=$form.debitorId">$form.debitorId</a></TD>
+        <TD class="searchlist" ALIGN="left">$form.attendeeNickname</TD>
+        <TD class="searchlist" ALIGN="right">$form.amount</TD>
+        <TD class="searchlist" ALIGN="right">$form.received</TD>
+        <TD class="searchlist" ALIGN="left"><a href="payment?param_id=$form.debitorId">$form.status</a></TD>
+        <TD class="searchlist" ALIGN="left">$form.refid</TD>
+        <TD class="searchlist" ALIGN="left">$form.comment</TD>
+    </TR>
+
+  #end##
+#end##
+
+    <TR>
+        <TH class="searchlist" ALIGN="right" ></TH>
+        <TH class="searchlist" ALIGN="right" ></TH>
+        <TH class="searchlist" ALIGN="left" ></TH>
+        <TH class="searchlist" ALIGN="right" >$form.getPayGrandTotal()</TH>
+        <TH class="searchlist" ALIGN="left" ></TH>
+        <TH class="searchlist" ALIGN="left" ></TH>
+        <TH class="searchlist" ALIGN="left" ></TH>
+        <TH class="searchlist" ALIGN="left" ></TH>
+    </TR>
+
+</TABLE>

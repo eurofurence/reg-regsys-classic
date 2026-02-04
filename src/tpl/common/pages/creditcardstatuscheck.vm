@@ -1,0 +1,18 @@
+#parse( "strings/creditcardstatuscheck.strings.vm" )
+<td class="contentbox">
+    <div class="pageheader">$strpageTitle</div>
+    <hr class="contentbox"/>
+    #parse( "errorlisting.vm" )
+
+    #parse( "creditcardstatuscheckForm.vm" )
+
+#if($page.showListing())##
+    <div class="headline"><br/>$strresultHeader</div>
+    <hr class="contentbox"/>
+    <p/>
+
+    #parse( "creditcardstatuscheckList.vm" )
+
+#end##
+
+</td>

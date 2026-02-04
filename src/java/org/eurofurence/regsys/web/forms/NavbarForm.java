@@ -48,6 +48,11 @@ public class NavbarForm extends Form {
         return "accounting";
     }
 
+    @SuppressWarnings("unused")
+    public String getCreditCardStatusCheckURL() {
+        return "creditcardstatuscheck";
+    }
+
     // camtv8 import
 
     private boolean bankImportEnabled() {

@@ -1,5 +1,7 @@
 package org.eurofurence.regsys.web.forms;
 
+import org.eurofurence.regsys.backend.Strings;
+import org.eurofurence.regsys.backend.StringsEF;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
@@ -304,6 +306,14 @@ public class AccountingSearchForm extends Form {
             }
             return false;
         }
+
+        public void setupForStatusCheck(HttpServletRequest request) {
+            searchFrom = isoFromHuman(Strings.conf.paymentStart, "2025-01-01");
+            searchTo = isoFromHuman(Strings.conf.paymentEnd, "2025-12-31");
+            searchStatus = Set.of(Transaction.Status.PENDING.getValue());
+            searchTypes = Set.of(Transaction.TransactionType.PAYMENT.getValue());
+            searchMethods = Set.of(Transaction.Method.CREDIT.getValue());
+        }
     }
 
     public ParameterParser getParameterParser() {
@@ -389,6 +399,10 @@ public class AccountingSearchForm extends Form {
 
         public String getComment() {
             return escape(found.get(count).comment);
+        }
+
+        public String getRefid() {
+            return escape(found.get(count).transactionIdentifier);
         }
 
         // lookups from attendeeInfos
