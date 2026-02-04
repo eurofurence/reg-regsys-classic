@@ -31,11 +31,9 @@ public class CreditCardStatusCheckPage extends Page {
         }
 
         getAccountingSearchForm().getParameterParser().setupForStatusCheck(getRequest());
-        if (showlisting) {
-            if (!getAccountingSearchForm().find()) {
-                addError("no matching payments found");
-                showlisting = false;
-            }
+        if (!getAccountingSearchForm().find()) {
+            addError("no matching payments found");
+            showlisting = false;
         }
 
         HashMap<String, Object> veloContext = new HashMap<>();

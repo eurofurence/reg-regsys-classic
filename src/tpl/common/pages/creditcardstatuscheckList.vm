@@ -8,6 +8,10 @@
         <TH class="searchlist" ALIGN="left" >$strcolStatus</TH>
         <TH class="searchlist" ALIGN="left" >$strcolRefid</TH>
         <TH class="searchlist" ALIGN="left" >$strcolComment</TH>
+        #if($form.isExecuteStatusCheck())##
+            <TH class="searchlist" ALIGN="center" >$strcolChkStatus</TH>
+            <TH class="searchlist" ALIGN="center" >$strcolChkCode</TH>
+        #end##
     </TR>
 
 #foreach($i in [0..10000])## if there are more than this many results, the page will load forever anyway
@@ -22,6 +26,10 @@
         <TD class="searchlist" ALIGN="left"><a href="payment?param_id=$form.debitorId">$form.status</a></TD>
         <TD class="searchlist" ALIGN="left">$form.refid</TD>
         <TD class="searchlist" ALIGN="left">$form.comment</TD>
+        #if($form.isExecuteStatusCheck())##
+            <TD class="searchlist" ALIGN="center">$form.checkStatus</TD>
+            <TD class="searchlist" ALIGN="center">$form.checkCode</TD>
+        #end##
     </TR>
 
   #end##
@@ -36,6 +44,10 @@
         <TH class="searchlist" ALIGN="left" ></TH>
         <TH class="searchlist" ALIGN="left" ></TH>
         <TH class="searchlist" ALIGN="left" ></TH>
+        #if($form.isExecuteStatusCheck())##
+            <TH class="searchlist" ALIGN="center" ></TH>
+            <TH class="searchlist" ALIGN="center" ></TH>
+        #end##
     </TR>
 
 </TABLE>

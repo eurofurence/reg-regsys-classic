@@ -6,8 +6,11 @@ import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
 import org.eurofurence.regsys.repositories.attendees.AttendeeService;
 import org.eurofurence.regsys.repositories.attendees.PackageInfo;
+import org.eurofurence.regsys.repositories.auth.RequestAuth;
 import org.eurofurence.regsys.repositories.errors.DownstreamException;
 import org.eurofurence.regsys.repositories.errors.DownstreamWebErrorException;
+import org.eurofurence.regsys.repositories.paygate.PaygateAdapter;
+import org.eurofurence.regsys.repositories.paygate.PaymentResponse;
 import org.eurofurence.regsys.repositories.payments.PaymentService;
 import org.eurofurence.regsys.repositories.payments.Transaction;
 import org.eurofurence.regsys.repositories.payments.TransactionResponse;
@@ -38,6 +41,8 @@ public class AccountingSearchForm extends Form {
     public static final String PARAM_SEARCH_TYPE     = "searchPaymentType";
     public static final String PARAM_SEARCH_METHOD   = "searchPaymentMethod";
 
+    public static final String EXECUTE   = "execute"; // run status check request
+
     // ------------ attributes -----------------------
 
     private String searchFrom; // kept as iso - from
@@ -48,6 +53,8 @@ public class AccountingSearchForm extends Form {
     private Set<String> searchMethods;
 
     private int count = -1; // before find()
+
+    private boolean executeStatusCheck = false;
 
     private Map<String,Map<Long,Long>> breakdownCountByAmount;
     private Map<String,Long> totalAmounts;
@@ -68,10 +75,14 @@ public class AccountingSearchForm extends Form {
 
     private List<Transaction> found = new ArrayList<>();
 
+    // status check
+    private PaymentResponse paymentResponse = new PaymentResponse();
+
     // ------------ constructors and initialization -----------------------
 
     private final PaymentService paymentService = new PaymentService();
     private final AttendeeService attendeeService = new AttendeeService();
+    private final PaygateAdapter paygateAdapter = new PaygateAdapter();
 
     public AccountingSearchForm() {
         breakdownCountByAmount = new TreeMap<>();
@@ -102,6 +113,20 @@ public class AccountingSearchForm extends Form {
             totalAmounts.put(t.transactionType, currentTotal);
         } catch (Exception e) {
             addError("internal error, skipped transaction with type " + t.transactionType);
+        }
+    }
+
+    private void processStatusCheck(Transaction t) {
+        try {
+            RequestAuth auth = new RequestAuth();
+            auth.apiToken = getPage().getConfiguration().downstream.apiToken;
+
+            paymentResponse = paygateAdapter.performStatusCheck(t.transactionIdentifier, auth, getPage().getRequestId());
+        } catch (Exception e) {
+            paymentResponse = new PaymentResponse();
+            paymentResponse.referenceId = t.transactionIdentifier;
+            paymentResponse.status = "<font color='red'>(syserr)</font>";
+            paymentResponse.responseCode = "<font color='red'>" + escape(e.getMessage(), true) + "</font>";
         }
     }
 
@@ -211,6 +236,9 @@ public class AccountingSearchForm extends Form {
         count++;
         if (count < found.size()) {
             registerInBreakdownAndTotals(found.get(count));
+            if (executeStatusCheck) {
+                processStatusCheck(found.get(count));
+            }
             return true;
         } else {
             return false;
@@ -313,6 +341,7 @@ public class AccountingSearchForm extends Form {
             searchStatus = Set.of(Transaction.Status.PENDING.getValue());
             searchTypes = Set.of(Transaction.TransactionType.PAYMENT.getValue());
             searchMethods = Set.of(Transaction.Method.CREDIT.getValue());
+            executeStatusCheck = !"".equals(nvl(request.getParameter(EXECUTE)));
         }
     }
 
@@ -403,6 +432,20 @@ public class AccountingSearchForm extends Form {
 
         public String getRefid() {
             return escape(found.get(count).transactionIdentifier);
+        }
+
+        // attributes for the current status check call
+
+        public String getCheckStatus() {
+            return paymentResponse.status;
+        }
+
+        public String getCheckCode() {
+            return paymentResponse.responseCode;
+        }
+
+        public boolean isExecuteStatusCheck() {
+            return executeStatusCheck;
         }
 
         // lookups from attendeeInfos

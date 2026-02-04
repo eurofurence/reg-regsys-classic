@@ -14,6 +14,7 @@ downstream:
   auth_service: 'http://localhost:4712'
   attendee_service: 'http://localhost:9091'
   payment_service: 'http://localhost:9092'
+  paygate_adapter: 'http://localhost:9097'
   mail_service: 'http://localhost:9093'
   room_service: 'http://localhost:9094'
   id_token_cookie_name: 'JWT'

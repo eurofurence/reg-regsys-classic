@@ -17,7 +17,9 @@
 #set($strcolAmount = "Paid&nbsp;&euro;")##
 #set($strcolAmountDue = "Due&nbsp;&euro;")##
 #set($strcolDate = "Date")##
-#set($strcolStatus = "Status")##
+#set($strcolStatus = "Orig.Status")##
+#set($strcolChkStatus = "Nexi.Status")##
+#set($strcolChkCode = "Nexi.Code")##
 #set($strcolRefid = "Reference ID")##
 #set($strcolComment = "Comment")##
 #set($strnoPaymentsFound = "No matching payments were found in the database.")##
