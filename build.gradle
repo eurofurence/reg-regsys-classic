@@ -61,7 +61,7 @@ dependencies {
     implementation 'commons-beanutils:commons-beanutils:1.11.0'
     implementation 'commons-validator:commons-validator:1.10.1'
 
-    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.4'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.5'
     implementation 'com.sun.xml.bind:jaxb-impl:4.0.6'
 
     // security updates
