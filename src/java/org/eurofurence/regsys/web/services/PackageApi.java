@@ -52,6 +52,7 @@ public class PackageApi extends Service {
                 allowed.put("dealer-full", downstream.ddToken);
                 allowed.put("dealer-fullplus", downstream.ddToken);
                 allowed.put("dealer-double", downstream.ddToken);
+                allowed.put("dealer-triple", downstream.ddToken);
                 allowed.put("dealer-quad", downstream.ddToken);
             }
             if (downstream.boatToken != null && !"".equals(downstream.boatToken)) {
