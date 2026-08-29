@@ -13,7 +13,7 @@
 #set($strNavBankImport = "Bank&nbsp;Import")##
 #set($strNavStatistics = "Statistics")##
 #set($strNavListNew = "List&nbsp;New")##
-#set($strNavListAll = "List&nbsp;All")##
+#set($strNavListActive = "List&nbsp;active")##
 #set($strNavSearch = "Search")##
 #set($strNavViewComments = "View&nbsp;Comments")##
 #set($strNavExport = "Export")##

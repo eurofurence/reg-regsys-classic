@@ -106,6 +106,8 @@ public class StringsEF {
         public String nullError = "Could not obtain attendees information - no mails were sent: got null or empty list";
         public String sendError = "Downstream error while mailing attendee with id %1$s. Skipping and proceeding. Error was: ";
         public String permMail = "Permission denied to mail attendee with id %1$s. Skipping and proceeding.";
+        public String cancelledMail = "Not allowed to send bulkmail to CANCELLED attendee with id %1$s. Skipping and proceeding.";
+        public String noBulkMail = "Not allowed to send bulkmail to attendee who requested to be opted out of bulk mails with id %1$s. Skipping and proceeding.";
     }
 
     public static class Camtv8ImportPageMsgs {

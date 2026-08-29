@@ -79,10 +79,24 @@ public class SearchForm extends Form {
 
     public SearchForm() {
         attendeeFinder = new AttendeeSearchCriteria.AttendeeSearchSingleCriterion();
+        attendeeFinder.status = List.of(
+                Constants.MemberStatus.APPROVED.newRegsysValue(),
+                Constants.MemberStatus.PARTIALLY_PAID.newRegsysValue(),
+                Constants.MemberStatus.PAID.newRegsysValue(),
+                Constants.MemberStatus.CHECKED_IN.newRegsysValue(),
+                Constants.MemberStatus.WAITING.newRegsysValue()
+        );
     }
 
     public void initialize() {
         attendeeFinder = new AttendeeSearchCriteria.AttendeeSearchSingleCriterion();
+        attendeeFinder.status = List.of(
+                Constants.MemberStatus.APPROVED.newRegsysValue(),
+                Constants.MemberStatus.PARTIALLY_PAID.newRegsysValue(),
+                Constants.MemberStatus.PAID.newRegsysValue(),
+                Constants.MemberStatus.CHECKED_IN.newRegsysValue(),
+                Constants.MemberStatus.WAITING.newRegsysValue()
+        );
         minId = 0L;
         maxId = 0L;
     }
@@ -186,8 +200,15 @@ public class SearchForm extends Form {
             maxId = s.maxId;
         } else {
             // this should never happen, because SearchForm just saved the attendee to the session
-            // rather than fail badly, just use a blank attendee - the "list all" function as a fallback
+            // rather than fail badly, just use a blank attendee - the "list active" function as a fallback
             attendeeFinder = new AttendeeSearchCriteria.AttendeeSearchSingleCriterion();
+            attendeeFinder.status = List.of(
+                    Constants.MemberStatus.APPROVED.newRegsysValue(),
+                    Constants.MemberStatus.PARTIALLY_PAID.newRegsysValue(),
+                    Constants.MemberStatus.PAID.newRegsysValue(),
+                    Constants.MemberStatus.CHECKED_IN.newRegsysValue(),
+                    Constants.MemberStatus.WAITING.newRegsysValue()
+            );
             sortBy = "id";
             sortOrder = "ascending";
             minId = 0L;

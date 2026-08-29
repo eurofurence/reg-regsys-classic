@@ -13,7 +13,7 @@
 #set($strNavBankImport = "Kontoauszug&nbsp;Import")##
 #set($strNavStatistics = "Statistik")##
 #set($strNavListNew = "Liste&nbsp;Neuzug&auml;nge")##
-#set($strNavListAll = "List&nbsp;alle")##
+#set($strNavListActive = "List&nbsp;aktiv")##
 #set($strNavSearch = "Suche")##
 #set($strNavViewComments = "Kommentare&nbsp;anzeigen")##
 #set($strNavExport = "Exportieren")##

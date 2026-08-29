@@ -117,6 +117,8 @@ public class StringsMMC {
         public String nullError = "Fehler bei Suchanfrage - keine Mails verschickt: null oder leere Liste";
         public String sendError = "Fehler beim Mailversand an Teilnehmer id %1$s. Teilnehmer &uuml;bersprungen. Fehler war: ";
         public String permMail = "Berechtigungsfehler beim Mailversand an Teilnehmer id %1$s. Teilnehmer &uuml;bersprungen.";
+        public String cancelledMail = "Mailversand von Infomails an Teilnehmer id %1$s in Status cancelled ist nicht zul&auml;ssig. Teilnehmer &uuml;bersprungen.";
+        public String noBulkMail = "Mailversand an Teilnehmer id %1$s mit opt-out f&uuml;r Massenmails ist nicht zul&auml;ssig. Teilnehmer &uuml;bersprungen.";
     }
 
     public static class Camtv8ImportPageMsgs {

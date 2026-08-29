@@ -1,5 +1,6 @@
 package org.eurofurence.regsys.web.forms;
 
+import org.eurofurence.regsys.backend.Constants;
 import org.eurofurence.regsys.backend.Strings;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchCriteria;
 import org.eurofurence.regsys.repositories.attendees.AttendeeSearchResultList;
@@ -89,46 +90,45 @@ public class BulkmailForm extends AttendeeSelectionForm {
         String regsysUrl = getPage().getConfiguration().web.regsysPublicUrl;
 
         for (AttendeeSearchResultList.AttendeeSearchResult att: attendeeResult.attendees) {
-            try {
-                MailSendRequest sendRequest = new MailSendRequest();
-                sendRequest.cid = cid;
-                sendRequest.to.add(att.email);
-                sendRequest.lang = att.registrationLanguage;
-                if (!"en-US".equals(sendRequest.lang) && !"de-DE".equals(sendRequest.lang)) {
-                    sendRequest.lang = "en-US";
+            if (Constants.MemberStatus.CANCELLED.newRegsysValue().equals(att.status)) {
+                addError(String.format(Strings.bulkmailPage.cancelledMail, Long.toString(att.id)));
+            } else if (att.flagsList != null && att.flagsList.contains("nobulkmail")) {
+                addError(String.format(Strings.bulkmailPage.noBulkMail, Long.toString(att.id)));
+            } else {
+                try {
+                    MailSendRequest sendRequest = new MailSendRequest();
+                    sendRequest.cid = cid;
+                    sendRequest.to.add(att.email);
+                    sendRequest.lang = att.registrationLanguage;
+                    if (!"en-US".equals(sendRequest.lang) && !"de-DE".equals(sendRequest.lang)) {
+                        sendRequest.lang = "en-US";
+                    }
+                    sendRequest.variables.put("badge_number", Long.toString(att.id));
+                    sendRequest.variables.put("badge_number_with_checksum", att.badgeId);
+                    sendRequest.variables.put("nickname", att.nickname);
+                    sendRequest.variables.put("email", att.email);
+                    sendRequest.variables.put("remaining_dues", FormHelper.toCurrencyDecimals(att.currentDues));
+                    sendRequest.variables.put("total_dues", FormHelper.toCurrencyDecimals(att.totalDues));
+                    // TODO - don't have open payments balance in search response
+                    sendRequest.variables.put("pending_payments", "TODO not available");
+                    sendRequest.variables.put("due_date", att.dueDate);
+                    sendRequest.variables.put("regsys_url", regsysUrl);
+
+                    // variable in use by the payment failure notification system - make it possible to recognize bulk mail
+                    sendRequest.variables.put("operation", "bulk mail");
+
+                    sendRequest.async = false;
+
+                    mailService.performSendMail(sendRequest, auth, requestId);
+
+                    successCount++;
+                } catch (UnauthorizedException | ForbiddenException e) {
+                    // huh? we should be admin - maybe token expired during operation
+                    addError(String.format(Strings.bulkmailPage.permMail, Long.toString(att.id)));
+                } catch (DownstreamException e) {
+                    addError(String.format(Strings.bulkmailPage.sendError, Long.toString(att.id)) + e.getMessage());
+                    getPage().addException(e);
                 }
-                sendRequest.variables.put("badge_number", Long.toString(att.id));
-                sendRequest.variables.put("badge_number_with_checksum", att.badgeId);
-                sendRequest.variables.put("nickname", att.nickname);
-                sendRequest.variables.put("email", att.email);
-                sendRequest.variables.put("remaining_dues", FormHelper.toCurrencyDecimals(att.currentDues));
-                sendRequest.variables.put("total_dues", FormHelper.toCurrencyDecimals(att.totalDues));
-                // TODO - don't have open payments balance in search response
-                sendRequest.variables.put("pending_payments", "TODO not available");
-                sendRequest.variables.put("due_date", att.dueDate);
-                sendRequest.variables.put("regsys_url", regsysUrl);
-
-                // variable in use by the payment failure notification system - make it possible to recognize bulk mail
-                sendRequest.variables.put("operation", "bulk mail");
-
-                sendRequest.async = false;
-
-                mailService.performSendMail(sendRequest, auth, requestId);
-
-                successCount++;
-
-//                try {
-//                    // prevent overloading mail server / service with async mail
-//                    Thread.sleep(100L);
-//                } catch (InterruptedException e) {
-//                    // ignore, should only happen during container shutdown
-//                }
-            } catch (UnauthorizedException | ForbiddenException e) {
-                // huh? we should be admin - maybe token expired during operation
-                addError(String.format(Strings.bulkmailPage.permMail, Long.toString(att.id)));
-            } catch (DownstreamException e) {
-                addError(String.format(Strings.bulkmailPage.sendError, Long.toString(att.id)) + e.getMessage());
-                getPage().addException(e);
             }
         }
 
