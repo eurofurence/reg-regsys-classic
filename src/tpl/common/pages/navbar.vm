@@ -31,7 +31,7 @@
 #if( $navbar.showSearchAndLists() )##
       #set( $hr = "yes" )##
       <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.ListNewURL">$strNavListNew</a><br/>
-      <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.ListAllURL">$strNavListAll</a><br/>
+      <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.ListActiveURL">$strNavListActive</a><br/>
       <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.SearchURL">$strNavSearch</a><br/>
       <img src="$pathImages/bullet.jpg"/>&nbsp;<a class="navigation" HREF="$navbar.ViewCommentsURL">$strNavViewComments</a><br/>
 #end##

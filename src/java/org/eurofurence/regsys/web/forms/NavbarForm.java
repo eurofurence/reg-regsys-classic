@@ -93,8 +93,8 @@ public class NavbarForm extends Form {
     }
 
     @SuppressWarnings("unused")
-    public String getListAllURL() {
-        return "list";
+    public String getListActiveURL() {
+        return "list?search_status_Xnew=1&search_status_Xcanc=1";
     }
 
     @SuppressWarnings("unused")
