@@ -48,7 +48,7 @@ public abstract class AttendeeSelectionForm extends Form {
     public void find() {
         try {
             AttendeeSearchCriteria criteria = CriteriaUtils.constructCriteriaByIdSet(idSet);
-            criteria.fillFields = Arrays.asList("balances", "nickname", "email", "status", "registration_language");
+            criteria.fillFields = Arrays.asList("balances", "nickname", "email", "status", "registration_language", "flags");
             attendeeResult = getPage().getAttendeeService().performFindAttendees(criteria, getPage().getTokenFromRequest(), getPage().getRequestId());
         } catch (DownstreamWebErrorException e) {
             resetErrors(Strings.searchForm.nobodyFound);
