@@ -62,7 +62,7 @@ dependencies {
     // org.apache.httpcomponents.client5:httpclient5
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
     implementation 'commons-beanutils:commons-beanutils:1.11.0'
-    implementation 'commons-validator:commons-validator:1.10.1'
+    implementation 'commons-validator:commons-validator:1.11.0'
 
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.5'
     implementation 'com.sun.xml.bind:jaxb-impl:4.0.9'
